@@ -1,0 +1,3 @@
+# Restored agent skills are verified byte for byte against skills-lock.json;
+# never convert their line endings.
+.claude/skills/** -text
