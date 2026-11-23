@@ -4,6 +4,7 @@
 
 | Area | Choice | Location | Constraints |
 | --- | --- | --- | --- |
+| Language | TypeScript, strict mode | all packages | Version supported by the Angular and Strapi versions in use |
 | Front end | Angular 21 or later | `apps/web/` | Standalone components, signals and built-in control flow (`@if`, `@for`); no NgModules |
 | Content backend | Strapi 5 or later | `apps/cms/` | Holds the form fields and plans per country |
 | CMS database | SQLite | `apps/cms/` | Used only by Strapi; quote data stays in the front end |

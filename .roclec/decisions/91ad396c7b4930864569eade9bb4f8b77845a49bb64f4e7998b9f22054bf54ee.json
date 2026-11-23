@@ -1,0 +1,28 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-001",
+      "status": "met"
+    },
+    {
+      "id": "CR-002",
+      "status": "met"
+    },
+    {
+      "id": "CR-003",
+      "status": "met"
+    }
+  ],
+  "entity": "stack",
+  "flow": "8a39e2be42b3c45936ac8ed9ca6dd11c80f2bb563fcfb0b1d3ecc24443e9cbce",
+  "id": "91ad396c7b4930864569eade9bb4f8b77845a49bb64f4e7998b9f22054bf54ee",
+  "kind": "foundation",
+  "model_schema": 2,
+  "previous": "ae2d934522fa99eff04344f571154f6235ac7ef13189e3cfb401ffcb4bf4d573",
+  "reason": "Owner adds TypeScript in strict mode to the agreed stack.",
+  "sources": {
+    "stack": "54d4100ed88fefe039c037056730c8ff262c96f8155dff3b15f263bc2d45be75"
+  },
+  "status": "agreed"
+}
