@@ -1,0 +1,28 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-001",
+      "status": "met"
+    },
+    {
+      "id": "CR-002",
+      "status": "met"
+    },
+    {
+      "id": "CR-003",
+      "status": "met"
+    }
+  ],
+  "entity": "principles",
+  "flow": "8a39e2be42b3c45936ac8ed9ca6dd11c80f2bb563fcfb0b1d3ecc24443e9cbce",
+  "id": "e724099f8fad736b52f74c9cfa4ffa73a410b391f5741ba8e901c7c692e2fa81",
+  "kind": "foundation",
+  "model_schema": 2,
+  "previous": null,
+  "reason": "Owner agrees the product principles P1-P7 that replace the seeded constitution.",
+  "sources": {
+    "principles": "ce473af13ddb50cebb38a7ca86990363ff7b7bce5b2367ff072daaeb023edf57"
+  },
+  "status": "agreed"
+}

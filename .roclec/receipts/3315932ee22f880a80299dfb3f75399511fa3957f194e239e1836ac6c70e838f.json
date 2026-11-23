@@ -1,0 +1,11 @@
+{
+  "kind": "reference-add",
+  "model_schema": 2,
+  "operation_id": "3315932ee22f880a80299dfb3f75399511fa3957f194e239e1836ac6c70e838f",
+  "payload": {
+    "id": "principles"
+  },
+  "writes": {
+    ".roclec/references.json": "131344c27f329a4532842a5db39fbd67fd94236b7ae4c22ce8d9cb2326a9b05a"
+  }
+}

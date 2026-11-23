@@ -23,6 +23,15 @@
       "components": [
         "app"
       ],
+      "decision_id": "e724099f8fad736b52f74c9cfa4ffa73a410b391f5741ba8e901c7c692e2fa81",
+      "id": "principles",
+      "path": ".roclec/constitution.md",
+      "role": "principles"
+    },
+    {
+      "components": [
+        "app"
+      ],
       "decision_id": "ae2d934522fa99eff04344f571154f6235ac7ef13189e3cfb401ffcb4bf4d573",
       "id": "stack",
       "path": "docs/stack.md",
