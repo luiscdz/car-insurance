@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "angular-developer": {
+      "source": "angular/skills",
+      "sourceType": "github",
+      "skillPath": "angular-developer/SKILL.md",
+      "computedHash": "048df1fb3b30e170e84593b6dfffdebf5208eb58f6feb3c2100faa926d5c8b41"
+    },
     "design-lab": {
       "source": "0xdesign/design-plugin",
       "sourceType": "github",
@@ -24,6 +30,12 @@
       "sourceType": "github",
       "skillPath": ".agents/skills/impeccable/SKILL.md",
       "computedHash": "f6498f888e66453bed64151372cec9199cf5179cc9f75e4ebf8501d25e6f1290"
+    },
+    "strapi-docs-mcp": {
+      "source": "strapi/skills",
+      "sourceType": "github",
+      "skillPath": "skills/cms/strapi-docs-mcp/SKILL.md",
+      "computedHash": "1aa149a4433ebce5c5bb048943a87b1dc355c8c54a4eac0eab81a6e0c1ce8aa3"
     },
     "ui-ux-pro-max": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",

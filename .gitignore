@@ -9,5 +9,14 @@ dist/
 .venv/
 docs/pilot/bitacora.md
 .roclec/runtime/
-.agents
+# Agent skills: own knowledge skills are versioned; installed copies are not.
+.agents/skills/roclec-*/
+.agents/skills/angular-developer/
+.agents/skills/design-lab/
+.agents/skills/design-taste-frontend/
+.agents/skills/frontend-design/
+.agents/skills/impeccable/
+.agents/skills/strapi-docs-mcp/
+.agents/skills/ui-ux-pro-max/
+.agents/skills/web-design-guidelines/
 .codex

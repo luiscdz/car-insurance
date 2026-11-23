@@ -53,10 +53,10 @@
     ".roclec/notices/spec-kit-provenance.json": "1bad8587bd0d9966b711ad4aca2c0f608a9cd4f8079cfd9209a218f2a2e147fd",
     ".roclec/run": "66f839c20764cd6d585b1736b37b5a58d6a1c27ccdf4cb2599ed9c7b55ea2d39",
     ".roclec/workflow.md": "91c336d0688834571efc59c080328e3f1d76259ee407b6566ccec8e36d588986",
-    "AGENTS.md": "5b780c8e6bae8a259a52cc860baf5c2165cfb4c8801a1d174cf611deb85af05d",
-    "CLAUDE.md": "5b780c8e6bae8a259a52cc860baf5c2165cfb4c8801a1d174cf611deb85af05d"
+    "AGENTS.md": "4c09f33c44e29bdf79400c27809ba1022eefe82492a3f3a4c2d34eba9a4a356e",
+    "CLAUDE.md": "4c09f33c44e29bdf79400c27809ba1022eefe82492a3f3a4c2d34eba9a4a356e"
   },
-  "generation": "d14e1c38d6760d63cde294bcf0af53e7cff2a13c48e13d9da016dff7d11edba6",
+  "generation": "ba9cc44d4b1ecd028b11ba66e79596ff3e79d9622edeed047c37e53f4206a2dc",
   "managed": [
     ".agents/skills/roclec-amend/SKILL.md",
     ".agents/skills/roclec-analyze/SKILL.md",
