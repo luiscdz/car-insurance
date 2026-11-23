@@ -1,0 +1,28 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-001",
+      "status": "met"
+    },
+    {
+      "id": "CR-002",
+      "status": "met"
+    },
+    {
+      "id": "CR-003",
+      "status": "met"
+    }
+  ],
+  "entity": "context",
+  "flow": "8a39e2be42b3c45936ac8ed9ca6dd11c80f2bb563fcfb0b1d3ecc24443e9cbce",
+  "id": "e1cc520f1d677e1ce5d8bf003309cc8ebcb73ce1ba2a0c5cbbc0f36726355e8b",
+  "kind": "foundation",
+  "model_schema": 2,
+  "previous": null,
+  "reason": "Owner adopts the business context and functional scope as the product context.",
+  "sources": {
+    "context": "7e5d7b4527fc14145a05e862478efa2335cfed7fddab236fa11606a408f105e2"
+  },
+  "status": "agreed"
+}

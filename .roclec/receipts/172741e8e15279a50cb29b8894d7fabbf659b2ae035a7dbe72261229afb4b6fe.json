@@ -1,0 +1,11 @@
+{
+  "kind": "reference-update",
+  "model_schema": 2,
+  "operation_id": "172741e8e15279a50cb29b8894d7fabbf659b2ae035a7dbe72261229afb4b6fe",
+  "payload": {
+    "id": "context"
+  },
+  "writes": {
+    ".roclec/references.json": "ea002035dc393fc5d3310850a29e85a061ba627a6dfef9eb5579495e366a0b06"
+  }
+}
