@@ -1,0 +1,28 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-001",
+      "status": "met"
+    },
+    {
+      "id": "CR-002",
+      "status": "met"
+    },
+    {
+      "id": "CR-003",
+      "status": "met"
+    }
+  ],
+  "entity": "design",
+  "flow": "8a39e2be42b3c45936ac8ed9ca6dd11c80f2bb563fcfb0b1d3ecc24443e9cbce",
+  "id": "2f0ac8b23724f5713c28d38458199f93f758a9b9108f2857d6827a931533c1c7",
+  "kind": "foundation",
+  "model_schema": 2,
+  "previous": null,
+  "reason": "Owner agrees the design reference: WCAG 2.2 AA rules, mobile-first layout, per-country themes and the SURA-based design system with Nunito Sans.",
+  "sources": {
+    "design": "c81ff9f48a6fe7b03f3e2c18a513fc8aa37a90a3f4c095dfb4876663ff2a870a"
+  },
+  "status": "agreed"
+}
