@@ -1,0 +1,40 @@
+# Starts the whole project with one command: `docker compose up --build`.
+# Optional overrides go in a root .env file (see .env.example).
+services:
+  cms:
+    build:
+      context: .
+      dockerfile: apps/cms/Dockerfile
+    environment:
+      HOST: 0.0.0.0
+      PORT: 1337
+      CORS_ORIGIN: ${WEB_ORIGINS:-http://localhost:4200,http://localhost:8080}
+    ports:
+      - '${CMS_PORT:-1337}:1337'
+    volumes:
+      - cms-data:/opt/workspace/apps/cms/data
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://localhost:1337/_health').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - '${WEB_PORT:-4200}:80'
+    depends_on:
+      cms:
+        condition: service_healthy
+
+volumes:
+  cms-data:

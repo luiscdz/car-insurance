@@ -1,0 +1,48 @@
+{
+  "name": "cms",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Strapi CMS holding the wizard content per country.",
+  "scripts": {
+    "build": "strapi build",
+    "dev": "strapi develop",
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "strapi": "strapi",
+    "upgrade": "npx @strapi/upgrade latest",
+    "upgrade:dry": "npx @strapi/upgrade latest --dry",
+    "types:generate": "strapi ts:generate-types",
+    "lint": "eslint .",
+    "test": "vitest",
+    "test:ci": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@strapi/database": "5.63.0",
+    "@strapi/plugin-users-permissions": "5.63.0",
+    "@strapi/strapi": "5.63.0",
+    "better-sqlite3": "12.11.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.30.3",
+    "styled-components": "^6.0.0",
+    "@car-insurance/shared": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^24",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.15.0",
+    "typescript-eslint": "^8.74.0",
+    "vitest": "^5.1.1",
+    "@vitest/coverage-v8": "^5.1.1"
+  },
+  "engines": {
+    "node": ">=26.13.1 <27"
+  },
+  "strapi": {
+    "uuid": "8579cdf1-e5a4-4bc1-ad20-8cf12375582a",
+    "installId": "479622fa9b650054fa2feace6f017973c22e147ab0fab59518394a11ba4efbb0"
+  }
+}

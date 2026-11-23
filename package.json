@@ -1,0 +1,39 @@
+{
+  "name": "car-insurance",
+  "private": true,
+  "description": "Multi-country car insurance quoting wizard (Colombia and Chile).",
+  "workspaces": [
+    "packages/shared",
+    "apps/web",
+    "apps/cms",
+    "e2e"
+  ],
+  "packageManager": "npm@11.20.0",
+  "engines": {
+    "node": ">=26.13.1 <27"
+  },
+  "scripts": {
+    "dev:web": "npm run start -w apps/web",
+    "dev:cms": "npm run develop -w apps/cms",
+    "build": "npm run build -w packages/shared && npm run build -w apps/web && npm run build -w apps/cms",
+    "test": "npm run test:ci --workspaces --if-present",
+    "test:e2e": "npm run test -w e2e",
+    "lint": "npm run lint --workspaces --if-present",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run format:check && npm run lint && npm run test && npm run build"
+  },
+  "devDependencies": {
+    "prettier": "^3.10.1"
+  },
+  "allowScripts": {
+    "better-sqlite3@12.11.1": true,
+    "@parcel/watcher@2.6.0": true,
+    "esbuild@0.25.12": true,
+    "esbuild@0.28.2": true,
+    "lmdb@3.5.9": true,
+    "core-js-pure@3.51.0": true,
+    "msgpackr-extract@3.0.7": true,
+    "@swc/core@1.16.22": true
+  }
+}

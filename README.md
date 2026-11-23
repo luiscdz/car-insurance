@@ -2,11 +2,31 @@
 
 A single application that sells car insurance in Colombia and Chile: a three-step wizard (policyholder and vehicle data, plan list, summary and payment) whose fields, plans and copy are configured per country in Strapi. Product context: [docs/context.md](docs/context.md).
 
-**Status:** the project references, ADR-001 and the agentic flow are agreed; the application code does not exist yet.
+**Status:** the project references, ADR-001 and the agentic flow are agreed; the workspace is scaffolded (Angular, Strapi, shared package, end-to-end tests, Docker Compose) and no user story is implemented yet.
 
 ## Running the project
 
-To be added with the workspace: the whole project will start with `docker compose up`, with seed data for both countries.
+Requirements: Docker, and Node.js 26.13.1 with npm for local development.
+
+```bash
+docker compose up --build
+```
+
+- Web application: http://localhost:4200
+- Strapi admin: http://localhost:1337/admin (create the first administrator on first visit)
+
+The cms container generates its secrets on first start and keeps them, with the SQLite database, in the `cms-data` volume. Optional port and origin overrides are listed in [.env.example](.env.example). Seed data for both countries arrives with the user stories.
+
+Local development without Docker:
+
+```bash
+npm install
+cp apps/cms/.env.example apps/cms/.env   # then fill in the secrets
+npm run dev:cms
+npm run dev:web
+```
+
+The rest of the commands are listed in [CLAUDE.md](CLAUDE.md#commands).
 
 ## Requirements not met
 

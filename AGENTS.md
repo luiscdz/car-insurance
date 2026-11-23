@@ -22,7 +22,22 @@ Multi-country (Colombia and Chile) car insurance quoting wizard: an Angular sing
 | `docs/` | Agreed references; ADRs in `docs/adr/` |
 | `.agents/skills/` | The project's own knowledge skills (installed skills are not versioned) |
 
-Project commands are added here when the workspace is created.
+## Commands
+
+Node.js 26.13.1 (`.nvmrc`) and npm workspaces; run everything from the repository root.
+
+| Command | What it does |
+| --- | --- |
+| `npm install` | Installs every workspace with the single root lockfile |
+| `docker compose up --build` | Starts `cms` (http://localhost:1337) and `web` (http://localhost:4200); the cms container generates its own secrets |
+| `npm run dev:web` / `npm run dev:cms` | Angular dev server / Strapi in develop mode (needs `apps/cms/.env`, see `apps/cms/.env.example`) |
+| `npm run lint` | ESLint in every workspace |
+| `npm run format` / `npm run format:check` | Prettier over application code |
+| `npm test` | Unit and component tests with coverage in every workspace |
+| `npm run test:e2e` | Playwright and axe tests against the running Compose stack |
+| `npm run build` | Builds `packages/shared`, `apps/web` and `apps/cms` |
+| `npm run check` | Format check, lint, tests and builds |
+| `npm run types:generate -w apps/cms` | Regenerates Strapi content types into `apps/cms/types/generated/` |
 
 <!-- roclec-spec-kit:begin -->
 ## Roclec native workflow

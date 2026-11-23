@@ -1,0 +1,23 @@
+{
+  "name": "e2e",
+  "version": "0.0.0",
+  "private": true,
+  "description": "End-to-end and accessibility tests run against the Docker Compose stack.",
+  "type": "module",
+  "scripts": {
+    "install:browsers": "playwright install --with-deps chromium",
+    "lint": "eslint .",
+    "test": "playwright test --pass-with-no-tests",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.65.1",
+    "@types/node": "^24",
+    "eslint": "^10.15.0",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.74.0"
+  }
+}

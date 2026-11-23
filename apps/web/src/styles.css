@@ -1,0 +1,107 @@
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css';
+
+@import '@spartan-ng/brain/hlm-tailwind-preset.css';
+
+/* Nunito Sans, self-hosted: regular, semibold and bold (docs/design.md, Typography). */
+@import '@fontsource/nunito-sans/400.css';
+@import '@fontsource/nunito-sans/600.css';
+@import '@fontsource/nunito-sans/700.css';
+
+/*
+ * Default theme: SURA design tokens (docs/design.md, Color tokens).
+ * Each country's theme from Strapi overrides these custom properties at runtime;
+ * this block is also the fallback when a theme is missing or invalid.
+ */
+:root {
+  color-scheme: light;
+
+  /* Brand tokens */
+  --sura-primary: #2d6df6;
+  --sura-primary-strong: #0033a0;
+  --sura-cta: #e3e829;
+  --sura-cta-foreground: #26328c;
+  --sura-accent: #00aec7;
+  --sura-foreground: #1c1c24;
+  --sura-muted: #888b8d;
+  --sura-border: #b4b4b5;
+  --sura-disabled: #878789;
+  --sura-danger: #db1a40;
+  --sura-surface-info: #dfeaff;
+  --sura-surface-cta: #f9fae1;
+  --sura-surface-muted: #f8f8f8;
+  --sura-white: #ffffff;
+
+  /* Project tokens (names from docs/design.md) */
+  --primary-strong: var(--sura-primary-strong);
+  --cta: var(--sura-cta);
+  --cta-foreground: var(--sura-cta-foreground);
+  --disabled: var(--sura-disabled);
+  --danger: var(--sura-danger);
+  --surface-info: var(--sura-surface-info);
+  --surface-cta: var(--sura-surface-cta);
+  --surface-muted: var(--sura-surface-muted);
+
+  /* Spartan UI semantic tokens mapped to the SURA identity */
+  --background: var(--sura-white);
+  --foreground: var(--sura-foreground);
+  --card: var(--sura-white);
+  --card-foreground: var(--sura-foreground);
+  --popover: var(--sura-white);
+  --popover-foreground: var(--sura-foreground);
+  --primary: var(--sura-primary);
+  --primary-foreground: var(--sura-white);
+  --secondary: var(--sura-surface-info);
+  --secondary-foreground: var(--sura-primary-strong);
+  --muted: var(--sura-surface-muted);
+  --muted-foreground: var(--sura-muted);
+  --accent: var(--sura-accent);
+  --accent-foreground: var(--sura-foreground);
+  --destructive: var(--sura-danger);
+  --border: var(--sura-border);
+  --input: var(--sura-border);
+  --ring: var(--sura-primary);
+
+  /* Typography and shape (docs/design.md, Typography and Shape) */
+  --font-sans: 'Nunito Sans', sans-serif;
+  --radius: 1rem;
+}
+
+/* Tailwind utilities for the project tokens and the SURA radius scale (8, 12, 16 and 24 px). */
+@theme inline {
+  --color-primary-strong: var(--primary-strong);
+  --color-cta: var(--cta);
+  --color-cta-foreground: var(--cta-foreground);
+  --color-disabled: var(--disabled);
+  --color-danger: var(--danger);
+  --color-surface-info: var(--surface-info);
+  --color-surface-cta: var(--surface-cta);
+  --color-surface-muted: var(--surface-muted);
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background font-sans text-base text-foreground;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

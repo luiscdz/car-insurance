@@ -1,0 +1,26 @@
+# Only the application code is formatted; references, records and agent files are left as written.
+*
+!apps/
+!apps/**
+!packages/
+!packages/**
+!e2e/
+!e2e/**
+!*.json
+!*.yml
+!.prettierrc.json
+
+package-lock.json
+**/node_modules/
+**/dist/
+**/build/
+**/coverage/
+**/.angular/
+**/.strapi/
+**/.tmp/
+apps/cms/types/generated/
+apps/cms/public/
+e2e/test-results/
+e2e/playwright-report/
+skills-lock.json
+**/.strapi-updater.json
