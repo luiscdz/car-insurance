@@ -28,6 +28,11 @@ excluded = [
   ".venv/*", ".idea/*", "*.DS_Store", ".env", "apps/*/.env",
   ".claude/*", ".codex/*", ".agents/skills/roclec-*", "AGENTS.md", "CLAUDE.md",
   "README.md", "FLOW.md", "docs/assessment/*", "docs/pilot/*", "apps/*/.gitignore", "apps/*/README.md",
+  ".agents/skills/angular-developer/*", ".agents/skills/design-lab/*",
+  ".agents/skills/design-taste-frontend/*", ".agents/skills/frontend-design/*",
+  ".agents/skills/impeccable/*", ".agents/skills/strapi-docs-mcp/*",
+  ".agents/skills/ui-ux-pro-max/*", ".agents/skills/web-design-guidelines/*",
+  "skills-lock.json", ".gitattributes",
 ]
 verification = [
   {id = "web-unit", argv = ["npm", "run", "test:ci"], cwd = "apps/web", timeout_seconds = 600},
