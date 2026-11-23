@@ -1,4 +1,4 @@
-<!-- roclec-managed-view sha256=f10c2e219205d532a080542257b6b3e0cf39986a4c358b01c8c6f41763775be7 -->
+<!-- roclec-managed-view sha256=4e4e912ca626d7bfaca8e02d86749649099f9c5488479e8ecfb26f13e3c2d141 -->
 # Project flow
 
 Generated from `.roclec/flow.toml` by `roclec views --write`. Do not edit by hand.
@@ -110,7 +110,7 @@ None recorded.
 
 | Role | foundation |
 | --- | --- |
-| coordinator | 1 |
+| coordinator | 2 |
 
 ### Retrospective
 

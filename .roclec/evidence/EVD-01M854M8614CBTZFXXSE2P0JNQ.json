@@ -1,0 +1,24 @@
+{
+  "actor": "luis-cardozo",
+  "digest": "653123bb7f6033f45386b7241b39cdbc47b5f077df17d375d9376eb2ed322e75",
+  "ended_at": "2026-11-23T21:19:27Z",
+  "executed_by_roclec": false,
+  "host": "claude-code",
+  "host_session_id": "8b128363-ba1d-4160-80d1-0453f40bbb95",
+  "id": "EVD-01M854M8614CBTZFXXSE2P0JNQ",
+  "kind": "agent-session",
+  "model": "claude-opus-5-5",
+  "model_schema": 2,
+  "role": "coordinator",
+  "stage": "foundation",
+  "started_at": "2026-11-23T20:04:36Z",
+  "subject": "stack",
+  "transcript": {
+    "name": "8b128363-ba1d-4160-80d1-0453f40bbb95.jsonl",
+    "redactions": 18,
+    "sha256": "f3eb4ab2023512ec0f9f491077e768316ce124181d3a18ad197da96b46497eed",
+    "size": 2265031,
+    "storage": "versioned-redacted",
+    "versioned_sha256": "436a932b3dfe89ea55d5cf21cb5d74837a3615aaaed7bd447375aab4178cd570"
+  }
+}
