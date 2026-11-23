@@ -1,0 +1,28 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-001",
+      "status": "met"
+    },
+    {
+      "id": "CR-002",
+      "status": "met"
+    },
+    {
+      "id": "CR-003",
+      "status": "met"
+    }
+  ],
+  "entity": "country-content",
+  "flow": "17d14ca0bada994fde64c0d81dc98681311f7b02520fda722d5e1f68c76fa2ba",
+  "id": "3f38fb79a67d75154c3753e2321fca0b740d554f7a316112e09522bb160a4bd1",
+  "kind": "foundation",
+  "model_schema": 2,
+  "previous": "679185d6c186ea8233dcb8ed4ba629715c1a4113c0aece90e6896fdbb40743c2",
+  "reason": "Owner agrees country-content generalized to every screen of the application.",
+  "sources": {
+    "country-content": "6076186fc9d8a667a83862233be6ea9042afab7338a6a38104cac1f15da88d4c"
+  },
+  "status": "agreed"
+}

@@ -74,6 +74,7 @@ description = "Capture discovery and draft the capability/change bundle with sou
 ai = true
 session_evidence = "optional"
 role = "specifier"
+skills = ["story-spec"]
 
 [stages.approve]
 description = "Approve the exact intent of the change; approval freezes its digest."
@@ -94,6 +95,7 @@ description = "Assign the approved change to a release and plan the implementati
 ai = true
 session_evidence = "optional"
 role = "implementer"
+skills = ["country-content"]
 
 [stages.implement]
 description = "Implement the approved change within its declared scope."
@@ -101,6 +103,7 @@ ai = true
 session_evidence = "optional"
 role = "implementer"
 checkpoint = { decider = "owner", criteria = ["CR-011"], on_reject = "revise" }
+skills = ["country-content"]
 
 [stages.verify]
 description = "Run the configured checks and record evidence covering the acceptance criteria."
@@ -113,6 +116,7 @@ description = "Independent review of the candidate; findings stay open until res
 ai = true
 session_evidence = "optional"
 role = "reviewer"
+skills = ["country-content"]
 
 [stages.integrate]
 description = "Integrate the verified, reviewed candidate per component."

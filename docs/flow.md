@@ -1,4 +1,4 @@
-<!-- roclec-managed-view sha256=3332e47ead1573331e43f4029adbb38e605f0f29b5e97d9742ac04539d0668b2 -->
+<!-- roclec-managed-view sha256=eeb6d28962101d09c1572a350ce02301872dde7d276804484d3fef5dd94deb5d -->
 # Project flow
 
 Generated from `.roclec/flow.toml` by `roclec views --write`. Do not edit by hand.
@@ -6,13 +6,13 @@ Generated from `.roclec/flow.toml` by `roclec views --write`. Do not edit by han
 | Step | Stage | Description | AI | Role | Skills and model | Deliverables | Human checkpoint | Criteria | On reject |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | foundation | Agree the project references (constitution, ADRs, process) before changes depend on them. | yes | coordinator | session model | — | owner | CR-001, CR-002, CR-003 | revise |
-| 2 | define | Capture discovery and draft the capability/change bundle with sources and acceptance criteria. | yes | specifier | session model | — | — | — | — |
+| 2 | define | Capture discovery and draft the capability/change bundle with sources and acceptance criteria. | yes | specifier | `story-spec`<br>session model | — | — | — | — |
 | 3 | approve | Approve the exact intent of the change; approval freezes its digest. | no: Only a person decides which intent is accepted. | owner | — | — | owner | CR-004, CR-005, CR-006, CR-007, CR-008 | revise |
 | 4 | design | Produce and review user-facing design or prototypes before implementation. | yes | coordinator | session model | — | owner | CR-009, CR-010 | revise |
-| 5 | plan | Assign the approved change to a release and plan the implementation work. | yes | implementer | session model | — | — | — | — |
-| 6 | implement | Implement the approved change within its declared scope. | yes | implementer | session model | — | owner (pre-implement) | CR-011 | revise |
+| 5 | plan | Assign the approved change to a release and plan the implementation work. | yes | implementer | `country-content`<br>session model | — | — | — | — |
+| 6 | implement | Implement the approved change within its declared scope. | yes | implementer | `country-content`<br>session model | — | owner (pre-implement) | CR-011 | revise |
 | 7 | verify | Run the configured checks and record evidence covering the acceptance criteria. | yes | implementer | session model | — | — | — | — |
-| 8 | review | Independent review of the candidate; findings stay open until resolved or decided. | yes | reviewer | session model | — | — | — | — |
+| 8 | review | Independent review of the candidate; findings stay open until resolved or decided. | yes | reviewer | `country-content`<br>session model | — | — | — | — |
 | 9 | integrate | Integrate the verified, reviewed candidate per component. | yes | coordinator | session model | — | owner (pre-integrate) | CR-012 | revise |
 | 10 | release | Verify the combined release, prepare it and record the existing Git publication. | yes | coordinator | session model | — | — | — | — |
 
@@ -60,23 +60,17 @@ Registered skill references (`roclec reference add <id> --role skill`). A skill 
 
 | Skill | Path | Components | Stages |
 | --- | --- | --- | --- |
-| `country-content` | [.agents/skills/country-content](../.agents/skills/country-content) | app | every stage |
-| `story-spec` | [.agents/skills/story-spec](../.agents/skills/story-spec) | app | every stage |
+| `country-content` | [.agents/skills/country-content](../.agents/skills/country-content) | app | plan, implement, review |
+| `story-spec` | [.agents/skills/story-spec](../.agents/skills/story-spec) | app | define |
 
 ### Skills by stage
 
 | Stage | Skills (components) |
 | --- | --- |
-| foundation | `country-content` (app)<br>`story-spec` (app) |
-| define | `country-content` (app)<br>`story-spec` (app) |
-| approve | `country-content` (app)<br>`story-spec` (app) |
-| design | `country-content` (app)<br>`story-spec` (app) |
-| plan | `country-content` (app)<br>`story-spec` (app) |
-| implement | `country-content` (app)<br>`story-spec` (app) |
-| verify | `country-content` (app)<br>`story-spec` (app) |
-| review | `country-content` (app)<br>`story-spec` (app) |
-| integrate | `country-content` (app)<br>`story-spec` (app) |
-| release | `country-content` (app)<br>`story-spec` (app) |
+| define | `story-spec` (app) |
+| plan | `country-content` (app) |
+| implement | `country-content` (app) |
+| review | `country-content` (app) |
 
 ## Flow learning
 
@@ -89,6 +83,7 @@ Agreements of the process reference in decision order, with the process FUTs eac
 | Decision | Flow sha256 | Actor | Reason | Process FUTs addressed |
 | --- | --- | --- | --- | --- |
 | `3754daad79d8b28bfe5b36d05bc2875fff81cc45c51bfa237fd3d51dfe41760f` | `8a39e2be42b3c45936ac8ed9ca6dd11c80f2bb563fcfb0b1d3ecc24443e9cbce` | luis-cardozo | Owner agreed the flow after reviewing each criterion, the checkpoints and the seeded stage roles one by one. | — |
+| `6f9144f765b544da65265126ffb05fa52de419eae5ecacecc6f51e46200d544b` | `17d14ca0bada994fde64c0d81dc98681311f7b02520fda722d5e1f68c76fa2ba` | luis-cardozo | Owner agrees the flow with knowledge skills scoped by stage: story-spec in define; country-content in plan, implement and review. | — |
 
 ### Open process FUTs
 

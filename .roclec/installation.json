@@ -24,7 +24,7 @@
     ".claude/agents/roclec-implementer.md": "9a55e032f79f279106c12d335a4983697ed18678ed98ca7976454842d6cdb841",
     ".claude/agents/roclec-reviewer.md": "b881a6f90fa6acad13ba93f05e1b66790b797b458248001e7f59f6ed8b096712",
     ".claude/agents/roclec-specifier.md": "4273f405384bef89bed620ec617703aeb5d1ea8c7814118a4dca62a16bd1d2a6",
-    ".claude/skills/country-content/SKILL.md": "d5ff45206fb30ad0775d03d7557a63af76652d120970617682360de4213e85d0",
+    ".claude/skills/country-content/SKILL.md": "4acafd2ff69500197546984f3311b3081fc8c2e3cdce82716eca120780a7044d",
     ".claude/skills/roclec-amend/SKILL.md": "e028ebebe366533a94784b019f2ea77d7ed41656e7995cf614edd6836b247d77",
     ".claude/skills/roclec-analyze/SKILL.md": "003d98446b67da2a74ef80ece0c90830cf8efd174a8b7bdca2feeca998362c94",
     ".claude/skills/roclec-checklist/SKILL.md": "610ea2728a29176029d64f0b072a83705c1b213ad1e43e30a694c4cdd1f4a519",
@@ -55,10 +55,10 @@
     ".roclec/notices/spec-kit-provenance.json": "1bad8587bd0d9966b711ad4aca2c0f608a9cd4f8079cfd9209a218f2a2e147fd",
     ".roclec/run": "66f839c20764cd6d585b1736b37b5a58d6a1c27ccdf4cb2599ed9c7b55ea2d39",
     ".roclec/workflow.md": "91c336d0688834571efc59c080328e3f1d76259ee407b6566ccec8e36d588986",
-    "AGENTS.md": "dd58d773f3173e1a67070f19c4c315a53a9afe0834b98159048756bf4f678458",
-    "CLAUDE.md": "dd58d773f3173e1a67070f19c4c315a53a9afe0834b98159048756bf4f678458"
+    "AGENTS.md": "2afb3540dc8245f45c05431c71e4b92fc56d4a7de12f34cf922c70e4f88a29f9",
+    "CLAUDE.md": "2afb3540dc8245f45c05431c71e4b92fc56d4a7de12f34cf922c70e4f88a29f9"
   },
-  "generation": "77d7b2fa572cbd3ce72c2cba84b9c295c8cd4d2660b719b4735c5442ac5b9cb3",
+  "generation": "0763b9c98d57b23c167a0e83df54f229c9236776f8c336134b2d0df73403f218",
   "managed": [
     ".agents/skills/roclec-amend/SKILL.md",
     ".agents/skills/roclec-analyze/SKILL.md",

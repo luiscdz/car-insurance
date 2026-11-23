@@ -25,6 +25,6 @@ ADRs:
 - `ADR-001`: [docs/adr/ADR-001-multi-country-content.md](docs/adr/ADR-001-multi-country-content.md); components: all components
 
 Knowledge skills (`.agents/skills/`, copied to `.claude/skills/` by `roclec skills`):
-- `country-content`: [.agents/skills/country-content](.agents/skills/country-content); components: all components; stages: every stage
-- `story-spec`: [.agents/skills/story-spec](.agents/skills/story-spec); components: all components; stages: every stage
+- `country-content`: [.agents/skills/country-content](.agents/skills/country-content); components: all components; stages: plan, implement, review
+- `story-spec`: [.agents/skills/story-spec](.agents/skills/story-spec); components: all components; stages: define
 <!-- roclec-spec-kit:end -->

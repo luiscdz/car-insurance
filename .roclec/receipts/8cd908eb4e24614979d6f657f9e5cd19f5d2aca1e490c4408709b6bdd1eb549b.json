@@ -1,0 +1,21 @@
+{
+  "kind": "views",
+  "model_schema": 2,
+  "operation_id": "8cd908eb4e24614979d6f657f9e5cd19f5d2aca1e490c4408709b6bdd1eb549b",
+  "payload": {
+    "flow_view": "docs/flow.md",
+    "generation": "bdbf7c6f8057e6ae21042eb1f3235d1091d5fc74abb5dd41544126c6b35b4c8d",
+    "instructions": [
+      "AGENTS.md",
+      "CLAUDE.md"
+    ],
+    "sources": {
+      "app": {}
+    }
+  },
+  "writes": {
+    "AGENTS.md": "2afb3540dc8245f45c05431c71e4b92fc56d4a7de12f34cf922c70e4f88a29f9",
+    "CLAUDE.md": "2afb3540dc8245f45c05431c71e4b92fc56d4a7de12f34cf922c70e4f88a29f9",
+    "docs/flow.md": "5b25fcc4000aeb4db28d60d3c39afb125d7303de6210ebac8a1b189f94fe4df0"
+  }
+}

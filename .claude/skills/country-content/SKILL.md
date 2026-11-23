@@ -7,7 +7,7 @@ description: Load when planning, implementing or reviewing a change that adds or
 
 ## Purpose
 
-Every wizard screen depends on content that differs by country and is edited by the business team in Strapi. This skill is the repeatable procedure to add or change that content end to end, from the Strapi model to the tests, so that no change breaks the single build for both countries or exposes more than the public role should.
+Every screen of the application, starting with the wizard, depends on content that differs by country and is edited by the business team in Strapi. This skill is the repeatable procedure to add or change that content end to end, from the Strapi model to the tests, so that no change breaks the single build for both countries or exposes more than the public role should.
 
 ## Applies to
 

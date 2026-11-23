@@ -1,0 +1,28 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-001",
+      "status": "met"
+    },
+    {
+      "id": "CR-002",
+      "status": "met"
+    },
+    {
+      "id": "CR-003",
+      "status": "met"
+    }
+  ],
+  "entity": "flow",
+  "flow": "17d14ca0bada994fde64c0d81dc98681311f7b02520fda722d5e1f68c76fa2ba",
+  "id": "6f9144f765b544da65265126ffb05fa52de419eae5ecacecc6f51e46200d544b",
+  "kind": "foundation",
+  "model_schema": 2,
+  "previous": "3754daad79d8b28bfe5b36d05bc2875fff81cc45c51bfa237fd3d51dfe41760f",
+  "reason": "Owner agrees the flow with knowledge skills scoped by stage: story-spec in define; country-content in plan, implement and review.",
+  "sources": {
+    "flow": "17d14ca0bada994fde64c0d81dc98681311f7b02520fda722d5e1f68c76fa2ba"
+  },
+  "status": "agreed"
+}
