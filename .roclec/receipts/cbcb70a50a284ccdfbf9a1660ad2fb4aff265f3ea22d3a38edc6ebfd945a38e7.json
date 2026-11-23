@@ -1,0 +1,11 @@
+{
+  "kind": "reference-add",
+  "model_schema": 2,
+  "operation_id": "cbcb70a50a284ccdfbf9a1660ad2fb4aff265f3ea22d3a38edc6ebfd945a38e7",
+  "payload": {
+    "id": "ADR-001"
+  },
+  "writes": {
+    ".roclec/references.json": "007d6e012065b2fd1a0af5fdf01af8cfab2849189f40cf3b6f8667daf43a2c37"
+  }
+}

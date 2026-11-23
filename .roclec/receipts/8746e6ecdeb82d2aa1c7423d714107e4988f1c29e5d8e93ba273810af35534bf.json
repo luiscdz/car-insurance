@@ -1,0 +1,12 @@
+{
+  "kind": "foundation-agree",
+  "model_schema": 2,
+  "operation_id": "8746e6ecdeb82d2aa1c7423d714107e4988f1c29e5d8e93ba273810af35534bf",
+  "payload": {
+    "id": "ADR-001"
+  },
+  "writes": {
+    ".roclec/decisions/b33241190d01214829826d3f4be82612e5cffd1768abce86324e3404562d4a61.json": "83eb70d18dffedd4c3aee69fbbdbe9cdb1311c942c99513f7e971673dbe75118",
+    ".roclec/references.json": "dcf9999120b5e0ceed161b78e4cd10250f26433974cd70a6de907508018cdc46"
+  }
+}
