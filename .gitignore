@@ -9,3 +9,5 @@ dist/
 .venv/
 docs/pilot/bitacora.md
 .roclec/runtime/
+.agents
+.codex
