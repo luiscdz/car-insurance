@@ -1,3 +1,29 @@
+# Car insurance quoting app
+
+Multi-country (Colombia and Chile) car insurance quoting wizard: an Angular single-page application (`apps/web`) reading content from Strapi (`apps/cms`), with shared types and schemas (`packages/shared`) and end-to-end tests (`e2e`). Product context: [docs/context.md](docs/context.md).
+
+## Rules for every agent
+
+- The agreed references in the authority map below are the source of truth. This section only orients; when it and a reference disagree, the reference wins.
+- Work starts from a user story through the Roclec flow: load `roclec-coordinator`. No code is written without an approved spec.
+- Read the [principles](.roclec/constitution.md) before any change. The ones most often broken: no country-specific branches in code, no secrets in the browser, only fictitious data.
+- Use the official skills for framework questions: `angular-developer` for Angular and `strapi-docs-mcp` for Strapi. Design skills are listed in [docs/design.md](docs/design.md).
+- Never edit generated files: the managed block below, `.claude/skills/` copies, `docs/flow.md` and Roclec records under `.roclec/`.
+- Commit only when the person asks; never push, tag or deploy on your own.
+
+## Repository layout
+
+| Path | Content |
+| --- | --- |
+| `apps/web/` | Angular application |
+| `apps/cms/` | Strapi CMS |
+| `packages/shared/` | Shared types and Zod schemas |
+| `e2e/` | Playwright end-to-end and accessibility tests |
+| `docs/` | Agreed references; ADRs in `docs/adr/` |
+| `.agents/skills/` | The project's own knowledge skills (installed skills are not versioned) |
+
+Project commands are added here when the workspace is created.
+
 <!-- roclec-spec-kit:begin -->
 ## Roclec native workflow
 
