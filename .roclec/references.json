@@ -87,6 +87,15 @@
       "components": [
         "app"
       ],
+      "decision_id": "c8f1695b41de1a1a08099c3f25f1d2399f6afa63535af4afeeb7023bc37a65e2",
+      "id": "story-spec",
+      "path": ".agents/skills/story-spec",
+      "role": "skill"
+    },
+    {
+      "components": [
+        "app"
+      ],
       "decision_id": "2a34501fc7143c553c02a9890c51696722dce1b59c821a2a42fa1d7a1292bfeb",
       "id": "verification",
       "path": "docs/verification.md",

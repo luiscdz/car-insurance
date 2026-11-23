@@ -1,4 +1,4 @@
-<!-- roclec-managed-view sha256=4ac757ac3458d71bc671cc267e015d765fd15149cbd0606bedcd68a7fca43986 -->
+<!-- roclec-managed-view sha256=3332e47ead1573331e43f4029adbb38e605f0f29b5e97d9742ac04539d0668b2 -->
 # Project flow
 
 Generated from `.roclec/flow.toml` by `roclec views --write`. Do not edit by hand.
@@ -61,21 +61,22 @@ Registered skill references (`roclec reference add <id> --role skill`). A skill 
 | Skill | Path | Components | Stages |
 | --- | --- | --- | --- |
 | `country-content` | [.agents/skills/country-content](../.agents/skills/country-content) | app | every stage |
+| `story-spec` | [.agents/skills/story-spec](../.agents/skills/story-spec) | app | every stage |
 
 ### Skills by stage
 
 | Stage | Skills (components) |
 | --- | --- |
-| foundation | `country-content` (app) |
-| define | `country-content` (app) |
-| approve | `country-content` (app) |
-| design | `country-content` (app) |
-| plan | `country-content` (app) |
-| implement | `country-content` (app) |
-| verify | `country-content` (app) |
-| review | `country-content` (app) |
-| integrate | `country-content` (app) |
-| release | `country-content` (app) |
+| foundation | `country-content` (app)<br>`story-spec` (app) |
+| define | `country-content` (app)<br>`story-spec` (app) |
+| approve | `country-content` (app)<br>`story-spec` (app) |
+| design | `country-content` (app)<br>`story-spec` (app) |
+| plan | `country-content` (app)<br>`story-spec` (app) |
+| implement | `country-content` (app)<br>`story-spec` (app) |
+| verify | `country-content` (app)<br>`story-spec` (app) |
+| review | `country-content` (app)<br>`story-spec` (app) |
+| integrate | `country-content` (app)<br>`story-spec` (app) |
+| release | `country-content` (app)<br>`story-spec` (app) |
 
 ## Flow learning
 

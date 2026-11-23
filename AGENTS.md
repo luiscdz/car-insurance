@@ -26,4 +26,5 @@ ADRs:
 
 Knowledge skills (`.agents/skills/`, copied to `.claude/skills/` by `roclec skills`):
 - `country-content`: [.agents/skills/country-content](.agents/skills/country-content); components: all components; stages: every stage
+- `story-spec`: [.agents/skills/story-spec](.agents/skills/story-spec); components: all components; stages: every stage
 <!-- roclec-spec-kit:end -->

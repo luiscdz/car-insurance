@@ -45,6 +45,7 @@
     ".claude/skills/roclec-specify/references/native-bundle-layout.md": "5506bac8b14b561ba745476846e23d885449bfb3364fb41bd7a1fc2bea9969a3",
     ".claude/skills/roclec-tasks/SKILL.md": "bbf6829cc7caa0c0f291945176e7e7c16da4bbf1daf141232dbb3e6fe947e692",
     ".claude/skills/roclec-ux/SKILL.md": "ddc147baeedea1993224f3601723ac9f0ace3e9bf77dfcf14e909ecb3fa4780a",
+    ".claude/skills/story-spec/SKILL.md": "61ff4f46c9605486c14ca5b033ab4f6e1214914b3c222af33592e253b3f25b59",
     ".codex/agents/roclec-implementer.toml": "08b996b40aadc18ed08144b952d2fa481d6cdc98889a8aeb753a713eabe88466",
     ".codex/agents/roclec-reviewer.toml": "bad31868fec1b1a09d39dcd2bd9ea1faf222cf6895a40381a8edc719352a6a22",
     ".codex/agents/roclec-specifier.toml": "495a6172148592e744dd2e840b577f74db2a29c4e8fa2af39b44a5c664578ecf",
@@ -54,10 +55,10 @@
     ".roclec/notices/spec-kit-provenance.json": "1bad8587bd0d9966b711ad4aca2c0f608a9cd4f8079cfd9209a218f2a2e147fd",
     ".roclec/run": "66f839c20764cd6d585b1736b37b5a58d6a1c27ccdf4cb2599ed9c7b55ea2d39",
     ".roclec/workflow.md": "91c336d0688834571efc59c080328e3f1d76259ee407b6566ccec8e36d588986",
-    "AGENTS.md": "4348c46b35d4a85e0993da2049daf1f7087c5846d5a00297f634f283b5c024f6",
-    "CLAUDE.md": "4348c46b35d4a85e0993da2049daf1f7087c5846d5a00297f634f283b5c024f6"
+    "AGENTS.md": "dd58d773f3173e1a67070f19c4c315a53a9afe0834b98159048756bf4f678458",
+    "CLAUDE.md": "dd58d773f3173e1a67070f19c4c315a53a9afe0834b98159048756bf4f678458"
   },
-  "generation": "ec90612108a6dd577728897688ac87592db90ef90c736c40a4306bb34cc6f6f3",
+  "generation": "77d7b2fa572cbd3ce72c2cba84b9c295c8cd4d2660b719b4735c5442ac5b9cb3",
   "managed": [
     ".agents/skills/roclec-amend/SKILL.md",
     ".agents/skills/roclec-analyze/SKILL.md",
@@ -103,6 +104,7 @@
     ".claude/skills/roclec-specify/references/native-bundle-layout.md",
     ".claude/skills/roclec-tasks/SKILL.md",
     ".claude/skills/roclec-ux/SKILL.md",
+    ".claude/skills/story-spec/SKILL.md",
     ".codex/agents/roclec-implementer.toml",
     ".codex/agents/roclec-reviewer.toml",
     ".codex/agents/roclec-specifier.toml",

@@ -1,0 +1,28 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-001",
+      "status": "met"
+    },
+    {
+      "id": "CR-002",
+      "status": "met"
+    },
+    {
+      "id": "CR-003",
+      "status": "met"
+    }
+  ],
+  "entity": "story-spec",
+  "flow": "8a39e2be42b3c45936ac8ed9ca6dd11c80f2bb563fcfb0b1d3ecc24443e9cbce",
+  "id": "c8f1695b41de1a1a08099c3f25f1d2399f6afa63535af4afeeb7023bc37a65e2",
+  "kind": "foundation",
+  "model_schema": 2,
+  "previous": null,
+  "reason": "Owner agrees the story-spec procedure to turn any user story into a verifiable change bundle.",
+  "sources": {
+    "story-spec": "e9a6fa88cf5747adbef0843ecec49081c786c90b3dcc28d874eccb702c4be997"
+  },
+  "status": "agreed"
+}
