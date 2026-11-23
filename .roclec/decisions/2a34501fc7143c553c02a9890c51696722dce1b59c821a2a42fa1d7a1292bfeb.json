@@ -1,0 +1,28 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-001",
+      "status": "met"
+    },
+    {
+      "id": "CR-002",
+      "status": "met"
+    },
+    {
+      "id": "CR-003",
+      "status": "met"
+    }
+  ],
+  "entity": "verification",
+  "flow": "8a39e2be42b3c45936ac8ed9ca6dd11c80f2bb563fcfb0b1d3ecc24443e9cbce",
+  "id": "2a34501fc7143c553c02a9890c51696722dce1b59c821a2a42fa1d7a1292bfeb",
+  "kind": "foundation",
+  "model_schema": 2,
+  "previous": null,
+  "reason": "Owner agrees the verification strategy: unit, component, end-to-end for both countries and accessibility tests, run by Roclec on every candidate.",
+  "sources": {
+    "verification": "7d9becbed34cc825d1ab35f11b4bef8c4b3cc28072bf4058c4918318b41ace25"
+  },
+  "status": "agreed"
+}

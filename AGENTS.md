@@ -18,6 +18,7 @@ References by role:
 - principles `principles`: [.roclec/constitution.md](.roclec/constitution.md); components: all components
 - process `flow`: [.roclec/flow.toml](.roclec/flow.toml); components: all components
 - stack `stack`: [docs/stack.md](docs/stack.md); components: all components
+- verification `verification`: [docs/verification.md](docs/verification.md); components: all components
 
 ADRs:
 - `ADR-001`: [docs/adr/ADR-001-multi-country-content.md](docs/adr/ADR-001-multi-country-content.md); components: all components

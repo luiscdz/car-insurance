@@ -64,6 +64,15 @@
       "id": "stack",
       "path": "docs/stack.md",
       "role": "stack"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "decision_id": "2a34501fc7143c553c02a9890c51696722dce1b59c821a2a42fa1d7a1292bfeb",
+      "id": "verification",
+      "path": "docs/verification.md",
+      "role": "verification"
     }
   ]
 }
