@@ -1,0 +1,12 @@
+{
+  "kind": "foundation-agree",
+  "model_schema": 2,
+  "operation_id": "5f20936bf44079a470eac7117e8d14127dde0df662806cadb5b2b0b869728044",
+  "payload": {
+    "id": "engineering"
+  },
+  "writes": {
+    ".roclec/decisions/ca5077867d8cfcea5d9857cce008b4cdd900ca7cffa162380b3196ba0f31971d.json": "82ad8d98c307dcd934a59051c1eb3ace5f03c01a6fc60f98b678539c50689f56",
+    ".roclec/references.json": "76804b3f7c93b8ff3aea0afb29ac17578200fc9a1f4290b0ecac2168e9510f9a"
+  }
+}

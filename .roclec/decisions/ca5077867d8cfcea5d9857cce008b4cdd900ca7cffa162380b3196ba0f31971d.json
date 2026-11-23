@@ -1,0 +1,28 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-001",
+      "status": "met"
+    },
+    {
+      "id": "CR-002",
+      "status": "met"
+    },
+    {
+      "id": "CR-003",
+      "status": "met"
+    }
+  ],
+  "entity": "engineering",
+  "flow": "8a39e2be42b3c45936ac8ed9ca6dd11c80f2bb563fcfb0b1d3ecc24443e9cbce",
+  "id": "ca5077867d8cfcea5d9857cce008b4cdd900ca7cffa162380b3196ba0f31971d",
+  "kind": "foundation",
+  "model_schema": 2,
+  "previous": null,
+  "reason": "Owner agrees the engineering conventions, including SOLID and clean code stated as reviewable rules.",
+  "sources": {
+    "engineering": "33dff2a2ef0e2fe75db14572003a6ec6ac85f1626dc5169ce09795d17b0c0fa9"
+  },
+  "status": "agreed"
+}

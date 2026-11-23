@@ -1,0 +1,11 @@
+{
+  "kind": "reference-add",
+  "model_schema": 2,
+  "operation_id": "168e7a1b9982b39246b3776a2c31aacb14b4b070e7af07719b6f5a0fbf0e9535",
+  "payload": {
+    "id": "engineering"
+  },
+  "writes": {
+    ".roclec/references.json": "54612b76765ca6c3ed7c05ea2913e5a51e7c744e128b6cf6e446f5a31487e885"
+  }
+}
