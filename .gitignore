@@ -6,3 +6,5 @@ dist/
 .env
 .env.*
 !.env.example
+.venv/
+docs/pilot/bitacora.md
