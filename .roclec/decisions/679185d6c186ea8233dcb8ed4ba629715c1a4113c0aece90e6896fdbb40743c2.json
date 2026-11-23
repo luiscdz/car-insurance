@@ -1,0 +1,28 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-001",
+      "status": "met"
+    },
+    {
+      "id": "CR-002",
+      "status": "met"
+    },
+    {
+      "id": "CR-003",
+      "status": "met"
+    }
+  ],
+  "entity": "country-content",
+  "flow": "8a39e2be42b3c45936ac8ed9ca6dd11c80f2bb563fcfb0b1d3ecc24443e9cbce",
+  "id": "679185d6c186ea8233dcb8ed4ba629715c1a4113c0aece90e6896fdbb40743c2",
+  "kind": "foundation",
+  "model_schema": 2,
+  "previous": null,
+  "reason": "Owner agrees the country-content procedure for country-specific Strapi content, from model to tests.",
+  "sources": {
+    "country-content": "351c3031a5116cb00f5518ee5991d4e61223d0271058b6e694db88c05d44111b"
+  },
+  "status": "agreed"
+}

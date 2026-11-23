@@ -1,4 +1,4 @@
-<!-- roclec-managed-view sha256=65a2fd7b810001f7d6f86f91aa5eec48fbd18b367a11879c7d1b1308c059650f -->
+<!-- roclec-managed-view sha256=4ac757ac3458d71bc671cc267e015d765fd15149cbd0606bedcd68a7fca43986 -->
 # Project flow
 
 Generated from `.roclec/flow.toml` by `roclec views --write`. Do not edit by hand.
@@ -53,6 +53,29 @@ flowchart LR
   class S3 person;
   class S1,S3,S4,S6,S9 checkpoint;
 ```
+
+## Knowledge skills
+
+Registered skill references (`roclec reference add <id> --role skill`). A skill applies to its components at the stages whose `skills` list it, or at every stage when no stage lists it. `roclec inspect --change CHG-ID` gives each role this list with its fingerprints.
+
+| Skill | Path | Components | Stages |
+| --- | --- | --- | --- |
+| `country-content` | [.agents/skills/country-content](../.agents/skills/country-content) | app | every stage |
+
+### Skills by stage
+
+| Stage | Skills (components) |
+| --- | --- |
+| foundation | `country-content` (app) |
+| define | `country-content` (app) |
+| approve | `country-content` (app) |
+| design | `country-content` (app) |
+| plan | `country-content` (app) |
+| implement | `country-content` (app) |
+| verify | `country-content` (app) |
+| review | `country-content` (app) |
+| integrate | `country-content` (app) |
+| release | `country-content` (app) |
 
 ## Flow learning
 

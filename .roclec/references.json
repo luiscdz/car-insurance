@@ -33,6 +33,15 @@
       "components": [
         "app"
       ],
+      "decision_id": "679185d6c186ea8233dcb8ed4ba629715c1a4113c0aece90e6896fdbb40743c2",
+      "id": "country-content",
+      "path": ".agents/skills/country-content",
+      "role": "skill"
+    },
+    {
+      "components": [
+        "app"
+      ],
       "decision_id": "2f0ac8b23724f5713c28d38458199f93f758a9b9108f2857d6827a931533c1c7",
       "id": "design",
       "path": "docs/design.md",
