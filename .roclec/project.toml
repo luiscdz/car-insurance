@@ -1,0 +1,36 @@
+schema = 3
+name = "Car insurance"
+trunk_ref = "refs/heads/main"
+secret_env = ["APP_KEYS", "API_TOKEN_SALT", "ADMIN_JWT_SECRET", "TRANSFER_TOKEN_SALT", "JWT_SECRET", "ENCRYPTION_KEY", "STRAPI_API_TOKEN"]
+redact_patterns = ["eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}", "[0-9a-f]{128,}"]
+
+[sessions]
+storage = "versioned-redacted"
+
+[components.app]
+repo = "."
+target_ref = "refs/remotes/origin/main"
+user_facing = true
+inputs = [
+  "apps/web/src/**", "apps/web/public/**", "apps/web/package.json", "apps/web/package-lock.json",
+  "apps/web/angular.json", "apps/web/tsconfig*.json",
+  "apps/cms/src/**", "apps/cms/config/**", "apps/cms/database/**", "apps/cms/types/**", "apps/cms/scripts/**",
+  "apps/cms/package.json", "apps/cms/package-lock.json", "apps/cms/tsconfig*.json", "apps/cms/.env.example",
+  "e2e/tests/**", "e2e/package.json", "e2e/package-lock.json", "e2e/playwright.config.ts",
+  "docker-compose.yml", ".env.example",
+]
+generated = [
+  "*node_modules/*", "apps/web/dist/**", "apps/web/.angular/**",
+  "apps/cms/dist/**", "apps/cms/build/**", "apps/cms/.strapi/**", "apps/cms/.tmp/**", "apps/cms/public/uploads/**",
+  "e2e/test-results/**", "e2e/playwright-report/**",
+]
+excluded = [
+  ".venv/*", ".idea/*", "*.DS_Store", ".env", "apps/*/.env",
+  ".claude/*", ".codex/*", ".agents/skills/roclec-*", "AGENTS.md", "CLAUDE.md",
+  "README.md", "FLOW.md", "docs/assessment/*", "docs/pilot/*", "apps/*/.gitignore", "apps/*/README.md",
+]
+verification = [
+  {id = "web-unit", argv = ["npm", "run", "test:ci"], cwd = "apps/web", timeout_seconds = 600},
+  {id = "web-build", argv = ["npm", "run", "build"], cwd = "apps/web", timeout_seconds = 600},
+  {id = "cms-build", argv = ["npm", "run", "build"], cwd = "apps/cms", timeout_seconds = 600},
+]

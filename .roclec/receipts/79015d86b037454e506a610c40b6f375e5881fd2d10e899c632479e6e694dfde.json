@@ -1,0 +1,131 @@
+{
+  "kind": "init",
+  "model_schema": 2,
+  "operation_id": "79015d86b037454e506a610c40b6f375e5881fd2d10e899c632479e6e694dfde",
+  "payload": {
+    "flow_view": "docs/flow.md",
+    "profile": {
+      "components": {
+        "app": {
+          "excluded": [
+            ".venv/*",
+            ".idea/*",
+            "*.DS_Store",
+            ".env",
+            "apps/*/.env",
+            ".claude/*",
+            ".codex/*",
+            ".agents/skills/roclec-*",
+            "AGENTS.md",
+            "CLAUDE.md",
+            "README.md",
+            "FLOW.md",
+            "docs/assessment/*",
+            "docs/pilot/*",
+            "apps/*/.gitignore",
+            "apps/*/README.md"
+          ],
+          "generated": [
+            "*node_modules/*",
+            "apps/web/dist/**",
+            "apps/web/.angular/**",
+            "apps/cms/dist/**",
+            "apps/cms/build/**",
+            "apps/cms/.strapi/**",
+            "apps/cms/.tmp/**",
+            "apps/cms/public/uploads/**",
+            "e2e/test-results/**",
+            "e2e/playwright-report/**"
+          ],
+          "inputs": [
+            "apps/web/src/**",
+            "apps/web/public/**",
+            "apps/web/package.json",
+            "apps/web/package-lock.json",
+            "apps/web/angular.json",
+            "apps/web/tsconfig*.json",
+            "apps/cms/src/**",
+            "apps/cms/config/**",
+            "apps/cms/database/**",
+            "apps/cms/types/**",
+            "apps/cms/scripts/**",
+            "apps/cms/package.json",
+            "apps/cms/package-lock.json",
+            "apps/cms/tsconfig*.json",
+            "apps/cms/.env.example",
+            "e2e/tests/**",
+            "e2e/package.json",
+            "e2e/package-lock.json",
+            "e2e/playwright.config.ts",
+            "docker-compose.yml",
+            ".env.example"
+          ],
+          "repo": ".",
+          "target_ref": "refs/remotes/origin/main",
+          "user_facing": true,
+          "verification": [
+            {
+              "argv": [
+                "npm",
+                "run",
+                "test:ci"
+              ],
+              "cwd": "apps/web",
+              "id": "web-unit",
+              "timeout_seconds": 600
+            },
+            {
+              "argv": [
+                "npm",
+                "run",
+                "build"
+              ],
+              "cwd": "apps/web",
+              "id": "web-build",
+              "timeout_seconds": 600
+            },
+            {
+              "argv": [
+                "npm",
+                "run",
+                "build"
+              ],
+              "cwd": "apps/cms",
+              "id": "cms-build",
+              "timeout_seconds": 600
+            }
+          ]
+        }
+      },
+      "name": "Car insurance",
+      "redact_patterns": [
+        "eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}",
+        "[0-9a-f]{128,}"
+      ],
+      "schema": 3,
+      "secret_env": [
+        "APP_KEYS",
+        "API_TOKEN_SALT",
+        "ADMIN_JWT_SECRET",
+        "TRANSFER_TOKEN_SALT",
+        "JWT_SECRET",
+        "ENCRYPTION_KEY",
+        "STRAPI_API_TOKEN"
+      ],
+      "sessions": {
+        "storage": "versioned-redacted"
+      },
+      "trunk_ref": "refs/heads/main"
+    }
+  },
+  "writes": {
+    ".gitignore": "e14013312a9ee13f74ad7da4396816d3a4913f075a98d3a288ac1b7d569ad0bf",
+    ".roclec/current.json": "4a42e21d89b5a26117a5a406de4d15ba9796d349102d482b5d66d5ab4caf9e92",
+    ".roclec/flow.toml": "87cd9cd568b92d370edbe8ec85666a181946a34a58c4538b6ed9a07fc6b32e64",
+    ".roclec/identities.json": "1c9e5e19c9c96c6f323a1393f573814efb85e75c9cc73f57474ec0b1d3425af8",
+    ".roclec/project.toml": "4d0f22b99d19344ab006b2263bc6ed29df3b926f751772913abbe7d6742b52c5",
+    ".roclec/references.json": "42deecb4a39d05920402bb2e0928f46fbea24f755b40a13b3ee8efc6f1327418",
+    "docs/flow-retro.md": "071fa175c1fbfe5352f7c25308c63fff387b31ca4888861783f1eefd04f7e6cf",
+    "docs/flow.md": "c2bf9f83c9a2cdec77c7118ceb3e5b7663c265a8f567e662edd6242b06276095"
+  }
+}
