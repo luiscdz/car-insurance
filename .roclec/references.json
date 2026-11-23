@@ -1,4 +1,14 @@
 {
   "model_schema": 2,
-  "references": []
+  "references": [
+    {
+      "components": [
+        "app"
+      ],
+      "decision_id": "3754daad79d8b28bfe5b36d05bc2875fff81cc45c51bfa237fd3d51dfe41760f",
+      "id": "flow",
+      "path": ".roclec/flow.toml",
+      "role": "process"
+    }
+  ]
 }

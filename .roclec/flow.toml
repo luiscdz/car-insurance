@@ -21,29 +21,58 @@ view = "docs/flow.md"
 kind = "human"
 description = "Person who agrees references, approves intent and accepts prototypes."
 
+# Foundation: every reference agreement (flow, constitution, ADRs, knowledge skills).
 [criteria.CR-001]
-text = "The reference reflects the practice the user agreed."
+text = "The reference states only what the owner decided; nothing was assumed by the agent."
 
 [criteria.CR-002]
-text = "Every origin criterion is covered, excluded or deferred."
+text = "The reference is consistent with the business context, functional scope and user stories of the product."
 
 [criteria.CR-003]
-text = "The proposal states the intended behavior."
+text = "The reference does not contradict any reference already agreed."
 
+# Approve: the proposal of each change.
 [criteria.CR-004]
-text = "The prototype matches the approved intention."
+text = "Each origin criterion is mapped to ACs that actually satisfy it; every exclusion or deferral has a reason the owner accepts."
+
+[criteria.CR-005]
+text = "The proposal states observable behavior without ambiguity, including limits and error cases."
+
+[criteria.CR-006]
+text = "Every AC names how it will be verified (unit test, e2e test or declared manual check)."
+
+[criteria.CR-007]
+text = "Gaps in the origin (missing states, limits, country differences) are resolved as derived ACs or as answers from the owner; none is silently assumed."
+
+[criteria.CR-008]
+text = "The proposal cites every agreed ADR it depends on; any new architecture decision it needs is raised as a proposed ADR, not decided inside the proposal."
+
+# Design: the prototype of each user-facing change.
+[criteria.CR-009]
+text = "The prototype demonstrates every user-facing AC of the approved proposal and adds no behavior it does not state."
+
+[criteria.CR-010]
+text = "The prototype shows the screen with Colombia's and with Chile's content."
+
+# Pre-implement: the plan and tasks before any code is written.
+[criteria.CR-011]
+text = "Plan and tasks cover every AC, stay within the component's paths and follow the agreed ADRs."
+
+# Pre-integrate: the reviewed candidate before it lands.
+[criteria.CR-012]
+text = "Review findings are resolved or decided by the owner, and all checks pass."
 
 [stages.foundation]
 description = "Agree the project references (constitution, ADRs, process) before changes depend on them."
 ai = true
-session_evidence = "required"
+session_evidence = "optional"
 role = "coordinator"
-checkpoint = { decider = "owner", criteria = ["CR-001"], on_reject = "revise" }
+checkpoint = { decider = "owner", criteria = ["CR-001", "CR-002", "CR-003"], on_reject = "revise" }
 
 [stages.define]
 description = "Capture discovery and draft the capability/change bundle with sources and acceptance criteria."
 ai = true
-session_evidence = "required"
+session_evidence = "optional"
 role = "specifier"
 
 [stages.approve]
@@ -51,47 +80,49 @@ description = "Approve the exact intent of the change; approval freezes its dige
 ai = false
 reason = "Only a person decides which intent is accepted."
 role = "owner"
-checkpoint = { decider = "owner", criteria = ["CR-002", "CR-003"], on_reject = "revise" }
+checkpoint = { decider = "owner", criteria = ["CR-004", "CR-005", "CR-006", "CR-007", "CR-008"], on_reject = "revise" }
 
 [stages.design]
 description = "Produce and review user-facing design or prototypes before implementation."
 ai = true
-session_evidence = "required"
+session_evidence = "optional"
 role = "coordinator"
-checkpoint = { decider = "owner", criteria = ["CR-004"], on_reject = "revise" }
+checkpoint = { decider = "owner", criteria = ["CR-009", "CR-010"], on_reject = "revise" }
 
 [stages.plan]
 description = "Assign the approved change to a release and plan the implementation work."
 ai = true
-session_evidence = "required"
+session_evidence = "optional"
 role = "implementer"
 
 [stages.implement]
 description = "Implement the approved change within its declared scope."
 ai = true
-session_evidence = "required"
+session_evidence = "optional"
 role = "implementer"
+checkpoint = { decider = "owner", criteria = ["CR-011"], on_reject = "revise" }
 
 [stages.verify]
 description = "Run the configured checks and record evidence covering the acceptance criteria."
 ai = true
-session_evidence = "required"
+session_evidence = "optional"
 role = "implementer"
 
 [stages.review]
 description = "Independent review of the candidate; findings stay open until resolved or decided."
 ai = true
-session_evidence = "required"
+session_evidence = "optional"
 role = "reviewer"
 
 [stages.integrate]
 description = "Integrate the verified, reviewed candidate per component."
 ai = true
-session_evidence = "required"
+session_evidence = "optional"
 role = "coordinator"
+checkpoint = { decider = "owner", criteria = ["CR-012"], on_reject = "revise" }
 
 [stages.release]
 description = "Verify the combined release, prepare it and record the existing Git publication."
 ai = true
-session_evidence = "required"
+session_evidence = "optional"
 role = "coordinator"

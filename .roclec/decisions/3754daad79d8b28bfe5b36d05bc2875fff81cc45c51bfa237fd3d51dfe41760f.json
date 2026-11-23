@@ -1,0 +1,29 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-001",
+      "status": "met"
+    },
+    {
+      "id": "CR-002",
+      "status": "met"
+    },
+    {
+      "id": "CR-003",
+      "reason": "It is the first reference; nothing is agreed yet.",
+      "status": "n/a"
+    }
+  ],
+  "entity": "flow",
+  "flow": "8a39e2be42b3c45936ac8ed9ca6dd11c80f2bb563fcfb0b1d3ecc24443e9cbce",
+  "id": "3754daad79d8b28bfe5b36d05bc2875fff81cc45c51bfa237fd3d51dfe41760f",
+  "kind": "foundation",
+  "model_schema": 2,
+  "previous": null,
+  "reason": "Owner agreed the flow after reviewing each criterion, the checkpoints and the seeded stage roles one by one.",
+  "sources": {
+    "flow": "8a39e2be42b3c45936ac8ed9ca6dd11c80f2bb563fcfb0b1d3ecc24443e9cbce"
+  },
+  "status": "agreed"
+}
