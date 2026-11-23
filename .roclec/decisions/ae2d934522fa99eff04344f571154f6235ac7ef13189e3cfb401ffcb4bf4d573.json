@@ -1,0 +1,28 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-001",
+      "status": "met"
+    },
+    {
+      "id": "CR-002",
+      "status": "met"
+    },
+    {
+      "id": "CR-003",
+      "status": "met"
+    }
+  ],
+  "entity": "stack",
+  "flow": "8a39e2be42b3c45936ac8ed9ca6dd11c80f2bb563fcfb0b1d3ecc24443e9cbce",
+  "id": "ae2d934522fa99eff04344f571154f6235ac7ef13189e3cfb401ffcb4bf4d573",
+  "kind": "foundation",
+  "model_schema": 2,
+  "previous": null,
+  "reason": "Owner agrees the technology stack chosen in session, including the tools added on review.",
+  "sources": {
+    "stack": "33bb1de5f3baa16c0837319cd2aaaaf5653cd95c3d9e7ea57ec99b2895346025"
+  },
+  "status": "agreed"
+}

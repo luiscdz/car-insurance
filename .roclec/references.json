@@ -18,6 +18,15 @@
       "id": "flow",
       "path": ".roclec/flow.toml",
       "role": "process"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "decision_id": "ae2d934522fa99eff04344f571154f6235ac7ef13189e3cfb401ffcb4bf4d573",
+      "id": "stack",
+      "path": "docs/stack.md",
+      "role": "stack"
     }
   ]
 }

@@ -1,0 +1,11 @@
+{
+  "kind": "reference-add",
+  "model_schema": 2,
+  "operation_id": "60080e7fab2d9931f24ce4d4ca93b6c76228368839f4679b4a36da92b2ed725a",
+  "payload": {
+    "id": "stack"
+  },
+  "writes": {
+    ".roclec/references.json": "62fdbd62d9ff5c39377a8077d49ebfe014ee0d8e22e21f684898af37167c4974"
+  }
+}

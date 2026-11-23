@@ -1,0 +1,19 @@
+{
+  "kind": "views",
+  "model_schema": 2,
+  "operation_id": "d6d8f38e318e4e1c6883f9506ceafe005541b1acd44d57109a8bf26d607fb5bf",
+  "payload": {
+    "generation": "10c1ee872ed57c2f963bc8f96891cdba917abb5958d65638199681afcd866ecf",
+    "instructions": [
+      "AGENTS.md",
+      "CLAUDE.md"
+    ],
+    "sources": {
+      "app": {}
+    }
+  },
+  "writes": {
+    "AGENTS.md": "235c22d5ae85be9c1aa5085fbae6ebb192aed131a8518c0dc046a32cc430cc52",
+    "CLAUDE.md": "235c22d5ae85be9c1aa5085fbae6ebb192aed131a8518c0dc046a32cc430cc52"
+  }
+}

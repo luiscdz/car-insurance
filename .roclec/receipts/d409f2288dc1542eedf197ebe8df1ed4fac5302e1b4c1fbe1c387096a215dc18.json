@@ -1,0 +1,12 @@
+{
+  "kind": "foundation-agree",
+  "model_schema": 2,
+  "operation_id": "d409f2288dc1542eedf197ebe8df1ed4fac5302e1b4c1fbe1c387096a215dc18",
+  "payload": {
+    "id": "stack"
+  },
+  "writes": {
+    ".roclec/decisions/ae2d934522fa99eff04344f571154f6235ac7ef13189e3cfb401ffcb4bf4d573.json": "000a32eddff24f04a1acf965b7b2d070f6edc8dea1618c529c178f01a5b76b98",
+    ".roclec/references.json": "54d5450ca0a780a3dd748b973d84326ec38652f665386bfa21b72af087bce0e9"
+  }
+}
