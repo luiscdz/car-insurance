@@ -1,0 +1,28 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-001",
+      "status": "met"
+    },
+    {
+      "id": "CR-002",
+      "status": "met"
+    },
+    {
+      "id": "CR-003",
+      "status": "met"
+    }
+  ],
+  "entity": "stack",
+  "flow": "8a39e2be42b3c45936ac8ed9ca6dd11c80f2bb563fcfb0b1d3ecc24443e9cbce",
+  "id": "3415bbc0f310a9f4e7290502ba51662e7c8f8653c27b9cf91c0e82ffcf65cc85",
+  "kind": "foundation",
+  "model_schema": 2,
+  "previous": "91ad396c7b4930864569eade9bb4f8b77845a49bb64f4e7998b9f22054bf54ee",
+  "reason": "Owner extends unit tests to apps/cms and packages/shared and aligns the forms and Zod rows with ADR-001 and the architecture.",
+  "sources": {
+    "stack": "732c66838c0a1c836b80aa519f1f6bc98f6723a8011ae2df1ee2ecb9e4649e2f"
+  },
+  "status": "agreed"
+}

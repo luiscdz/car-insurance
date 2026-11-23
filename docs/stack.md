@@ -11,9 +11,9 @@
 | CMS types | TypeScript types generated from the Strapi content types | `apps/cms/types/` | The front end uses them instead of hand-written copies |
 | UI components | Spartan UI | `apps/web/` | — |
 | Styling | Tailwind CSS | `apps/web/` | — |
-| Forms | Angular Signal Forms | `apps/web/` | The step 1 form is generated dynamically from the Strapi configuration, with typed validations |
-| Runtime validation | Zod | `apps/web/` | Validates the content returned by Strapi before the application uses it |
-| Unit tests | Vitest (Vite) with Angular Testing Library | `apps/web/` | — |
+| Forms | Angular Signal Forms | `apps/web/` | Form steps are generated dynamically from the Strapi configuration, with typed validations |
+| Runtime validation | Zod | `packages/shared/`, used by `apps/web/` | Validates the content returned by Strapi before the application uses it |
+| Unit tests | Vitest (Vite); Angular Testing Library for components | `apps/web/`, `apps/cms/`, `packages/shared/` | — |
 | End-to-end tests | Playwright | `e2e/` | — |
 | Accessibility tests | @axe-core/playwright | `e2e/` | Runs inside the end-to-end tests |
 | Lint and format | ESLint (angular-eslint) and Prettier | each package | — |
