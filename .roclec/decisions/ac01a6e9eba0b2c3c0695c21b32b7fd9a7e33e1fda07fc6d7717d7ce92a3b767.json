@@ -1,0 +1,28 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-001",
+      "status": "met"
+    },
+    {
+      "id": "CR-002",
+      "status": "met"
+    },
+    {
+      "id": "CR-003",
+      "status": "met"
+    }
+  ],
+  "entity": "flow",
+  "flow": "3ae780aad6b1fc33890a0dff47645cf0515ef6319f7c53e9c0a04f98cf4a49fc",
+  "id": "ac01a6e9eba0b2c3c0695c21b32b7fd9a7e33e1fda07fc6d7717d7ce92a3b767",
+  "kind": "foundation",
+  "model_schema": 2,
+  "previous": "6f9144f765b544da65265126ffb05fa52de419eae5ecacecc6f51e46200d544b",
+  "reason": "Owner agrees the flow with the deliverables of every stage declared.",
+  "sources": {
+    "flow": "3ae780aad6b1fc33890a0dff47645cf0515ef6319f7c53e9c0a04f98cf4a49fc"
+  },
+  "status": "agreed"
+}

@@ -68,6 +68,7 @@ ai = true
 session_evidence = "optional"
 role = "coordinator"
 checkpoint = { decider = "owner", criteria = ["CR-001", "CR-002", "CR-003"], on_reject = "revise" }
+deliverables = ["docs", "docs/adr", ".roclec/constitution.md", ".agents/skills"]
 
 [stages.define]
 description = "Capture discovery and draft the capability/change bundle with sources and acceptance criteria."
@@ -75,6 +76,7 @@ ai = true
 session_evidence = "optional"
 role = "specifier"
 skills = ["story-spec"]
+deliverables = [".roclec/changes"]
 
 [stages.approve]
 description = "Approve the exact intent of the change; approval freezes its digest."
@@ -82,6 +84,7 @@ ai = false
 reason = "Only a person decides which intent is accepted."
 role = "owner"
 checkpoint = { decider = "owner", criteria = ["CR-004", "CR-005", "CR-006", "CR-007", "CR-008"], on_reject = "revise" }
+deliverables = [".roclec/decisions"]
 
 [stages.design]
 description = "Produce and review user-facing design or prototypes before implementation."
@@ -89,6 +92,7 @@ ai = true
 session_evidence = "optional"
 role = "coordinator"
 checkpoint = { decider = "owner", criteria = ["CR-009", "CR-010"], on_reject = "revise" }
+deliverables = ["docs/prototypes"]
 
 [stages.plan]
 description = "Assign the approved change to a release and plan the implementation work."
@@ -96,6 +100,7 @@ ai = true
 session_evidence = "optional"
 role = "implementer"
 skills = ["country-content"]
+deliverables = ["docs/plans", ".roclec/releases"]
 
 [stages.implement]
 description = "Implement the approved change within its declared scope."
@@ -104,12 +109,14 @@ session_evidence = "optional"
 role = "implementer"
 checkpoint = { decider = "owner", criteria = ["CR-011"], on_reject = "revise" }
 skills = ["country-content"]
+deliverables = ["apps/web", "apps/cms", "packages/shared", "e2e"]
 
 [stages.verify]
 description = "Run the configured checks and record evidence covering the acceptance criteria."
 ai = true
 session_evidence = "optional"
 role = "implementer"
+deliverables = [".roclec/runs"]
 
 [stages.review]
 description = "Independent review of the candidate; findings stay open until resolved or decided."
@@ -117,6 +124,7 @@ ai = true
 session_evidence = "optional"
 role = "reviewer"
 skills = ["country-content"]
+deliverables = [".roclec/evidence"]
 
 [stages.integrate]
 description = "Integrate the verified, reviewed candidate per component."
@@ -124,9 +132,11 @@ ai = true
 session_evidence = "optional"
 role = "coordinator"
 checkpoint = { decider = "owner", criteria = ["CR-012"], on_reject = "revise" }
+deliverables = [".roclec/integrations", "specs/capabilities"]
 
 [stages.release]
 description = "Verify the combined release, prepare it and record the existing Git publication."
 ai = true
 session_evidence = "optional"
 role = "coordinator"
+deliverables = [".roclec/releases"]

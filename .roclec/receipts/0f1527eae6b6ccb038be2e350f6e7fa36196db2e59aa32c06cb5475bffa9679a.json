@@ -1,0 +1,15 @@
+{
+  "kind": "views",
+  "model_schema": 2,
+  "operation_id": "0f1527eae6b6ccb038be2e350f6e7fa36196db2e59aa32c06cb5475bffa9679a",
+  "payload": {
+    "flow_view": "docs/flow.md",
+    "generation": "1524cb7771cf33553e7a5d7ed98cc1cbc618636e9a946505c8cda875dd67fd01",
+    "sources": {
+      "app": {}
+    }
+  },
+  "writes": {
+    "docs/flow.md": "47f315a8153a50d7fc52d3da3808332d78a27165597f0e9bb02e0ff064e61e59"
+  }
+}

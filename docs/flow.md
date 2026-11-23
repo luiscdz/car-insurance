@@ -1,20 +1,20 @@
-<!-- roclec-managed-view sha256=eeb6d28962101d09c1572a350ce02301872dde7d276804484d3fef5dd94deb5d -->
+<!-- roclec-managed-view sha256=e13f72da92d899fe206a305e78f5efcc7f534f8fd443039475ad808434420174 -->
 # Project flow
 
 Generated from `.roclec/flow.toml` by `roclec views --write`. Do not edit by hand.
 
 | Step | Stage | Description | AI | Role | Skills and model | Deliverables | Human checkpoint | Criteria | On reject |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | foundation | Agree the project references (constitution, ADRs, process) before changes depend on them. | yes | coordinator | session model | — | owner | CR-001, CR-002, CR-003 | revise |
-| 2 | define | Capture discovery and draft the capability/change bundle with sources and acceptance criteria. | yes | specifier | `story-spec`<br>session model | — | — | — | — |
-| 3 | approve | Approve the exact intent of the change; approval freezes its digest. | no: Only a person decides which intent is accepted. | owner | — | — | owner | CR-004, CR-005, CR-006, CR-007, CR-008 | revise |
-| 4 | design | Produce and review user-facing design or prototypes before implementation. | yes | coordinator | session model | — | owner | CR-009, CR-010 | revise |
-| 5 | plan | Assign the approved change to a release and plan the implementation work. | yes | implementer | `country-content`<br>session model | — | — | — | — |
-| 6 | implement | Implement the approved change within its declared scope. | yes | implementer | `country-content`<br>session model | — | owner (pre-implement) | CR-011 | revise |
-| 7 | verify | Run the configured checks and record evidence covering the acceptance criteria. | yes | implementer | session model | — | — | — | — |
-| 8 | review | Independent review of the candidate; findings stay open until resolved or decided. | yes | reviewer | `country-content`<br>session model | — | — | — | — |
-| 9 | integrate | Integrate the verified, reviewed candidate per component. | yes | coordinator | session model | — | owner (pre-integrate) | CR-012 | revise |
-| 10 | release | Verify the combined release, prepare it and record the existing Git publication. | yes | coordinator | session model | — | — | — | — |
+| 1 | foundation | Agree the project references (constitution, ADRs, process) before changes depend on them. | yes | coordinator | session model | `docs`, `docs/adr`, `.roclec/constitution.md`, `.agents/skills` | owner | CR-001, CR-002, CR-003 | revise |
+| 2 | define | Capture discovery and draft the capability/change bundle with sources and acceptance criteria. | yes | specifier | `story-spec`<br>session model | `.roclec/changes` | — | — | — |
+| 3 | approve | Approve the exact intent of the change; approval freezes its digest. | no: Only a person decides which intent is accepted. | owner | — | `.roclec/decisions` | owner | CR-004, CR-005, CR-006, CR-007, CR-008 | revise |
+| 4 | design | Produce and review user-facing design or prototypes before implementation. | yes | coordinator | session model | `docs/prototypes` | owner | CR-009, CR-010 | revise |
+| 5 | plan | Assign the approved change to a release and plan the implementation work. | yes | implementer | `country-content`<br>session model | `docs/plans`, `.roclec/releases` | — | — | — |
+| 6 | implement | Implement the approved change within its declared scope. | yes | implementer | `country-content`<br>session model | `apps/web`, `apps/cms`, `packages/shared`, `e2e` | owner (pre-implement) | CR-011 | revise |
+| 7 | verify | Run the configured checks and record evidence covering the acceptance criteria. | yes | implementer | session model | `.roclec/runs` | — | — | — |
+| 8 | review | Independent review of the candidate; findings stay open until resolved or decided. | yes | reviewer | `country-content`<br>session model | `.roclec/evidence` | — | — | — |
+| 9 | integrate | Integrate the verified, reviewed candidate per component. | yes | coordinator | session model | `.roclec/integrations`, `specs/capabilities` | owner (pre-integrate) | CR-012 | revise |
+| 10 | release | Verify the combined release, prepare it and record the existing Git publication. | yes | coordinator | session model | `.roclec/releases` | — | — | — |
 
 ## Criteria
 
@@ -84,6 +84,7 @@ Agreements of the process reference in decision order, with the process FUTs eac
 | --- | --- | --- | --- | --- |
 | `3754daad79d8b28bfe5b36d05bc2875fff81cc45c51bfa237fd3d51dfe41760f` | `8a39e2be42b3c45936ac8ed9ca6dd11c80f2bb563fcfb0b1d3ecc24443e9cbce` | luis-cardozo | Owner agreed the flow after reviewing each criterion, the checkpoints and the seeded stage roles one by one. | — |
 | `6f9144f765b544da65265126ffb05fa52de419eae5ecacecc6f51e46200d544b` | `17d14ca0bada994fde64c0d81dc98681311f7b02520fda722d5e1f68c76fa2ba` | luis-cardozo | Owner agrees the flow with knowledge skills scoped by stage: story-spec in define; country-content in plan, implement and review. | — |
+| `ac01a6e9eba0b2c3c0695c21b32b7fd9a7e33e1fda07fc6d7717d7ce92a3b767` | `3ae780aad6b1fc33890a0dff47645cf0515ef6319f7c53e9c0a04f98cf4a49fc` | luis-cardozo | Owner agrees the flow with the deliverables of every stage declared. | — |
 
 ### Open process FUTs
 
