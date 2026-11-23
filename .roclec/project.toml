@@ -2,7 +2,7 @@ schema = 3
 name = "Car insurance"
 trunk_ref = "refs/heads/main"
 secret_env = ["APP_KEYS", "API_TOKEN_SALT", "ADMIN_JWT_SECRET", "TRANSFER_TOKEN_SALT", "JWT_SECRET", "ENCRYPTION_KEY", "STRAPI_API_TOKEN"]
-redact_patterns = ["eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}", "[0-9a-f]{128,}"]
+redact_patterns = ["eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}", "[0-9a-f]{128,}", "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"]
 
 [sessions]
 storage = "versioned-redacted"
