@@ -15,6 +15,15 @@
       "components": [
         "app"
       ],
+      "decision_id": "cb34b5eb00ca03afe2a5bc30e8937f853ebee522a79460403b3148afeb583a35",
+      "id": "architecture",
+      "path": "docs/architecture.md",
+      "role": "architecture"
+    },
+    {
+      "components": [
+        "app"
+      ],
       "decision_id": "1ae6c16012dfe68620056df5a281994986b139ca8436cbaaba2091034dc5c780",
       "id": "context",
       "path": "docs/context.md",

@@ -1,0 +1,28 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-001",
+      "status": "met"
+    },
+    {
+      "id": "CR-002",
+      "status": "met"
+    },
+    {
+      "id": "CR-003",
+      "status": "met"
+    }
+  ],
+  "entity": "architecture",
+  "flow": "8a39e2be42b3c45936ac8ed9ca6dd11c80f2bb563fcfb0b1d3ecc24443e9cbce",
+  "id": "cb34b5eb00ca03afe2a5bc30e8937f853ebee522a79460403b3148afeb583a35",
+  "kind": "foundation",
+  "model_schema": 2,
+  "previous": null,
+  "reason": "Owner agrees the architecture: Angular SPA by feature, read-only public access to Strapi, stateless quote endpoints, sessionStorage wizard state and bootstrap-applied permissions and seed.",
+  "sources": {
+    "architecture": "53e3b75fac47d734ac4e4eb5283036108a87b3d036c3f91462afbe5f3598ea76"
+  },
+  "status": "agreed"
+}
