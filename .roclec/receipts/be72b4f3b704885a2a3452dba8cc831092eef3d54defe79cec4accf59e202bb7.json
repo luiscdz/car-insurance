@@ -1,0 +1,12 @@
+{
+  "kind": "session-record",
+  "model_schema": 2,
+  "operation_id": "be72b4f3b704885a2a3452dba8cc831092eef3d54defe79cec4accf59e202bb7",
+  "payload": {
+    "id": "EVD-01M84PNE00BWS5JKR5DBYXVF75"
+  },
+  "writes": {
+    ".roclec/evidence/EVD-01M84PNE00BWS5JKR5DBYXVF75.json": "eb966bc553ebd56dd2aaff0a8e42b3fc88b1c45cdafb8104af14f4dc9c8db8df",
+    ".roclec/evidence/EVD-01M84PNE00BWS5JKR5DBYXVF75.session": "e272f5803437df19cb98892a34340e6f1db4ba53aba9b9f3ec7088df6da9b3a0"
+  }
+}

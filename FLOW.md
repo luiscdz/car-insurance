@@ -81,7 +81,7 @@ User story → spec (`.roclec/changes/CHG-NNN/`, origin `US-NN`) → ADRs cited 
 
 ## Session logs
 
-Agent sessions are imported into Roclec as evidence (`.roclec/evidence/EVD-*.session`). The only edit is automatic redaction of secrets and email addresses configured in [`.roclec/project.toml`](.roclec/project.toml) (`secret_env`, `redact_patterns`); the original stays local.
+Agent sessions are imported into Roclec as evidence and versioned twice: the unedited original in `.roclec/runtime/sessions/EVD-*/` and a copy in `.roclec/evidence/EVD-*.session` with secrets and email addresses redacted as configured in [`.roclec/project.toml`](.roclec/project.toml) (`secret_env`, `redact_patterns`).
 
 ## Questions
 

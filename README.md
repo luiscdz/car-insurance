@@ -25,7 +25,7 @@ To be listed when the implementation is complete.
 | Architecture decision records | [docs/adr/](docs/adr/) |
 | Specs, one per user story | `.roclec/changes/CHG-NNN/`; integrated contracts readable in `specs/capabilities/` |
 | Code reviews with findings and resolutions | `.roclec/evidence/` |
-| Agent session logs | `.roclec/evidence/EVD-*.session` |
+| Agent session logs | `.roclec/runtime/sessions/EVD-*/` (unedited originals) and `.roclec/evidence/EVD-*.session` (redacted copies) |
 | Application code | `apps/web/` (Angular), `apps/cms/` (Strapi), `packages/shared/`, `e2e/` |
 
 ## Agentic flow tooling
@@ -37,8 +37,8 @@ To be listed when the implementation is complete.
 
 ## Session logs
 
-Agent sessions are stored as Roclec evidence. The versioned copy is the original transcript with one automatic edit: values of the configured secret environment variables and matches of the configured patterns (tokens and email addresses) are replaced with `[REDACTED]`, as declared in [.roclec/project.toml](.roclec/project.toml). The unredacted original stays local and its hash is recorded with the evidence.
+Agent sessions are stored as Roclec evidence and versioned twice: the unedited original transcript under `.roclec/runtime/sessions/EVD-*/`, and a copy under `.roclec/evidence/EVD-*.session` where values of the configured secret environment variables and matches of the configured patterns (tokens and email addresses) are replaced with `[REDACTED]`, as declared in [.roclec/project.toml](.roclec/project.toml). The evidence record holds the hash of both.
 
 ## Data
 
-Only fictitious data is used. No real personal data, card data or credentials are stored in this repository.
+The application and its seed data use only fictitious data, and no credentials are stored in this repository. The unedited session logs include the author's own name and email address.

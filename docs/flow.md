@@ -1,4 +1,4 @@
-<!-- roclec-managed-view sha256=e13f72da92d899fe206a305e78f5efcc7f534f8fd443039475ad808434420174 -->
+<!-- roclec-managed-view sha256=f10c2e219205d532a080542257b6b3e0cf39986a4c358b01c8c6f41763775be7 -->
 # Project flow
 
 Generated from `.roclec/flow.toml` by `roclec views --write`. Do not edit by hand.
@@ -108,7 +108,9 @@ None recorded.
 
 ### Agent sessions by role and stage
 
-None recorded.
+| Role | foundation |
+| --- | --- |
+| coordinator | 1 |
 
 ### Retrospective
 

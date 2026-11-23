@@ -1,0 +1,46 @@
+{
+  "installer": "skills@1.7.6",
+  "skills": {
+    "angular-developer": {
+      "computedHash": "048df1fb3b30e170e84593b6dfffdebf5208eb58f6feb3c2100faa926d5c8b41",
+      "expected": "048df1fb3b30e170e84593b6dfffdebf5208eb58f6feb3c2100faa926d5c8b41",
+      "verified": true
+    },
+    "design-lab": {
+      "computedHash": "2f91bff63e6e749642f966510755b8912d5d53e56de3f0fb4a86bc8c604da192",
+      "expected": "2f91bff63e6e749642f966510755b8912d5d53e56de3f0fb4a86bc8c604da192",
+      "verified": true
+    },
+    "design-taste-frontend": {
+      "computedHash": "acda6bf83f200405aa200eb245448fdc11cfce43d97bc2d9b8bf13a27f362d95",
+      "expected": "acda6bf83f200405aa200eb245448fdc11cfce43d97bc2d9b8bf13a27f362d95",
+      "verified": true
+    },
+    "frontend-design": {
+      "computedHash": "89496d5dd00f4810205f351759594fc2742bf8eea85a2f2b2d1de59f4bd91576",
+      "expected": "89496d5dd00f4810205f351759594fc2742bf8eea85a2f2b2d1de59f4bd91576",
+      "verified": true
+    },
+    "impeccable": {
+      "computedHash": "f6498f888e66453bed64151372cec9199cf5179cc9f75e4ebf8501d25e6f1290",
+      "expected": "f6498f888e66453bed64151372cec9199cf5179cc9f75e4ebf8501d25e6f1290",
+      "verified": true
+    },
+    "strapi-docs-mcp": {
+      "computedHash": "1aa149a4433ebce5c5bb048943a87b1dc355c8c54a4eac0eab81a6e0c1ce8aa3",
+      "expected": "1aa149a4433ebce5c5bb048943a87b1dc355c8c54a4eac0eab81a6e0c1ce8aa3",
+      "verified": true
+    },
+    "ui-ux-pro-max": {
+      "computedHash": "4ddf179ab6a152c73e86b37859bdac08ef1af297e7f9d87916fa406c901e5a64",
+      "expected": "4ddf179ab6a152c73e86b37859bdac08ef1af297e7f9d87916fa406c901e5a64",
+      "verified": true
+    },
+    "web-design-guidelines": {
+      "computedHash": "1807144a592ddd784291b59caafe9629e29ba7adaa4536b0a9cd4f80dcffa196",
+      "expected": "1807144a592ddd784291b59caafe9629e29ba7adaa4536b0a9cd4f80dcffa196",
+      "verified": true
+    }
+  },
+  "status": "verified"
+}

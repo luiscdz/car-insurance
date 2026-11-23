@@ -8,7 +8,6 @@ dist/
 !.env.example
 .venv/
 docs/pilot/bitacora.md
-.roclec/runtime/
 # Agent skills: own knowledge skills are versioned; installed copies are not.
 .agents/skills/roclec-*/
 .agents/skills/angular-developer/
