@@ -1,0 +1,26 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-009",
+      "status": "met"
+    },
+    {
+      "id": "CR-010",
+      "status": "met"
+    }
+  ],
+  "entity": "docs/prototypes/us-02/index.html",
+  "flow": "3ae780aad6b1fc33890a0dff47645cf0515ef6319f7c53e9c0a04f98cf4a49fc",
+  "id": "396e4bd4c6b87c93fb36f7933c223b0a96f257dc5a4fa73ee1aceb88c032edfe",
+  "kind": "checkpoint",
+  "model_schema": 2,
+  "outcome": "approved",
+  "previous": null,
+  "reason": "Owner approves the US-02 plan list prototype (CHG-002) showing Colombia and Chile content.",
+  "subject": {
+    "digest": "98b01e080e241306797deaa64386ff09f3167e1ec974ffdc983ba8572f0a548a",
+    "entity": "docs/prototypes/us-02/index.html",
+    "type": "prototype"
+  }
+}

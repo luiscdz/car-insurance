@@ -1,0 +1,1311 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cotiza tu seguro de auto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<!--
+  Prototype of CHG-002 (US-02: plan list), component app. It reuses the approved US-01 prototype
+  (CHG-001) for the form steps and adds the plan step and its states.
+  Self-contained: the Strapi responses for Colombia and Chile, including plans and the price-quote
+  endpoint, are simulated below with only fictitious data. The rendering code has no
+  country-specific branch: every difference between /co and /cl comes from the simulated content.
+  The panel at the bottom ("Panel del prototipo") only simulates content and network conditions
+  for review; it is not part of the product.
+-->
+<style>
+  :root {
+    /* Design tokens (docs/design.md). Country theme overrides --primary and --accent at runtime. */
+    --primary: #2D6DF6;
+    --primary-strong: #0033A0;
+    --cta: #E3E829;
+    --cta-foreground: #26328C;
+    --accent: #00AEC7;
+    --foreground: #1C1C24;
+    --muted: #888B8D;
+    --border: #B4B4B5;
+    --disabled: #878789;
+    --danger: #DB1A40;
+    --surface-info: #DFEAFF;
+    --surface-cta: #F9FAE1;
+    --surface-muted: #F8F8F8;
+    --white: #FFFFFF;
+    --radius-field: 12px;
+    --radius-card: 16px;
+    --font: "Nunito Sans", sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; } /* component display rules must never reveal hidden elements */
+  html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0; font-family: var(--font); font-size: 16px; line-height: 1.5;
+    color: var(--foreground); background: var(--surface-muted); caret-color: var(--primary);
+  }
+  ::selection { background: var(--surface-info); color: var(--primary-strong); }
+  a, button, input, select, label { touch-action: manipulation; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+  :focus-visible { outline: 3px solid var(--primary-strong); outline-offset: 2px; }
+
+  /* Header */
+  .header { background: var(--primary); color: var(--white); }
+  .header__inner { max-width: 960px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+  .logo-placeholder {
+    font-weight: 700; font-size: 20px; letter-spacing: .04em; padding: 2px 12px;
+    border: 2px solid var(--white); border-radius: 8px;
+  }
+  .logo-img { height: 32px; width: auto; }
+  .nav-bar { background: var(--primary-strong); height: 6px; }
+  .accent-bar { background: var(--accent); height: 4px; }
+
+  main { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+  .card {
+    background: var(--white); border-radius: var(--radius-card); padding: 24px 16px;
+    box-shadow: 0 1px 2px rgb(0 0 0 / .06);
+  }
+  @media (min-width: 768px) { .card { padding: 32px; } }
+  h1 { font-size: 24px; line-height: 1.25; margin: 0 0 24px; color: var(--primary-strong); text-wrap: balance; }
+  @media (min-width: 768px) { h1 { font-size: 32px; } }
+  /* The step heading receives focus programmatically (AC-019) but is not operable: no ring around it. */
+  h1[tabindex="-1"]:focus { outline: none; }
+
+  /* Progress */
+  .progress { margin: 0 0 32px; }
+  .progress__label { font-size: 14px; font-weight: 600; color: var(--primary-strong); margin: 0 0 8px; }
+  .progress__list { list-style: none; margin: 0; padding: 0; display: flex; gap: 8px; flex-wrap: wrap; }
+  .progress__item {
+    display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--foreground);
+    padding: 4px 12px 4px 4px; border-radius: 999px; background: var(--surface-muted);
+  }
+  .progress__num {
+    display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--white); font-weight: 700; font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  .progress__item[aria-current="step"] { color: var(--primary-strong); background: var(--surface-info); font-weight: 700; }
+  .progress__item[aria-current="step"] .progress__num { background: var(--primary); border-color: var(--primary); color: var(--white); }
+  .progress__item.is-done .progress__num { border-color: var(--primary); color: var(--primary); }
+
+  /* Fields */
+  .fields { display: grid; gap: 20px; grid-template-columns: 1fr; }
+  @media (min-width: 768px) { .fields { grid-template-columns: 1fr 1fr; column-gap: 24px; } }
+  .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .field__label { font-size: 14px; font-weight: 600; color: var(--primary); }
+  .field__req { color: var(--danger); margin-left: 2px; }
+  .field__control {
+    font: inherit; font-weight: 600; color: var(--primary-strong); width: 100%; min-height: 48px; padding: 10px 14px;
+    border: 1px solid var(--border); border-radius: var(--radius-field); background: var(--white);
+    transition: border-color .15s ease-out;
+  }
+  .field__control:hover { border-color: var(--primary); }
+  .field__control:focus-visible { border-color: var(--primary); outline-offset: 1px; }
+  /* Placeholder and empty select use foreground at regular weight: muted is 3.4:1, below AA (owner decision). */
+  .field__control::placeholder { color: var(--foreground); font-weight: 400; opacity: 1; }
+  select.field__control { appearance: none; padding-right: 40px;
+    background-image: linear-gradient(45deg, transparent 50%, var(--primary) 50%), linear-gradient(135deg, var(--primary) 50%, transparent 50%);
+    background-position: calc(100% - 22px) 21px, calc(100% - 16px) 21px; background-size: 6px 6px; background-repeat: no-repeat; }
+  select.field__control.is-empty, input.field__control.is-empty { color: var(--foreground); font-weight: 400; }
+  select.field__control option { color: var(--foreground); font-weight: 400; }
+  .field__control[aria-invalid="true"] { border-color: var(--danger); border-width: 2px; padding: 9px 13px; }
+  .field__help { font-size: 14px; color: var(--foreground); margin: 0; }  /* muted fails AA for text (3.4:1) */
+  .field__error { font-size: 14px; color: var(--danger); margin: 0; display: flex; gap: 6px; align-items: flex-start; font-weight: 600; }
+  .field__error svg { flex: none; margin-top: 2px; }
+  .field--checkbox .check { display: flex; gap: 10px; align-items: flex-start; min-height: 24px; cursor: pointer; }
+  .field--checkbox input { width: 24px; height: 24px; margin: 0; flex: none; accent-color: var(--primary); }
+  .field--checkbox .check__text { font-size: 16px; color: var(--foreground); }
+
+  /* Actions */
+  .actions { display: flex; flex-wrap: wrap-reverse; gap: 12px; justify-content: space-between; align-items: center; margin-top: 32px; }
+  .btn {
+    font: inherit; font-weight: 700; min-height: 48px; padding: 10px 28px; border-radius: 999px;
+    cursor: pointer; border: 2px solid transparent; display: inline-flex; align-items: center; justify-content: center;
+    text-decoration: none; transition: background-color .15s ease-out, border-color .15s ease-out, transform .1s ease-out;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn--cta { background: var(--cta); color: var(--cta-foreground); margin-left: auto; }
+  .btn--cta:hover { border-color: var(--cta-foreground); }
+  .btn--cta[aria-disabled="true"] { background: var(--surface-muted); color: var(--disabled); border-color: var(--border); cursor: not-allowed; transform: none; }
+  .btn--secondary { background: var(--white); color: var(--primary); border-color: var(--primary); }
+  .btn--secondary:hover { background: var(--surface-info); }
+  .btn--link { background: none; color: var(--primary); text-decoration: underline; text-underline-offset: 3px; padding: 10px 4px; min-height: 48px; border: 0; }
+  .btn--link:hover { text-decoration-thickness: 2px; color: var(--primary-strong); }
+  @media (max-width: 479px) { .btn--cta, .btn--secondary { width: 100%; } }
+
+  /* Root */
+  .countries { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .countries { grid-template-columns: 1fr 1fr; } }
+  .country-link {
+    display: flex; align-items: center; justify-content: space-between; min-height: 72px; padding: 16px 20px;
+    background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-card);
+    color: var(--primary-strong); font-weight: 700; font-size: 20px; text-decoration: none;
+    transition: background-color .15s ease-out, border-color .15s ease-out;
+  }
+  .country-link svg { flex: none; color: var(--primary); transition: transform .15s ease-out; }
+  .country-link:hover { border-color: var(--primary); background: var(--surface-info); }
+  .country-link:hover svg { transform: translateX(3px); }
+
+  /* States */
+  .state { text-align: center; padding: 48px 16px; }
+  .state p { margin: 0 auto 16px; font-size: 18px; max-width: 40ch; text-wrap: pretty; }
+  .loader { width: 40px; height: 40px; margin: 0 auto 16px; border-radius: 50%;
+    border: 4px solid var(--surface-info); border-top-color: var(--primary); animation: spin 0.9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .state__icon { width: 40px; height: 40px; margin: 0 auto 12px; color: var(--danger); }
+
+  /* Dialog */
+  dialog.leave {
+    border: 0; border-radius: var(--radius-card); padding: 24px; max-width: min(440px, calc(100vw - 32px));
+    color: var(--foreground); box-shadow: 0 12px 40px rgb(0 0 0 / .25); overscroll-behavior: contain;
+  }
+  dialog.leave::backdrop { background: rgb(28 28 36 / .55); }
+  dialog.leave h2 { margin: 0 0 8px; font-size: 22px; line-height: 1.3; color: var(--primary-strong); text-wrap: balance; }
+  dialog.leave p { margin: 0 0 24px; text-wrap: pretty; }
+  .dialog__actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; }
+  .dialog__actions .btn--cta { margin-left: 0; }
+  /* On phones the stay action sits on top, closest to the thumb's first reach; DOM order stays leave, stay. */
+  @media (max-width: 479px) { .dialog__actions { flex-direction: column-reverse; } .dialog__actions .btn { width: 100%; } }
+
+  /* Plan list (US-02) */
+  .plans-intro { margin: -12px 0 24px; color: var(--foreground); }
+  .plans { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); align-items: stretch; }
+  .plan {
+    display: flex; flex-direction: column; gap: 16px; min-width: 0; height: 100%;
+    padding: 24px 20px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-card);
+    transition: border-color .15s ease-out, box-shadow .15s ease-out;
+  }
+  .plan.is-recommended { border: 2px solid var(--primary); background: var(--surface-info); padding: 23px 19px; }
+  .plan.is-chosen { border: 3px solid var(--primary-strong); padding: 22px 18px; box-shadow: 0 6px 20px rgb(0 51 160 / .14); }
+  .plan__top { display: flex; flex-direction: column; gap: 6px; }
+  .plan__badge {
+    align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700;
+    color: var(--white); background: var(--primary-strong); padding: 2px 12px 2px 8px; border-radius: 999px;
+  }
+  .plan__name { margin: 0; font-size: 22px; line-height: 1.25; color: var(--primary-strong); text-wrap: balance; }
+  .plan__desc { margin: 0; color: var(--foreground); text-wrap: pretty; }
+  .plan__price { margin: 0; display: flex; flex-direction: column; }
+  .plan__price-label { font-size: 14px; font-weight: 600; color: var(--foreground); }
+  .plan__amount { font-size: 28px; line-height: 1.2; font-weight: 700; color: var(--primary-strong); font-variant-numeric: tabular-nums; }
+  .plan__final { border-radius: var(--radius-field); background: var(--surface-cta); padding: 12px 14px; min-height: 72px;
+    display: flex; flex-direction: column; justify-content: center; }
+  .plan__final:focus { outline: 3px solid var(--primary-strong); outline-offset: 2px; }
+  .plan__final .plan__amount { font-size: 26px; }
+  .plan__wait { display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--primary-strong); }
+  .spinner { width: 20px; height: 20px; flex: none; border-radius: 50%; border: 3px solid var(--surface-info);
+    border-top-color: var(--primary-strong); animation: spin 0.9s linear infinite; }
+  .plan__final.is-error { background: var(--white); border: 2px solid var(--danger); }
+  .plan__error { margin: 0 0 8px; color: var(--danger); font-weight: 600; display: flex; gap: 6px; align-items: flex-start; }
+  .plan__error svg { flex: none; margin-top: 4px; }
+  .plan__retry { align-self: flex-start; min-height: 40px; padding: 6px 20px; }
+  .plan__choose { width: 100%; gap: 8px; }
+  .plan__choose[aria-pressed="true"] { background: var(--primary-strong); border-color: var(--primary-strong); color: var(--white); cursor: default; }
+  .plan__choose[aria-pressed="true"]:hover { background: var(--primary-strong); }
+  .plan__section h3 { margin: 0 0 8px; font-size: 14px; font-weight: 700; color: var(--primary-strong); text-transform: none; }
+  .plan__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .plan__list li { display: flex; gap: 8px; align-items: flex-start; font-size: 15px; line-height: 1.4; }
+  .plan__list svg { flex: none; margin-top: 2px; color: var(--primary); }
+  .plan__value { display: block; font-weight: 700; color: var(--primary-strong); }
+  .plans-msg { margin: 16px 0 0; }
+  .no-plans { padding: 32px 16px; }
+
+  /* Out-of-scope step note (prototype only) */
+  .proto-note { border: 2px dashed var(--muted); border-radius: var(--radius-card); padding: 16px; color: var(--foreground); background: var(--surface-muted); font-size: 14px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+
+  /* Prototype review panel: not part of the product */
+  .proto { max-width: 960px; margin: 0 auto 32px; padding: 0 16px; font-family: ui-sans-serif, system-ui, sans-serif; }
+  .proto details { background: #24242c; color: #f2f2f2; border-radius: 12px; padding: 0 16px; }
+  .proto summary { cursor: pointer; min-height: 48px; display: flex; align-items: center; font-weight: 700; }
+  .proto__body { padding: 0 0 16px; display: grid; gap: 16px; font-size: 14px; }
+  .proto h3 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: #c9c9d1; }
+  .proto a { color: #9fc0ff; }
+  .proto .row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .proto .chip { display: inline-flex; align-items: center; min-height: 32px; padding: 4px 12px; border-radius: 999px; background: #3a3a46; color: #fff; text-decoration: none; border: 0; font: inherit; cursor: pointer; }
+  .proto label { display: flex; gap: 8px; align-items: center; min-height: 28px; }
+  .proto input[type="checkbox"] { width: 18px; height: 18px; }
+  .proto code { background: #3a3a46; padding: 1px 6px; border-radius: 6px; }
+  .proto .proto__warn { color: #ffd27a; }
+</style>
+</head>
+<body>
+<div id="theme-root">
+  <header class="header" id="header" hidden>
+    <div class="header__inner" id="header-inner"></div>
+  </header>
+  <div class="nav-bar" id="nav-bar" hidden></div>
+  <div class="accent-bar" id="accent-bar" hidden></div>
+  <main id="main"></main>
+</div>
+<div id="status" class="sr-only" role="status" aria-live="polite"></div>
+
+<dialog class="leave" id="leave-dialog" aria-labelledby="leave-title" aria-describedby="leave-message">
+  <h2 id="leave-title"></h2>
+  <p id="leave-message"></p>
+  <div class="dialog__actions">
+    <button type="button" class="btn btn--secondary" id="leave-confirm"></button>
+    <button type="button" class="btn btn--cta" id="leave-stay"></button>
+  </div>
+</dialog>
+
+<aside class="proto" aria-label="Panel del prototipo">
+  <details id="proto-details">
+    <summary>Panel del prototipo (solo para revisión, no es parte del producto)</summary>
+    <div class="proto__body">
+      <div>
+        <h3>Dirección simulada</h3>
+        <div><code id="proto-path">/</code></div>
+      </div>
+      <div>
+        <h3>Navegar dentro de la aplicación (como con atrás/adelante del navegador)</h3>
+        <div class="row">
+          <a class="chip" href="#/">/ (raíz)</a>
+          <a class="chip" href="#/co">/co</a>
+          <a class="chip" href="#/cl">/cl</a>
+          <a class="chip" href="#/co/elige-tu-plan">/co/elige-tu-plan (entrada directa)</a>
+          <a class="chip" href="#/cl/elige-tu-plan">/cl/elige-tu-plan (entrada directa)</a>
+          <a class="chip" href="#/co/resumen-y-pago">/co/resumen-y-pago (entrada directa)</a>
+          <a class="chip" href="#/cl/resumen-y-pago">/cl/resumen-y-pago (entrada directa)</a>
+        </div>
+      </div>
+      <div>
+        <h3>Completar los pasos de formulario con datos ficticios (ambos países) e ir a los planes</h3>
+        <div class="row">
+          <button type="button" class="chip" data-preset="40,3">40 años · vehículo de 3 años (sin ajuste)</button>
+          <button type="button" class="chip" data-preset="22,8">22 años · vehículo de 8 años (+25 %)</button>
+          <button type="button" class="chip" data-preset="70,15">70 años · vehículo de 15 años (+30 %)</button>
+        </div>
+        <p>Usar otro preset con un plan ya elegido simula volver al formulario y confirmar datos distintos (AC-054).</p>
+      </div>
+      <div>
+        <h3>Simular contenido y red (se aplica recargando la aplicación)</h3>
+        <label><input type="checkbox" data-sim="slow"> Carga lenta (4 s) para ver el loader</label>
+        <label><input type="checkbox" data-sim="down"> Strapi no responde en la primera carga (“Reintentar” la recupera)</label>
+        <label><input type="checkbox" data-sim="invalidPlan"> Plan inválido publicado (precio base 0)</label>
+        <label><input type="checkbox" data-sim="noPlans"> Ningún plan activo para el país</label>
+        <label><input type="checkbox" data-sim="noRecommended"> Ningún plan marcado como recomendado</label>
+        <label><input type="checkbox" data-sim="twoRecommended"> Dos planes marcados como recomendados</label>
+        <label><input type="checkbox" data-sim="dropChosen"> Desactivar en Strapi el plan elegido en esta pestaña</label>
+        <label><input type="checkbox" data-sim="newPlan"> Publicar en Strapi un plan nuevo al final</label>
+      </div>
+      <div>
+        <h3>Simular el endpoint de precio (inmediato)</h3>
+        <label><input type="checkbox" data-sim-live="slowQuote"> Precio final lento (3 s)</label>
+        <label><input type="checkbox" data-sim-live="quoteFail"> La próxima solicitud de precio falla (“Reintentar” la recupera)</label>
+      </div>
+      <div class="row">
+        <button type="button" class="chip" id="proto-reload">Recargar la página</button>
+        <button type="button" class="chip" id="proto-clear">Borrar datos de esta pestaña</button>
+      </div>
+      <div>
+        <h3>Última solicitud de precio final enviada por el navegador (AC-046)</h3>
+        <div><code id="proto-quote">Ninguna todavía</code></div>
+      </div>
+      <div>
+        <h3>Planes que Strapi tiene pero no se envían (filtrados por publicado y activo)</h3>
+        <div>Colombia: “Plan Antiguo” (inactivo), “Plan Borrador” (borrador). Chile: “Plan Antiguo” (inactivo), “Plan Borrador” (borrador).</div>
+      </div>
+      <div>
+        <h3>Fecha usada para validar y calcular edades</h3>
+        <div id="proto-today"></div>
+      </div>
+    </div>
+  </details>
+</aside>
+
+<script>
+(() => {
+  "use strict";
+
+  // ---------------------------------------------------------------------------
+  // Simulated Strapi content (fictitious). Only published entries are returned.
+  // ---------------------------------------------------------------------------
+  const SURA_THEME = { primary: "#2D6DF6", accent: "#00AEC7", logo: null };
+  const MAKES_CO = [
+    { value: "chevrolet", label: "Chevrolet", order: 1 },
+    { value: "renault", label: "Renault", order: 2 },
+    { value: "mazda", label: "Mazda", order: 3 },
+    { value: "kia", label: "Kia", order: 4 },
+  ];
+  const MAKES_CL = [
+    { value: "toyota", label: "Toyota", order: 1 },
+    { value: "hyundai", label: "Hyundai", order: 2 },
+    { value: "suzuki", label: "Suzuki", order: 3 },
+    { value: "chevrolet", label: "Chevrolet", order: 4 },
+  ];
+  const BIRTH_DATE = (order) => ({
+    id: "fecha-nacimiento", label: "Fecha de nacimiento", type: "date", required: true, order,
+    help: "Debes ser mayor de edad para contratar el seguro.",
+    error: "Ingresa una fecha válida. Debes tener 18 años o más.",
+    validations: { minAge: 18 }, pricing: "birthDate",   // pricing input mark (AC-044)
+  });
+  const YEAR = (order) => ({
+    id: "anio", label: "Año del vehículo", type: "number", required: true, order,
+    placeholder: "Ej: 2020", help: "Año de fabricación que aparece en la licencia del vehículo.",
+    error: "Ingresa un año válido: el vehículo puede tener hasta 20 años de antigüedad.",
+    validations: { integer: true, yearRange: { before: 20, after: 1 } }, pricing: "vehicleYear",   // AC-044
+  });
+
+  // Plans as stored in Strapi (AC-064, AC-065). Array order = creation order. The browser only
+  // receives the published, active plans of the requested country (see fetchContent).
+  const plan = (o) => ({ published: true, active: true, recommended: false, benefits: [], ...o });
+  const PLANS_CO = [
+    plan({ id: "co-basico", name: "Plan Básico", order: 1, basePrice: 1200000, currency: "COP",
+      description: "Lo esencial para circular tranquilo y cumplir con terceros.",
+      coverages: [
+        { name: "Responsabilidad civil extracontractual", value: "Hasta $ 1.000 millones" },
+        { name: "Asistencia en carretera", value: "Grúa hasta 50 km" },
+        { name: "Asistencia jurídica" },
+      ] }),
+    plan({ id: "co-clasico", name: "Plan Clásico", order: 2, basePrice: 1850000, currency: "COP", recommended: true,
+      description: "Protección completa para tu carro en el día a día.",
+      coverages: [
+        { name: "Responsabilidad civil extracontractual", value: "Hasta $ 2.000 millones" },
+        { name: "Pérdida total por daños o hurto", value: "100 % del valor comercial" },
+        { name: "Pérdida parcial por daños", value: "Deducible de $ 1.000.000" },
+        { name: "Asistencia en carretera", value: "Grúa hasta 150 km" },
+      ],
+      benefits: ["Vehículo de reemplazo por 10 días"] }),
+    plan({ id: "co-global", name: "Plan Global", order: 3, basePrice: 2600000, currency: "COP",
+      description: "La cobertura más amplia, sin deducible en pérdidas parciales.",
+      coverages: [
+        { name: "Responsabilidad civil extracontractual", value: "Hasta $ 4.000 millones" },
+        { name: "Pérdida total por daños o hurto", value: "100 % del valor comercial" },
+        { name: "Pérdida parcial por daños", value: "Sin deducible" },
+        { name: "Asistencia en carretera", value: "Grúa sin límite de km" },
+      ],
+      benefits: ["Vehículo de reemplazo por 20 días", "Conductor elegido 4 veces al año"] }),
+    plan({ id: "co-antiguo", name: "Plan Antiguo", order: 4, basePrice: 900000, currency: "COP", active: false,
+      description: "Plan que ya no se ofrece.", coverages: [{ name: "Responsabilidad civil extracontractual" }] }),
+    plan({ id: "co-borrador", name: "Plan Borrador", order: 0, basePrice: 3000000, currency: "COP", published: false,
+      description: "Plan en preparación.", coverages: [{ name: "Responsabilidad civil extracontractual" }] }),
+  ];
+  const PLANS_CL = [
+    plan({ id: "cl-esencial", name: "Plan Esencial", order: 1, basePrice: 350000, currency: "CLP",
+      description: "Cubre los daños que puedas causar a terceros.",
+      coverages: [
+        { name: "Responsabilidad civil", value: "Hasta UF 500" },
+        { name: "Asistencia en ruta", value: "Grúa hasta 50 km" },
+      ] }),
+    plan({ id: "cl-full", name: "Plan Full", order: 2, basePrice: 520000, currency: "CLP", recommended: true,
+      description: "Protege tu auto y a terceros con un deducible moderado.",
+      coverages: [
+        { name: "Responsabilidad civil", value: "Hasta UF 1.000" },
+        { name: "Daños propios y robo", value: "Deducible UF 5" },
+        { name: "Asistencia en ruta", value: "Grúa hasta 200 km" },
+      ],
+      benefits: ["Auto de reemplazo por 7 días"] }),
+    plan({ id: "cl-premium", name: "Plan Premium", order: 3, basePrice: 690000, currency: "CLP",
+      description: "La protección más completa, con deducible reducido.",
+      coverages: [
+        { name: "Responsabilidad civil", value: "Hasta UF 2.000" },
+        { name: "Daños propios y robo", value: "Deducible UF 3" },
+        { name: "Asistencia en ruta", value: "Grúa sin límite de km" },
+      ],
+      benefits: ["Auto de reemplazo por 15 días", "Revisión técnica a domicilio"] }),
+    plan({ id: "cl-antiguo", name: "Plan Antiguo", order: 4, basePrice: 300000, currency: "CLP", active: false,
+      description: "Plan que ya no se ofrece.", coverages: [{ name: "Responsabilidad civil" }] }),
+    plan({ id: "cl-borrador", name: "Plan Borrador", order: 0, basePrice: 800000, currency: "CLP", published: false,
+      description: "Plan en preparación.", coverages: [{ name: "Responsabilidad civil" }] }),
+  ];
+  const PLAN_COPY_KEYS = ["intro", "choose", "chosen", "recommended", "basePrice", "finalPrice", "quoting", "coverages",
+    "benefits", "noPlans", "choosePlan", "priceError", "retry"];
+
+  function baseContent() {
+    return [
+      {
+        code: "co", name: "Colombia", currency: "COP", locale: "es-CO", published: true, theme: SURA_THEME,
+        copy: {
+          continue: "Continuar", back: "Volver", progress: "Paso {current} de {total}",
+          leaveTitle: "¿Quieres salir del formulario?",
+          leaveMessage: "Perderás los datos que escribiste en este paso y aún no confirmaste.",
+          leaveStay: "Seguir en el formulario", leaveConfirm: "Salir",
+          plans: {
+            intro: "Precios anuales en pesos colombianos. Tu precio final depende de tu edad y de la antigüedad de tu vehículo.",
+            choose: "Elegir este plan", chosen: "Plan elegido", recommended: "Recomendado",
+            basePrice: "Precio base anual", finalPrice: "Tu precio anual", quoting: "Calculando tu precio…",
+            coverages: "Coberturas", benefits: "Beneficios",
+            noPlans: "Por ahora no tenemos planes disponibles para cotizar. Inténtalo más tarde.",
+            choosePlan: "Elige un plan para continuar.",
+            priceError: "No pudimos calcular tu precio.", retry: "Reintentar",
+          },
+        },
+        plans: PLANS_CO,
+        steps: [
+          { slug: "tus-datos-y-tu-vehiculo", title: "Tus datos y tu vehículo", type: "form", order: 1, fields: [
+            { id: "tipo-documento", label: "Tipo de documento", type: "select", required: true, order: 1,
+              placeholder: "Selecciona tu tipo de documento", help: "Elige el documento con el que te identificas.",
+              error: "Selecciona un tipo de documento.",
+              options: [
+                { value: "cc", label: "Cédula de ciudadanía", order: 1 },
+                { value: "ce", label: "Cédula de extranjería", order: 2 },
+              ] },
+            { id: "numero-documento", label: "Número de documento", type: "text", required: true, order: 2,
+              placeholder: "Ej: 1234567890", help: "Solo números, sin puntos ni espacios.",
+              error: "Ingresa un número de documento de 6 a 10 dígitos.",
+              validations: { pattern: "^[0-9]{6,10}$" }, inputmode: "numeric" },
+            BIRTH_DATE(3),
+            { id: "placa", label: "Placa", type: "text", required: true, order: 4,
+              placeholder: "Ej: ABC123", help: "Tres letras seguidas de tres números.",
+              error: "Ingresa una placa con tres letras y tres números, por ejemplo ABC123.",
+              validations: { pattern: "^[A-Za-z]{3}[0-9]{3}$" } },
+            { id: "marca", label: "Marca", type: "select", required: true, order: 5,
+              placeholder: "Selecciona la marca", help: "Marca que aparece en la licencia de tránsito.",
+              error: "Selecciona la marca de tu vehículo.", options: MAKES_CO },
+            YEAR(6),
+          ] },
+          { slug: "elige-tu-plan", title: "Elige tu plan", type: "plans", order: 2 },
+          { slug: "resumen-y-pago", title: "Resumen y pago", type: "summary", order: 3 },
+        ],
+      },
+      {
+        code: "cl", name: "Chile", currency: "CLP", locale: "es-CL", published: true, theme: SURA_THEME,
+        copy: {
+          continue: "Continuar", back: "Volver", progress: "Paso {current} de {total}",
+          leaveTitle: "¿Quieres salir de la cotización?",
+          leaveMessage: "Se perderán los datos que ingresaste en este paso y que aún no confirmaste.",
+          leaveStay: "Seguir cotizando", leaveConfirm: "Salir",
+          plans: {
+            intro: "Precios anuales en pesos chilenos. Tu precio final se ajusta según tu edad y los años de tu auto.",
+            choose: "Elegir este plan", chosen: "Plan elegido", recommended: "Recomendado",
+            basePrice: "Precio base anual", finalPrice: "Tu precio anual", quoting: "Calculando tu precio…",
+            coverages: "Coberturas", benefits: "Beneficios",
+            noPlans: "En este momento no hay planes disponibles para cotizar. Vuelve a intentarlo más tarde.",
+            choosePlan: "Selecciona un plan para continuar.",
+            priceError: "No pudimos calcular tu precio en este momento.", retry: "Reintentar",
+          },
+        },
+        plans: PLANS_CL,
+        steps: [
+          { slug: "tus-datos", title: "Tus datos", type: "form", order: 1, fields: [
+            { id: "rut", label: "RUT", type: "text", required: true, order: 1,
+              placeholder: "Ej: 12.345.678-5", help: "Con o sin puntos, con guion y dígito verificador.",
+              error: "Ingresa un RUT válido, por ejemplo 12.345.678-5.",
+              validations: { pattern: "^([0-9]{1,2}(\\.[0-9]{3}){2}|[0-9]{7,8})-[0-9Kk]$" } },
+            BIRTH_DATE(2),
+          ] },
+          { slug: "tu-vehiculo", title: "Tu vehículo", type: "form", order: 2, fields: [
+            { id: "patente", label: "Patente", type: "text", required: true, order: 1,
+              placeholder: "Ej: BBBB12", help: "Cuatro letras y dos números, o dos letras y cuatro números.",
+              error: "Ingresa una patente válida, por ejemplo BBBB12 o AB1234.",
+              validations: { pattern: "^([A-Za-z]{4}[0-9]{2}|[A-Za-z]{2}[0-9]{4})$" } },
+            { id: "marca", label: "Marca", type: "select", required: true, order: 2,
+              placeholder: "Selecciona la marca", help: "Marca que aparece en el padrón del vehículo.",
+              error: "Selecciona la marca de tu vehículo.", options: MAKES_CL },
+            YEAR(3),
+          ] },
+          { slug: "elige-tu-plan", title: "Elige tu plan", type: "plans", order: 3 },
+          { slug: "resumen-y-pago", title: "Resumen y pago", type: "summary", order: 4 },
+        ],
+      },
+      {
+        code: "pe", name: "Perú", currency: "PEN", locale: "es-PE", published: false, theme: SURA_THEME,
+        copy: {}, steps: [], plans: [],
+      },
+    ];
+  }
+
+  // ---------------------------------------------------------------------------
+  // Prototype simulations (review panel only)
+  // ---------------------------------------------------------------------------
+  const SIM_KEY = "proto:sim";
+  const sim = readJSON(SIM_KEY) || {};
+
+  const live = readJSON("proto:live") || {};   // endpoint simulations, applied without reloading
+
+  // What Strapi holds right now (the "server" side of the simulation).
+  function simulatedContent() {
+    const all = baseContent();
+    for (const c of all) {
+      if (sim.noPlans) for (const p of c.plans) p.active = false;
+      if (sim.invalidPlan && c.plans[0]) c.plans[0].basePrice = 0;
+      if (sim.noRecommended) for (const p of c.plans) p.recommended = false;
+      if (sim.twoRecommended && c.plans[2]) c.plans[2].recommended = true;
+      if (sim.newPlan && c.plans.length) {
+        const first = c.plans[0];
+        c.plans.push(plan({ id: c.code + "-nuevo", name: "Plan Nuevo", order: 9, basePrice: first.basePrice * 3,
+          currency: first.currency, description: "Plan publicado por el equipo de negocio sin despliegue.",
+          coverages: first.coverages.slice(0, 2), benefits: ["Beneficio de lanzamiento"] }));
+      }
+      if (sim.dropChosen) {
+        const chosen = (readJSON(dataKey(c.code)) || {}).plan;
+        const p = chosen && c.plans.find((x) => x.id === chosen.id);
+        if (p) p.active = false;
+      }
+    }
+    return all; // Perú exists only as a draft and is filtered out as unpublished
+  }
+
+  // Country, steps and the country's published, active plans arrive together (AC-059).
+  let attempts = 0;
+  function fetchContent() {
+    attempts++;
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (sim.down && attempts === 1) { reject(new Error("network")); return; } // only the first load fails, so retry recovers
+        resolve(simulatedContent().filter((c) => c.published).map((c) => ({
+          ...c,
+          plans: c.plans.filter((p) => p.published && p.active)
+            .map(({ published, active, ...rest }) => rest),   // the browser never receives drafts or inactive plans
+        })));
+      }, sim.slow ? 4000 : 450);
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Simulated price-quote endpoint (Strapi custom route, stateless, AC-043, AC-045)
+  // It reads the plan's published base price itself; the browser never sends a price.
+  // ---------------------------------------------------------------------------
+  function priceRule(base, age, vehicleAge) {          // same for every country (AC-043)
+    let pct = 0;
+    if (vehicleAge != null) pct += vehicleAge <= 5 ? 0 : vehicleAge <= 10 ? 10 : 20;
+    if (age != null) pct += age <= 25 ? 15 : age <= 64 ? 0 : 10;
+    return Math.floor((base * (100 + pct) + 50) / 100); // exact integer arithmetic, halves rounded up
+  }
+  function quoteEndpoint(request) {
+    document.getElementById("proto-quote").textContent = "POST /api/quote " + JSON.stringify(request);
+    const failNow = !!live.quoteFail;
+    if (failNow) { live.quoteFail = false; writeJSON("proto:live", live); syncLiveBoxes(); }
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (failNow) { reject(new Error("HTTP 503")); return; }
+        const country = simulatedContent().find((c) => c.code === request.country && c.published);
+        const p = country && country.plans.find((x) => x.id === request.planId && x.published && x.active);
+        const intOrAbsent = (v) => v === undefined || Number.isInteger(v);
+        if (!p || !intOrAbsent(request.policyholderAge) || !intOrAbsent(request.vehicleAge)) { reject(new Error("HTTP 400")); return; }
+        resolve({ finalPrice: priceRule(p.basePrice, request.policyholderAge, request.vehicleAge) });
+      }, live.slowQuote ? 3000 : 500 + Math.round(Math.random() * 400));
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Content validation (shared schema in the real app)
+  // ---------------------------------------------------------------------------
+  const TYPES = ["text", "number", "select", "date", "checkbox"];
+  const nonBlank = (v) => typeof v === "string" && v.trim() !== "";
+  function validPlan(p, country) {                     // AC-041
+    return nonBlank(p.name) && nonBlank(p.description)
+      && Number.isInteger(p.basePrice) && p.basePrice > 0
+      && p.currency === country.currency && Number.isInteger(p.order)
+      && Array.isArray(p.coverages) && p.coverages.length > 0
+      && p.coverages.every((cv) => nonBlank(cv.name) && (cv.value === undefined || nonBlank(cv.value)))
+      && Array.isArray(p.benefits) && p.benefits.every(nonBlank)
+      && (p.recommended === undefined || typeof p.recommended === "boolean");
+  }
+  function validCountry(c) {
+    const cp = c.copy || {};
+    if (!["continue", "back", "progress", "leaveTitle", "leaveMessage", "leaveStay", "leaveConfirm"].every((k) => typeof cp[k] === "string" && cp[k])) return false;
+    if (!cp.plans || !PLAN_COPY_KEYS.every((k) => nonBlank(cp.plans[k]))) return false;            // AC-040
+    if (!c.plans.every((p) => validPlan(p, c))) return false;                                       // AC-041
+    const marked = (mark) => c.steps.filter((s) => s.type === "form").flatMap((s) => s.fields).filter((f) => f.pricing === mark);
+    const bd = marked("birthDate"), vy = marked("vehicleYear");                                     // AC-044
+    if (bd.length > 1 || vy.length > 1 || bd.some((f) => f.type !== "date") || vy.some((f) => f.type !== "number")) return false;
+    const steps = [...c.steps].sort(byOrder);
+    const types = steps.map((s) => s.type);
+    const firstNonForm = types.findIndex((t) => t !== "form");
+    if (firstNonForm < 1) return false;
+    if (types.slice(firstNonForm).join() !== "plans,summary") return false;
+    for (const s of steps.filter((x) => x.type === "form")) {
+      for (const f of s.fields) {
+        if (!f.label || !f.error || !TYPES.includes(f.type)) return false;
+        if (f.type === "select" && !(f.options && f.options.length)) return false;
+        const v = f.validations || {};
+        if (v.pattern) { try { new RegExp(v.pattern); } catch { return false; } }
+        if (v.min != null && v.max != null && v.min > v.max) return false;
+      }
+    }
+    return true;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Helpers
+  // ---------------------------------------------------------------------------
+  function byOrder(a, b) { return a.order - b.order; } // Array.sort is stable: equal orders keep creation order
+  function readJSON(k) { try { return JSON.parse(sessionStorage.getItem(k)); } catch { return null; } }
+  function writeJSON(k, v) { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch { /* storage unavailable */ } }
+  function el(tag, attrs = {}, children = []) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (v == null || v === false) continue;
+      if (k === "text") n.textContent = v;
+      else if (k === "class") n.className = v;
+      else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v === true ? "" : v);
+    }
+    for (const c of [].concat(children)) if (c) n.append(c);
+    return n;
+  }
+  function svgIcon(kind) {
+    const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("width", kind === "big" ? "40" : "16"); s.setAttribute("height", kind === "big" ? "40" : "16");
+    s.setAttribute("viewBox", "0 0 24 24"); s.setAttribute("aria-hidden", "true"); s.setAttribute("focusable", "false");
+    s.innerHTML = '<circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.3" fill="currentColor"/>';
+    if (kind === "big") s.classList.add("state__icon");
+    return s;
+  }
+  function chevron() {
+    const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("width", "24"); s.setAttribute("height", "24"); s.setAttribute("viewBox", "0 0 24 24");
+    s.setAttribute("aria-hidden", "true"); s.setAttribute("focusable", "false");
+    s.innerHTML = '<path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>';
+    return s;
+  }
+  function today() { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function announce(msg) { const s = document.getElementById("status"); s.textContent = ""; setTimeout(() => { s.textContent = msg; }, 30); }
+
+  // ---------------------------------------------------------------------------
+  // Field validation (AC-012, AC-013, AC-014)
+  // ---------------------------------------------------------------------------
+  function isEmpty(field, value) {
+    if (field.type === "checkbox") return value !== true;
+    return value == null || String(value).trim() === "";
+  }
+  function yearBounds(v) { const y = today().getFullYear(); return { min: y - v.yearRange.before, max: y + v.yearRange.after }; }
+  function ageOn(birth, d) {
+    let bm = birth.getMonth(), bd = birth.getDate();
+    const leap = (y) => (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+    if (bm === 1 && bd === 29 && !leap(d.getFullYear())) { bm = 2; bd = 1; }
+    let age = d.getFullYear() - birth.getFullYear();
+    if (d.getMonth() < bm || (d.getMonth() === bm && d.getDate() < bd)) age--;
+    return age;
+  }
+  function isValid(field, value) {
+    if (isEmpty(field, value)) return !field.required;
+    const v = field.validations || {};
+    const str = String(value).trim();
+    if (field.type === "text") {
+      if (v.minLength != null && str.length < v.minLength) return false;
+      if (v.maxLength != null && str.length > v.maxLength) return false;
+      if (v.pattern && !new RegExp(v.pattern).test(str)) return false;
+    }
+    if (field.type === "number") {
+      if (!/^-?\d+(\.\d+)?$/.test(str)) return false;
+      const n = Number(str);
+      if (v.integer && !Number.isInteger(n)) return false;
+      if (v.min != null && n < v.min) return false;
+      if (v.max != null && n > v.max) return false;
+      if (v.yearRange) { const b = yearBounds(v); if (n < b.min || n > b.max) return false; }
+    }
+    if (field.type === "date") {
+      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(str);
+      if (!m) return false;
+      const birth = new Date(+m[1], +m[2] - 1, +m[3]);
+      if (birth > today()) return false;
+      if (v.minAge != null && ageOn(birth, today()) < v.minAge) return false;
+    }
+    if (field.type === "select" && !field.options.some((o) => o.value === value)) return false;
+    return true;
+  }
+  function errorText(field) { return field.error; }
+
+  // ---------------------------------------------------------------------------
+  // Wizard data per country, kept in this tab (AC-022, AC-023, AC-025)
+  // ---------------------------------------------------------------------------
+  const dataKey = (code) => "wizard:" + code;
+  function loadData(country) {
+    const raw = readJSON(dataKey(country.code)) || { steps: {} };
+    // Reconcile with the current configuration: drop unknown steps/fields; a step stays complete only if still valid.
+    const out = { steps: {} };
+    for (const s of country.steps.filter((x) => x.type === "form")) {
+      const stored = raw.steps[s.slug];
+      if (!stored) continue;
+      const values = {};
+      for (const f of s.fields) if (f.id in stored.values) values[f.id] = stored.values[f.id];
+      const complete = stored.complete && s.fields.length > 0 && s.fields.every((f) => isValid(f, values[f.id]));
+      out.steps[s.slug] = { values, complete };
+    }
+    // Chosen plan (AC-048): discarded silently when the plan is no longer offered (AC-055).
+    out.plan = raw.plan && country.plans.some((p) => p.id === raw.plan.id) ? { id: raw.plan.id, finalPrice: raw.plan.finalPrice ?? null } : null;
+    if (raw.plan && !out.plan) writeJSON(dataKey(country.code), out);
+    return out;
+  }
+  function saveStep(country, slug, values) {
+    const d = loadData(country);
+    const before = d.steps[slug] && d.steps[slug].values;
+    const changed = !before || JSON.stringify(before) !== JSON.stringify(values);
+    d.steps[slug] = { values, complete: true };
+    if (changed && d.plan) d.plan.finalPrice = null;      // new step 1 data needs a new final price (AC-054)
+    writeJSON(dataKey(country.code), d);
+  }
+  function savePlan(country, planValue) {
+    const d = loadData(country);
+    d.plan = planValue;
+    writeJSON(dataKey(country.code), d);
+  }
+  function isComplete(step, data) {
+    if (step.type === "form") return !!(data.steps[step.slug] && data.steps[step.slug].complete);
+    if (step.type === "plans") return !!(data.plan && data.plan.finalPrice != null);   // AC-056
+    return false;
+  }
+
+  // Inputs of the price rule, derived on the device from the marked fields (AC-044, AC-046)
+  function pricingInputs(country, data) {
+    const out = {};
+    for (const s of country.steps.filter((x) => x.type === "form")) {
+      for (const f of s.fields) {
+        const v = data.steps[s.slug] && data.steps[s.slug].values[f.id];
+        if (v == null || v === "") continue;
+        if (f.pricing === "birthDate") {
+          const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+          if (m) out.policyholderAge = ageOn(new Date(+m[1], +m[2] - 1, +m[3]), today());
+        }
+        if (f.pricing === "vehicleYear" && /^\d{4}$/.test(String(v))) out.vehicleAge = today().getFullYear() - Number(v);
+      }
+    }
+    return out;
+  }
+  function formatPrice(country, amount) {             // AC-042: Intl with the country's locale and currency
+    return new Intl.NumberFormat(country.locale, { style: "currency", currency: country.currency,
+      minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Routing (hash simulates the path: #/co/tus-datos -> /co/tus-datos)
+  // ---------------------------------------------------------------------------
+  function parse(hash) {
+    const parts = (hash.replace(/^#/, "") || "/").split("/").filter(Boolean);
+    return { code: parts[0] || null, slug: parts[1] || null };
+  }
+  const pathOf = (hash) => { const p = parse(hash); return "/" + [p.code, p.slug].filter(Boolean).join("/"); };
+
+  // ---------------------------------------------------------------------------
+  // App state
+  // ---------------------------------------------------------------------------
+  let countries = null;      // loaded content
+  let loadError = null;      // "down" | null
+  let current = null;        // { country, step, form: {values, touched, attempted} }
+  let currentHash = location.hash || "#/";
+  let advancing = false;
+  let pendingHash = null;
+  let focusBeforeDialog = null;
+
+  const main = document.getElementById("main");
+  const header = document.getElementById("header");
+
+  function setTheme(theme) {
+    const root = document.documentElement.style;
+    const hex = /^#[0-9A-Fa-f]{6}$/;
+    const ok = theme && hex.test(theme.primary || "") && hex.test(theme.accent || "");
+    root.setProperty("--primary", ok ? theme.primary : "#2D6DF6");
+    root.setProperty("--accent", ok ? theme.accent : "#00AEC7");
+    const inner = document.getElementById("header-inner");
+    inner.replaceChildren(ok && theme.logo
+      ? el("img", { class: "logo-img", src: theme.logo, alt: "SURA" })
+      : el("span", { class: "logo-placeholder", translate: "no", text: "SURA" }));
+  }
+  function showChrome(show) {
+    header.hidden = !show;
+    document.getElementById("nav-bar").hidden = !show;
+    document.getElementById("accent-bar").hidden = !show;
+  }
+
+  function renderLoading() {
+    showChrome(false);
+    main.replaceChildren(el("div", { class: "card state" }, [el("div", { class: "loader", "aria-hidden": "true" })]));
+    announce("Cargando…");
+  }
+  function renderMessage(text, action) {
+    main.replaceChildren(el("div", { class: "card state", role: "alert" }, [svgIcon("big"), el("p", { text }), action || null]));
+  }
+
+  function boot() {
+    countries = null; loadError = null;
+    renderLoading();
+    fetchContent().then((c) => { countries = c; route(true); })
+      .catch(() => { loadError = "down"; route(true); });
+  }
+
+  function retry() { boot(); }
+
+  function route(initial) {
+    planView = null;                                   // answers for a plan step that is no longer shown are ignored
+    currentHash = location.hash || "#/";
+    document.getElementById("proto-path").textContent = pathOf(currentHash);
+    const { code, slug } = parse(currentHash);
+
+    if (loadError) {
+      showChrome(false); document.title = "Cotiza tu seguro de auto";
+      renderMessage("No pudimos cargar el formulario. Revisa tu conexión e inténtalo de nuevo.",
+        el("button", { type: "button", class: "btn btn--cta", text: "Reintentar", onclick: retry }));
+      current = null; return;
+    }
+
+    if (!code) { current = null; return renderRoot(); }
+
+    const country = countries.find((c) => c.code === code); // exact match only (AC-002)
+    if (!country) {
+      current = null; showChrome(false); document.title = "Cotiza tu seguro de auto";
+      renderMessage("Este país no está disponible.", el("a", { href: "#/", class: "btn btn--secondary", text: "Elegir otro país" }));
+      return;
+    }
+    if (!validCountry(country)) {
+      current = null; showChrome(false);
+      renderMessage("El formulario no está disponible en este momento. Inténtalo más tarde.");
+      return;
+    }
+
+    const steps = [...country.steps].sort(byOrder);
+    const data = loadData(country);
+    // First step that is not complete (AC-024, AC-056)
+    const firstIncomplete = steps.find((s) => !isComplete(s, data));
+    let step = steps.find((s) => s.slug === slug);
+    const idx = step ? steps.indexOf(step) : -1;
+    const allowed = step && steps.slice(0, idx).every((s) => isComplete(s, data));
+    if (!step || !allowed) {
+      step = firstIncomplete;
+      const target = "#/" + country.code + "/" + step.slug;
+      history.replaceState(null, "", target);
+      currentHash = target;
+      document.getElementById("proto-path").textContent = pathOf(target);
+    }
+    renderStep(country, steps, step, data, !initial);
+  }
+
+  function renderRoot() {
+    showChrome(false); setTheme(null);
+    // Brand bars without the logo: the root shows no copy other than its heading and the country names (AC-001).
+    document.getElementById("nav-bar").hidden = false;
+    document.getElementById("accent-bar").hidden = false;
+    document.title = "Cotiza tu seguro de auto";
+    const h1 = el("h1", { tabindex: "-1", text: "Elige tu país para cotizar tu seguro de auto" });
+    const list = el("ul", { class: "countries" }, countries.map((c) =>
+      el("li", {}, [el("a", { class: "country-link", href: "#/" + c.code }, [c.name, chevron()])])));
+    main.replaceChildren(el("div", {}, [h1, list]));
+  }
+
+  function renderProgress(country, steps, step, data) {
+    const pos = steps.indexOf(step) + 1;
+    const label = country.copy.progress.replace("{current}", pos).replace("{total}", steps.length);
+    return el("nav", { class: "progress", "aria-label": label }, [
+      el("p", { class: "progress__label", "aria-hidden": "true", text: label }),
+      el("ol", { class: "progress__list" }, steps.map((s, i) => {
+        const done = isComplete(s, data) && s !== step;
+        return el("li", { class: "progress__item" + (done ? " is-done" : ""), "aria-current": s === step ? "step" : null }, [
+          el("span", { class: "progress__num", "aria-hidden": "true", text: String(i + 1) }), s.title]);
+      })),
+    ]);
+  }
+
+  function renderStep(country, steps, step, data, moveFocus) {
+    setTheme(country.theme); showChrome(true);
+    document.title = step.title + " – " + country.name;
+    const pos = steps.indexOf(step);
+    const h1 = el("h1", { tabindex: "-1", id: "step-heading", text: step.title });
+    const children = [renderProgress(country, steps, step, data), h1];
+    const prev = pos > 0 ? steps[pos - 1] : null;
+    const back = prev ? el("a", { class: "btn btn--link", href: "#/" + country.code + "/" + prev.slug, text: country.copy.back }) : null;
+
+    if (step.type === "plans") { current = null; renderPlansStep(country, step, data, children, back, h1, moveFocus); return; }
+
+    if (step.type !== "form") {
+      current = null;
+      const chosen = data.plan && country.plans.find((p) => p.id === data.plan.id);
+      children.push(el("p", { class: "proto-note", text: "Prototipo: el contenido de este paso pertenece a US-03 y no forma parte de CHG-002. Aquí terminan las pruebas de este cambio. Para revisión, los datos del asistente guardan: "
+        + (chosen ? chosen.name + " con precio final " + formatPrice(country, data.plan.finalPrice) + "." : "ningún plan.") }));
+      children.push(el("div", { class: "actions" }, [back]));
+      main.replaceChildren(el("div", { class: "card" }, children));
+      if (moveFocus) h1.focus();
+      return;
+    }
+
+    if (!step.fields.length) {
+      current = null;
+      children.push(el("div", { class: "state", role: "alert" }, [svgIcon("big"), el("p", { text: "El formulario no está disponible en este momento. Inténtalo más tarde." })]));
+      children.push(el("div", { class: "actions" }, [back]));
+      main.replaceChildren(el("div", { class: "card" }, children));
+      if (moveFocus) h1.focus();
+      return;
+    }
+
+    const stored = (data.steps[step.slug] && data.steps[step.slug].values) || {};
+    const fields = [...step.fields].sort(byOrder);
+    current = { country, step, fields, stored: { ...stored }, values: { ...stored } };
+
+    const form = el("form", { novalidate: true, onsubmit: (e) => { e.preventDefault(); onContinue(); } });
+    form.append(el("div", { class: "fields" }, fields.map(renderField)));
+    const cta = el("button", { type: "submit", class: "btn btn--cta", id: "continue", text: country.copy.continue });
+    form.append(el("div", { class: "actions" }, [back, cta]));
+    children.push(form);
+    main.replaceChildren(el("div", { class: "card" }, children));
+    refreshValidity();
+    if (moveFocus) h1.focus();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Plan step (US-02)
+  // ---------------------------------------------------------------------------
+  let planView = null;   // { country, step, plans, chosenId, status: idle|waiting|ok|error, price, seq }
+
+  function checkIcon(size) {
+    const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("width", size || "18"); s.setAttribute("height", size || "18"); s.setAttribute("viewBox", "0 0 24 24");
+    s.setAttribute("aria-hidden", "true"); s.setAttribute("focusable", "false");
+    s.innerHTML = '<path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>';
+    return s;
+  }
+  function starIcon() {
+    const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("width", "16"); s.setAttribute("height", "16"); s.setAttribute("viewBox", "0 0 24 24");
+    s.setAttribute("aria-hidden", "true"); s.setAttribute("focusable", "false");
+    s.innerHTML = '<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.8z" fill="currentColor"/>';
+    return s;
+  }
+
+  function renderPlansStep(country, step, data, children, back, h1, moveFocus) {
+    const cp = country.copy.plans;
+    const plans = [...country.plans].sort(byOrder);
+    if (!plans.length) {                                                       // AC-058
+      planView = null;
+      children.push(el("div", { class: "state no-plans" }, [svgIcon("big"), el("p", { text: cp.noPlans })]));
+      children.push(el("div", { class: "actions" }, [back]));
+      main.replaceChildren(el("div", { class: "card" }, children));
+      if (moveFocus) h1.focus();
+      announce(cp.noPlans);
+      return;
+    }
+    const recommended = plans.find((p) => p.recommended === true);            // only the first is distinguished (AC-038)
+    planView = { country, step, plans, chosenId: data.plan ? data.plan.id : null, status: "idle", price: null, seq: 0 };
+
+    children.push(el("p", { class: "plans-intro", text: cp.intro }));
+    const list = el("ul", { class: "plans" }, plans.map((p) => {
+      const isRec = recommended && p.id === recommended.id;
+      const nameId = "plan-name-" + p.id, badgeId = "plan-badge-" + p.id, baseId = "plan-base-" + p.id, finalId = "plan-final-" + p.id;
+      return el("li", {}, [el("article", { class: "plan" + (isRec ? " is-recommended" : ""), "data-plan": p.id, "aria-labelledby": nameId }, [
+        el("div", { class: "plan__top" }, [
+          isRec ? el("span", { class: "plan__badge", id: badgeId }, [starIcon(), cp.recommended]) : null,
+          el("h2", { class: "plan__name", id: nameId, text: p.name }),
+          el("p", { class: "plan__desc", text: p.description }),
+        ]),
+        el("p", { class: "plan__price", id: baseId }, [
+          el("span", { class: "plan__price-label", text: cp.basePrice }),
+          el("span", { class: "plan__amount", text: formatPrice(country, p.basePrice) }),
+        ]),
+        el("div", { class: "plan__final", id: finalId, tabindex: "-1", hidden: true }),
+        el("button", { type: "button", class: "btn btn--secondary plan__choose",
+          "aria-describedby": [isRec ? badgeId : null, baseId, finalId].filter(Boolean).join(" "),
+          onclick: () => choosePlan(p.id) }),
+        el("section", { class: "plan__section", "aria-label": cp.coverages + " · " + p.name }, [
+          el("h3", { "aria-hidden": "true", text: cp.coverages }),
+          el("ul", { class: "plan__list" }, p.coverages.map((cv) => el("li", {}, [checkIcon(), el("span", {}, [
+            cv.name, cv.value ? el("span", { class: "plan__value", text: cv.value }) : null])]))),
+        ]),
+        p.benefits.length ? el("section", { class: "plan__section", "aria-label": cp.benefits + " · " + p.name }, [
+          el("h3", { "aria-hidden": "true", text: cp.benefits }),
+          el("ul", { class: "plan__list" }, p.benefits.map((b) => el("li", {}, [checkIcon(), el("span", { text: b })]))),
+        ]) : null,
+      ])]);
+    }));
+    const group = el("div", { role: "group", id: "plans-group", "aria-labelledby": "step-heading" }, [list]);
+    const msg = el("p", { class: "field__error plans-msg", id: "plans-msg", hidden: true }, [svgIcon(), el("span", { text: cp.choosePlan })]);
+    const cta = el("button", { type: "button", class: "btn btn--cta", id: "continue", text: country.copy.continue, onclick: onPlansContinue });
+    children.push(group, msg, el("div", { class: "actions" }, [back, cta]));
+    main.replaceChildren(el("div", { class: "card" }, children));
+    updatePlans();
+    if (moveFocus) h1.focus();
+    if (planView.chosenId) requestQuote();                                     // requested every time the step is shown (AC-053)
+  }
+
+  function updatePlans() {
+    if (!planView) return;
+    const { country, chosenId, status, price } = planView;
+    const cp = country.copy.plans;
+    for (const p of planView.plans) {
+      const card = main.querySelector('[data-plan="' + p.id + '"]');
+      const chosen = p.id === chosenId;
+      card.classList.toggle("is-chosen", chosen);
+      const btn = card.querySelector(".plan__choose");
+      btn.setAttribute("aria-pressed", chosen ? "true" : "false");
+      btn.replaceChildren(...[chosen ? checkIcon("20") : null, chosen ? cp.chosen : cp.choose,
+        el("span", { class: "sr-only", text: ": " + p.name })].filter(Boolean));
+      const slot = card.querySelector(".plan__final");
+      slot.hidden = !chosen;
+      slot.classList.toggle("is-error", chosen && status === "error");
+      if (!chosen) { slot.replaceChildren(); continue; }
+      if (status === "waiting") {
+        slot.replaceChildren(el("div", { class: "plan__wait" }, [el("span", { class: "spinner", "aria-hidden": "true" }), el("span", { text: cp.quoting })]));
+      } else if (status === "ok") {
+        slot.replaceChildren(el("span", { class: "plan__price-label", text: cp.finalPrice }), el("span", { class: "plan__amount", text: formatPrice(country, price) }));
+      } else if (status === "error") {
+        slot.replaceChildren(el("p", { class: "plan__error" }, [svgIcon(), el("span", { text: cp.priceError })]),
+          el("button", { type: "button", class: "btn btn--secondary plan__retry", text: cp.retry, onclick: onRetry }));
+      } else slot.replaceChildren();
+    }
+    const ready = chosenId && status === "ok";
+    document.getElementById("continue").setAttribute("aria-disabled", ready ? "false" : "true");   // AC-051
+  }
+
+  function choosePlan(id) {
+    if (!planView || planView.chosenId === id) return;                       // same plan: nothing happens (AC-049)
+    planView.chosenId = id;
+    savePlan(planView.country, { id, finalPrice: null });                     // stored at once (AC-048)
+    const msg = document.getElementById("plans-msg");
+    msg.hidden = true; document.getElementById("plans-group").removeAttribute("aria-describedby");
+    requestQuote();
+  }
+
+  function requestQuote() {
+    const view = planView;
+    const my = ++view.seq;
+    view.status = "waiting"; view.price = null;
+    updatePlans();
+    announce(view.country.copy.plans.quoting);
+    const inputs = pricingInputs(view.country, loadData(view.country));
+    quoteEndpoint({ country: view.country.code, planId: view.chosenId, ...inputs })
+      .then((r) => {
+        if (planView !== view || my !== view.seq) return;                       // stale answer (AC-049)
+        if (!r || !Number.isInteger(r.finalPrice) || r.finalPrice <= 0) throw new Error("bad answer");
+        view.status = "ok"; view.price = r.finalPrice;
+        savePlan(view.country, { id: view.chosenId, finalPrice: r.finalPrice });
+        updatePlans();
+        announce(view.country.copy.plans.finalPrice + ": " + formatPrice(view.country, r.finalPrice));
+      })
+      .catch(() => {
+        if (planView !== view || my !== view.seq) return;
+        view.status = "error";
+        updatePlans();
+        announce(view.country.copy.plans.priceError);                         // AC-047
+      });
+  }
+
+  function onRetry() {
+    requestQuote();
+    const slot = main.querySelector('[data-plan="' + planView.chosenId + '"] .plan__final');
+    if (slot) slot.focus();
+  }
+
+  function onPlansContinue() {
+    if (!planView || advancing) return;                                        // single advance (AC-052)
+    const { country, step, chosenId, status } = planView;
+    if (!chosenId) {                                                           // AC-051
+      document.getElementById("plans-msg").hidden = false;
+      document.getElementById("plans-group").setAttribute("aria-describedby", "plans-msg");
+      announce(country.copy.plans.choosePlan);
+      main.querySelector(".plan__choose").focus();
+      return;
+    }
+    const card = main.querySelector('[data-plan="' + chosenId + '"]');
+    if (status === "error") { card.querySelector(".plan__retry").focus(); return; }
+    if (status !== "ok") { card.querySelector(".plan__final").focus(); return; }
+    advancing = true;
+    const steps = [...country.steps].sort(byOrder);
+    const next = steps[steps.indexOf(step) + 1];
+    location.hash = "#/" + country.code + "/" + next.slug;                     // AC-050
+    setTimeout(() => { advancing = false; }, 400);
+  }
+
+  function renderField(f) {
+    const id = "f-" + f.id, helpId = id + "-help", errId = id + "-error";
+    const value = current.values[f.id];
+    const describedBy = [f.help ? helpId : null].filter(Boolean).join(" ") || null;
+    const onInput = (e) => {
+      current.values[f.id] = f.type === "checkbox" ? e.target.checked : e.target.value;
+      if (f.type === "select" || f.type === "date") e.target.classList.toggle("is-empty", !e.target.value);
+      refreshValidity(f.id);
+    };
+    const onBlur = () => refreshValidity(f.id, true);
+    let control;
+    if (f.type === "checkbox") {
+      control = el("input", { type: "checkbox", id, name: f.id, "aria-describedby": describedBy, "aria-required": f.required ? "true" : null, onchange: onInput, onblur: onBlur });
+      control.checked = value === true;
+      return el("div", { class: "field field--checkbox", "data-field": f.id }, [
+        el("label", { class: "check", for: id }, [control, el("span", { class: "check__text" }, [f.label, f.required ? el("span", { class: "field__req", "aria-hidden": "true", text: "*" }) : null])]),
+        f.help ? el("p", { class: "field__help", id: helpId, text: f.help }) : null,
+        el("p", { class: "field__error", id: errId, hidden: true }, [svgIcon(), el("span", { text: errorText(f) })]),
+      ]);
+    }
+    if (f.type === "select") {
+      control = el("select", { id, name: f.id, class: "field__control" + (value ? "" : " is-empty"), "aria-describedby": describedBy, "aria-required": f.required ? "true" : null, onchange: onInput, onblur: onBlur }, [
+        el("option", { value: "", disabled: true, text: f.placeholder || "" }),
+        ...[...f.options].sort(byOrder).map((o) => el("option", { value: o.value, text: o.label })),
+      ]);
+      control.value = value || "";
+    } else {
+      const type = f.type === "number" ? "text" : f.type;
+      control = el("input", {
+        id, name: f.id, type, class: "field__control" + (f.type === "date" && !value ? " is-empty" : ""), placeholder: f.placeholder || null,
+        spellcheck: f.type === "text" ? "false" : null,
+        inputmode: f.type === "number" ? "numeric" : (f.inputmode || null),
+        autocomplete: "off", "aria-describedby": describedBy, "aria-required": f.required ? "true" : null,
+        max: f.type === "date" ? "9999-12-31" : null, oninput: onInput, onblur: onBlur,
+      });
+      control.value = value == null ? "" : value;
+    }
+    return el("div", { class: "field", "data-field": f.id }, [
+      el("label", { class: "field__label", for: id }, [f.label, f.required ? el("span", { class: "field__req", "aria-hidden": "true", text: "*" }) : null]),
+      control,
+      f.help ? el("p", { class: "field__help", id: helpId, text: f.help }) : null,
+      el("p", { class: "field__error", id: errId, hidden: true }, [svgIcon(), el("span", { text: errorText(f) })]),
+    ]);
+  }
+
+  // Shows/hides errors (AC-009, AC-010) and the continue state (AC-011)
+  function refreshValidity(changedId, fromBlur, forceAll) {
+    if (!current) return;
+    let allValid = true;
+    for (const f of current.fields) {
+      const valid = isValid(f, current.values[f.id]);
+      if (!valid) allValid = false;
+      const wrap = main.querySelector('[data-field="' + f.id + '"]');
+      const control = wrap.querySelector("input, select");
+      const err = wrap.querySelector(".field__error");
+      const showing = !err.hidden;
+      // Valid: hidden at once. Invalid: shown when leaving the field or trying to advance, and kept while invalid.
+      const show = !valid && (showing || forceAll || (fromBlur && f.id === changedId));
+      err.hidden = !show;
+      control.setAttribute("aria-invalid", show ? "true" : "false");
+      const ids = [f.help ? control.id + "-help" : null, show ? control.id + "-error" : null].filter(Boolean);
+      if (ids.length) control.setAttribute("aria-describedby", ids.join(" ")); else control.removeAttribute("aria-describedby");
+    }
+    const cta = document.getElementById("continue");
+    if (cta) cta.setAttribute("aria-disabled", allValid ? "false" : "true");
+  }
+
+  function onContinue() {
+    if (!current || advancing) return;                          // single advance (AC-021)
+    const invalid = current.fields.filter((f) => !isValid(f, current.values[f.id]));
+    if (invalid.length) {
+      refreshValidity(null, false, true);
+      const first = main.querySelector('[data-field="' + invalid[0].id + '"] input, [data-field="' + invalid[0].id + '"] select');
+      first.focus();                                             // error is read through aria-describedby
+      return;
+    }
+    advancing = true;
+    const values = {};
+    for (const f of current.fields) values[f.id] = f.type === "text" || f.type === "number" ? String(current.values[f.id] ?? "").trim() : current.values[f.id];
+    saveStep(current.country, current.step.slug, values);
+    const steps = [...current.country.steps].sort(byOrder);
+    const next = steps[steps.indexOf(current.step) + 1];
+    current.stored = values; current.values = { ...values };
+    location.hash = "#/" + current.country.code + "/" + next.slug;
+    setTimeout(() => { advancing = false; }, 400);
+  }
+
+  // Unconfirmed values (N1): any field differs from stored, or from empty when never completed
+  function hasUnconfirmed() {
+    if (!current) return false;
+    return current.fields.some((f) => {
+      const a = current.values[f.id], b = current.stored[f.id];
+      const norm = (v) => (f.type === "checkbox" ? v === true : String(v ?? "").trim());
+      return norm(a) !== norm(b);
+    });
+  }
+
+  // AC-033: browser's own confirmation on reload / close
+  window.addEventListener("beforeunload", (e) => {
+    if (hasUnconfirmed()) { e.preventDefault(); e.returnValue = ""; }
+  });
+
+  // AC-034 / AC-035: navigation inside the application
+  const dialog = document.getElementById("leave-dialog");
+  window.addEventListener("hashchange", () => {
+    const target = location.hash || "#/";
+    if (pendingHash) return;
+    const from = parse(currentHash), to = parse(target);
+    const leavingWizard = current && to.code !== from.code;
+    if (leavingWizard && hasUnconfirmed()) {
+      pendingHash = target;
+      history.replaceState(null, "", currentHash);                // stay at the same address while asking
+      openDialog();
+      return;
+    }
+    route(false);
+  });
+
+  function openDialog() {
+    const cp = current.country.copy;
+    document.getElementById("leave-title").textContent = cp.leaveTitle;
+    document.getElementById("leave-message").textContent = cp.leaveMessage;
+    document.getElementById("leave-stay").textContent = cp.leaveStay;
+    document.getElementById("leave-confirm").textContent = cp.leaveConfirm;
+    focusBeforeDialog = document.activeElement;
+    dialog.showModal();
+    document.getElementById("leave-stay").focus();
+  }
+  function closeDialog(leave) {
+    const target = pendingHash;
+    dialog.close();
+    if (leave) {
+      current = null;                                            // unconfirmed values discarded
+      history.replaceState(null, "", target);
+      pendingHash = null;
+      route(false);
+    } else {
+      pendingHash = null;
+      if (focusBeforeDialog && document.contains(focusBeforeDialog)) focusBeforeDialog.focus();
+    }
+  }
+  document.getElementById("leave-stay").addEventListener("click", () => closeDialog(false));
+  document.getElementById("leave-confirm").addEventListener("click", () => closeDialog(true));
+  dialog.addEventListener("cancel", (e) => { e.preventDefault(); closeDialog(false); });   // Escape = stay
+
+  // ---------------------------------------------------------------------------
+  // Review panel wiring
+  // ---------------------------------------------------------------------------
+  for (const box of document.querySelectorAll("[data-sim]")) {
+    box.checked = !!sim[box.dataset.sim];
+    box.addEventListener("change", () => { sim[box.dataset.sim] = box.checked; writeJSON(SIM_KEY, sim); location.reload(); });
+  }
+  function syncLiveBoxes() { for (const box of document.querySelectorAll("[data-sim-live]")) box.checked = !!live[box.dataset.simLive]; }
+  for (const box of document.querySelectorAll("[data-sim-live]")) {
+    box.addEventListener("change", () => { live[box.dataset.simLive] = box.checked; writeJSON("proto:live", live); });
+  }
+  syncLiveBoxes();
+
+  // Presets: fill every form step of both countries with fictitious values, as if confirmed with continue.
+  const SAMPLE = { "tipo-documento": "cc", "numero-documento": "1234567890", placa: "ABC123", rut: "12.345.678-5", patente: "BBBB12" };
+  for (const btn of document.querySelectorAll("[data-preset]")) {
+    btn.addEventListener("click", () => {
+      if (!countries) return;
+      const [age, vAge] = btn.dataset.preset.split(",").map(Number);
+      const t = today();
+      const pad = (n) => String(n).padStart(2, "0");
+      const birth = (t.getFullYear() - age) + "-" + pad(t.getMonth() + 1) + "-" + pad(t.getDate());
+      for (const c of countries.filter(validCountry)) {
+        for (const s of c.steps.filter((x) => x.type === "form")) {
+          const values = {};
+          for (const f of s.fields) {
+            if (f.pricing === "birthDate") values[f.id] = birth;
+            else if (f.pricing === "vehicleYear") values[f.id] = String(t.getFullYear() - vAge);
+            else if (f.type === "select") values[f.id] = [...f.options].sort(byOrder)[0].value;
+            else if (f.type === "checkbox") values[f.id] = false;
+            else values[f.id] = SAMPLE[f.id] ?? "";
+          }
+          saveStep(c, s.slug, values);
+        }
+      }
+      current = null;                                  // presets replace typed values without asking
+      const code = parse(location.hash).code;
+      const country = countries.find((c) => c.code === code) || countries[0];
+      const target = "#/" + country.code + "/" + [...country.steps].sort(byOrder).find((s) => s.type === "plans").slug;
+      if (location.hash === target) route(false); else location.hash = target;
+    });
+  }
+
+  document.getElementById("proto-reload").addEventListener("click", () => location.reload());
+  document.getElementById("proto-clear").addEventListener("click", () => {
+    for (const k of Object.keys(sessionStorage)) if (k.startsWith("wizard:")) sessionStorage.removeItem(k);
+    current = null; location.hash = "#/"; location.reload();
+  });
+  if (readJSON("proto:open")) document.getElementById("proto-details").open = true;
+  document.getElementById("proto-details").addEventListener("toggle", (e) => writeJSON("proto:open", e.target.open));
+  const t = today();
+  const y = t.getFullYear();
+  document.getElementById("proto-today").textContent =
+    t.toLocaleDateString("es-CO", { day: "numeric", month: "long", year: "numeric" }) +
+    " · año del vehículo aceptado: " + (y - 20) + " a " + (y + 1) +
+    " · nacidos hasta el " + new Date(y - 18, t.getMonth(), t.getDate()).toLocaleDateString("es-CO") + " son mayores de edad"
+    + " · regla de precio (AC-043): vehículo 0–5 años +0 %, 6–10 +10 %, 11+ +20 %; edad ≤25 +15 %, 26–64 +0 %, 65+ +10 %";
+
+  if (!location.hash) history.replaceState(null, "", "#/");
+  boot();
+})();
+</script>
+</body>
+</html>
