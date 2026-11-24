@@ -82,3 +82,16 @@ User story → spec (`.roclec/changes/CHG-NNN/`, origin `US-NN`) → ADRs cited 
 ## Session logs
 
 Agent sessions are imported into Roclec as evidence and versioned twice: the unedited original in `.roclec/runtime/sessions/EVD-*/` and a copy in `.roclec/evidence/EVD-*.session` with secrets and email addresses redacted as configured in [`.roclec/project.toml`](.roclec/project.toml) (`secret_env`, `redact_patterns`).
+
+## Questions
+
+- What you would do differently if a team of 5 developers used this flow .
+  I would agree on the shared schemas and quote API contract first. The plan selection story already exposed this dependency: Angular and Strapi needed to share the request and response formats for the final price. With five developers, I would assign owners for Angular, Strapi, and the shared contract, with someone other than the implementer reviewing each change. Once the contract was agreed, frontend and CMS work could proceed in parallel and come together in end-to-end tests before the QA handoff.
+  
+- Which part of the flow did not work as expected and how you adjusted it.
+  The initial workflow allowed coding to start as soon as the spec was approved. I added a checkpoint before implementation to verify that the plan and tasks covered every acceptance criterion and followed the agreed architecture decisions. The pilot also exposed a limitation in Roclec. Because the checkpoint is tied to the spec revision, the original approval remains valid even if the plan changes afterward.
+
+As this was my first time applying Roclec to a real project, I identified several priorities for the next iteration. I would make the documentation easier to follow, reduce the time spent on setup and handoffs, and organize specs, plans, and verification records so contributors can find them more quickly.
+  
+- At which points you decided not to use AI and why
+  I kept spec approval and the decisions on architecture, prototypes, plans, and integration in human hands. For example, in the summary and payment story, I sent the draft back so that Colombian and Chilean ID numbers would always be masked using the same rule, with no option to disable it in Strapi. The agent incorporated that decision into the next revision. I kept that approval human because it defined what personal data the product could display.
