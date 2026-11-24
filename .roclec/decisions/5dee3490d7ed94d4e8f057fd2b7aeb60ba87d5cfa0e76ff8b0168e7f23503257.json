@@ -1,0 +1,26 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-009",
+      "status": "met"
+    },
+    {
+      "id": "CR-010",
+      "status": "met"
+    }
+  ],
+  "entity": "docs/prototypes/us-03/index.html",
+  "flow": "3ae780aad6b1fc33890a0dff47645cf0515ef6319f7c53e9c0a04f98cf4a49fc",
+  "id": "5dee3490d7ed94d4e8f057fd2b7aeb60ba87d5cfa0e76ff8b0168e7f23503257",
+  "kind": "checkpoint",
+  "model_schema": 2,
+  "outcome": "approved",
+  "previous": null,
+  "reason": "Owner approves the US-03 summary and payment prototype (CHG-003) showing Colombia and Chile content.",
+  "subject": {
+    "digest": "ff47822df072927f65657ad80e48e0b50037ec53161c924498bdbb15a85c730e",
+    "entity": "docs/prototypes/us-03/index.html",
+    "type": "prototype"
+  }
+}
