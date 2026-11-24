@@ -3,7 +3,7 @@ import { render } from '@testing-library/angular';
 import { App } from './app';
 
 describe('App', () => {
-  it('renders the router outlet', async () => {
+  it('AC-001 renders the router outlet that shows the page of each address', async () => {
     const { container } = await render(App, { providers: [provideRouter([])] });
 
     expect(container.querySelector('router-outlet')).not.toBeNull();

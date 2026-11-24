@@ -1,0 +1,13 @@
+{
+  "kind": "change-start",
+  "model_schema": 2,
+  "operation_id": "c69d84c52b099bf4c4bdae250aaaac427478741d97685ac41878620537aca6ff",
+  "payload": {
+    "component": "app",
+    "id": "CHG-001",
+    "proposal_digest": "3c6df305a8fa0075571146e6906deca182c864031e8eb64e24605b7bd6064192"
+  },
+  "writes": {
+    ".roclec/decisions/e5082a6dd28fa2971e29dbd9003da4bba0b77366a442a8567780a093683d4c47.json": "21c57d5b6804d9a77a83c097d758a474b7bff7238d11924a011ea912b3a798d1"
+  }
+}

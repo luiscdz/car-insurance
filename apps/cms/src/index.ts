@@ -1,20 +1,18 @@
-// import type { Core } from '@strapi/strapi';
+import type { Core } from '@strapi/strapi';
+import { disableSelfRegistration, restrictPublicRole } from './bootstrap/public-permissions';
+import { seedWhenEmpty } from './seed';
 
 export default {
-  /**
-   * An asynchronous register function that runs before
-   * your application is initialized.
-   *
-   * This gives you an opportunity to extend code.
-   */
-  register(/* { strapi }: { strapi: Core.Strapi } */) {},
+  register() {},
 
   /**
-   * An asynchronous bootstrap function that runs before
-   * your application gets started.
-   *
-   * This gives you an opportunity to set up your data model,
-   * run jobs, or perform some special logic.
+   * Runs before the server starts: leaves the public role with only the read permissions the
+   * wizard needs, turns off self-registration and seeds both countries on an empty database.
+   * Every step is idempotent (docs/architecture.md).
    */
-  bootstrap(/* { strapi }: { strapi: Core.Strapi } */) {},
+  async bootstrap({ strapi }: { strapi: Core.Strapi }) {
+    await restrictPublicRole(strapi);
+    await disableSelfRegistration(strapi);
+    await seedWhenEmpty(strapi);
+  },
 };

@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_country_wizard_copies",
+  "info": {
+    "displayName": "Wizard copy",
+    "description": "Labels of the wizard's actions, progress indicator ({current} and {total}) and leave dialog."
+  },
+  "options": {},
+  "attributes": {
+    "continueLabel": { "type": "string", "required": true },
+    "backLabel": { "type": "string", "required": true },
+    "progressLabel": { "type": "string", "required": true },
+    "leaveTitle": { "type": "string", "required": true },
+    "leaveMessage": { "type": "text", "required": true },
+    "leaveStayLabel": { "type": "string", "required": true },
+    "leaveConfirmLabel": { "type": "string", "required": true }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_country_themes",
+  "info": {
+    "displayName": "Theme",
+    "description": "Country theme applied as CSS custom properties; the default theme is used when it is missing or invalid."
+  },
+  "options": {},
+  "attributes": {
+    "primaryColor": {
+      "type": "string",
+      "regex": "^#[0-9A-Fa-f]{6}$"
+    },
+    "accentColor": {
+      "type": "string",
+      "regex": "^#[0-9A-Fa-f]{6}$"
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

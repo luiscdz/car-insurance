@@ -14,7 +14,9 @@
     "types:generate": "strapi ts:generate-types",
     "lint": "eslint .",
     "test": "vitest",
-    "test:ci": "vitest run --coverage"
+    "test:ci": "vitest run --coverage --typecheck",
+    "pretest:ci": "npm run build --prefix ../../packages/shared",
+    "prebuild": "npm run build --prefix ../../packages/shared"
   },
   "dependencies": {
     "@strapi/database": "5.63.0",

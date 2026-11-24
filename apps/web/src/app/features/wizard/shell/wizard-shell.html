@@ -1,0 +1,70 @@
+@switch (state()) {
+  @case ('loading') {
+    <main class="mx-auto max-w-240 px-4 pt-6 pb-12">
+      <app-loader [label]="fallback.loading" />
+    </main>
+  }
+  @case ('unavailable') {
+    <main class="mx-auto max-w-240 px-4 pt-6 pb-12">
+      <app-status-message [message]="fallback.unavailable">
+        <button type="button" appButton="cta" (click)="retry()">{{ fallback.retry }}</button>
+      </app-status-message>
+    </main>
+  }
+  @case ('not-found') {
+    <main class="mx-auto max-w-240 px-4 pt-6 pb-12">
+      <app-status-message [message]="fallback.countryNotAvailable">
+        <a appButton="secondary" routerLink="/">{{ fallback.chooseCountry }}</a>
+      </app-status-message>
+    </main>
+  }
+  @case ('invalid') {
+    <main class="mx-auto max-w-240 px-4 pt-6 pb-12">
+      <app-status-message [message]="fallback.notAvailableNow" />
+    </main>
+  }
+  @default {
+    @if (wizard(); as wizard) {
+      <header class="bg-primary text-primary-foreground">
+        <div class="mx-auto flex max-w-240 items-center gap-3 px-4 py-3">
+          @if (wizard.theme.logo; as logo) {
+            <img class="h-8 w-auto" [src]="logo.url" [alt]="logo.alt" />
+          } @else {
+            <span
+              class="rounded-sm border-2 border-primary-foreground px-3 py-0.5 text-xl font-bold tracking-wide"
+              translate="no"
+              >{{ fallback.logoPlaceholder }}</span
+            >
+          }
+        </div>
+      </header>
+      <div class="h-1.5 bg-primary-strong"></div>
+      <div class="h-1 bg-accent"></div>
+      <main class="mx-auto max-w-240 px-4 pt-6 pb-12">
+        <div class="rounded-lg bg-background px-4 py-6 shadow-sm md:p-8">
+          <app-progress-indicator
+            [steps]="progressSteps()"
+            [current]="currentIndex()"
+            [labelTemplate]="wizard.content.country.copy.progressLabel"
+          />
+          <h1
+            #heading
+            tabindex="-1"
+            class="mb-6 text-2xl leading-tight font-bold text-balance text-primary-strong focus:outline-none md:text-[2rem]"
+          >
+            {{ currentStep()?.title }}
+          </h1>
+          @for (rendered of renderedSteps(); track rendered.key) {
+            <ng-container *ngComponentOutlet="rendered.component; inputs: rendered.inputs" />
+          } @empty {
+            @if (previousStepLink(); as link) {
+              <div class="mt-8 flex">
+                <a appButton="link" [routerLink]="link">{{ copy().backLabel }}</a>
+              </div>
+            }
+          }
+        </div>
+      </main>
+    }
+  }
+}

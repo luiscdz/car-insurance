@@ -1,0 +1,13 @@
+{
+  "base_tag": null,
+  "changes": [
+    {
+      "change_id": "CHG-001",
+      "intent_revision": "3c6df305a8fa0075571146e6906deca182c864031e8eb64e24605b7bd6064192"
+    }
+  ],
+  "component": "app",
+  "kind": "release",
+  "model_schema": 2,
+  "version": "v0.1.0"
+}

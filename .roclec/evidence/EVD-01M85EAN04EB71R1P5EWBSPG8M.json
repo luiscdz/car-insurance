@@ -1,0 +1,34 @@
+{
+  "acceptance_ids": [
+    "AC-003",
+    "AC-028",
+    "AC-029",
+    "AC-030"
+  ],
+  "actor": "luis-cardozo",
+  "candidate_digest": "83e56b91eed229ce541665562b9e9255b22d562beb3022e6cfecad0e8931c4a1",
+  "change_id": "CHG-001",
+  "checks": [
+    "AC-003: colors and logo placeholder of each country's seeded theme at 375 and 1280 px.",
+    "AC-028: country chosen with Tab and Enter; form completed with keyboard only, visible focus, logical order and no trap (Chile through step 2); continue with invalid fields moves focus to the first error; leave dialog starts on stay, Tab stays inside, Escape closes it and focus returns.",
+    "AC-029: layout at 375 and 1280 px with and without errors, nothing cut off and no horizontal scroll.",
+    "AC-030: with the reduced-motion preference, no animation on step change, error display, loader or leave dialog."
+  ],
+  "component": "app",
+  "context": "Owner manual verification in the browser on the local Compose stack (http://localhost:4200), Colombia and Chile: no visible errors that prevent approval",
+  "digest": "9f73708cc7d9f2735206fe9491a716c0a3e8794818140c1282400236f2e3591d",
+  "executed_by_roclec": false,
+  "finding_parents": {},
+  "findings": [],
+  "id": "EVD-01M85EAN04EB71R1P5EWBSPG8M",
+  "kind": "manual",
+  "limitations": [
+    "Observed in the owner's browser only; no other browsers or screen readers were exercised (the optional AC-011 screen-reader check was not performed)."
+  ],
+  "model_schema": 2,
+  "outcome": "pass",
+  "run_id": "RUN-01M85E31K8Y0MSRPVH0HA3XZAJ",
+  "supersedes": [
+    "EVD-01M85DKC3CEVK2F7BTQKXZ7ECG"
+  ]
+}

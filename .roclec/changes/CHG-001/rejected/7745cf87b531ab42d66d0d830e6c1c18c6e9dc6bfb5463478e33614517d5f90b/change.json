@@ -1,0 +1,283 @@
+{
+  "id": "CHG-001",
+  "kind": "evolution",
+  "model_schema": 2,
+  "proposal_digest": "7745cf87b531ab42d66d0d830e6c1c18c6e9dc6bfb5463478e33614517d5f90b",
+  "semantic": {
+    "architecture_decisions": {
+      "adrs": [
+        {
+          "id": "ADR-001",
+          "sha256": "bd3697711bb77da644c103469cc41cfd63e2ab94964da397bd5c894804449e93"
+        }
+      ]
+    },
+    "bases": [
+      {
+        "capability_id": "CAP-001",
+        "component": "app",
+        "revision": null
+      }
+    ],
+    "components": [
+      "app"
+    ],
+    "coverage": {
+      "criteria": [
+        {
+          "acceptance_ids": [
+            "AC-004",
+            "AC-005",
+            "AC-009",
+            "AC-012"
+          ],
+          "criterion": "BR-01",
+          "origin": "US-01",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-006"
+          ],
+          "criterion": "BR-02",
+          "origin": "US-01",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-013"
+          ],
+          "criterion": "BR-03",
+          "origin": "US-01",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-014"
+          ],
+          "criterion": "BR-04",
+          "origin": "US-01",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-004",
+            "AC-031",
+            "AC-032"
+          ],
+          "criterion": "SC-01",
+          "origin": "US-01",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-009",
+            "AC-011"
+          ],
+          "criterion": "SC-02",
+          "origin": "US-01",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-007"
+          ],
+          "criterion": "SC-03",
+          "origin": "US-01",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-019",
+            "AC-020"
+          ],
+          "criterion": "SC-04",
+          "origin": "US-01",
+          "status": "covered"
+        }
+      ],
+      "derived": [
+        {
+          "id": "AC-001",
+          "reason": "The story opens the application 'in the context of a country' without saying how the country is chosen; ADR-001 and the architecture place the choice at the root address and the country in the first route segment."
+        },
+        {
+          "id": "AC-002",
+          "reason": "ADR-001 lists an unknown or unpublished country code in the address as a risk whose behavior the specs must define; the story does not define it."
+        },
+        {
+          "id": "AC-003",
+          "reason": "The design reference requires a per-country theme from Strapi with a default fallback; the story does not mention it and this is the first screen of the wizard."
+        },
+        {
+          "id": "AC-008",
+          "reason": "The engineering reference requires all user-facing copy to come from Strapi except the fallback; the story only covers field copy, not navigation and progress copy."
+        },
+        {
+          "id": "AC-010",
+          "reason": "The story says errors appear when a field fails validation but not when they are shown; the gap checklist requires stating when validation messages appear."
+        },
+        {
+          "id": "AC-015",
+          "reason": "The story has no loading state; the engineering reference requires explicit loading states and the design reference requires them to be announced."
+        },
+        {
+          "id": "AC-016",
+          "reason": "The story does not say what happens when Strapi is unavailable; principle P3 requires a controlled message instead of a broken screen."
+        },
+        {
+          "id": "AC-017",
+          "reason": "The story does not cover misconfigured content; principle P3 and the architecture require validating content before use and showing a controlled message."
+        },
+        {
+          "id": "AC-018",
+          "reason": "The story does not cover an empty form step; the engineering reference requires an explicit empty state."
+        },
+        {
+          "id": "AC-021",
+          "reason": "The story does not cover repeated activation of continue; the gap checklist requires handling double submission."
+        },
+        {
+          "id": "AC-022",
+          "reason": "The story only covers going back; the architecture states that wizard data survives reloading, and the gap checklist requires stating reload behavior."
+        },
+        {
+          "id": "AC-023",
+          "reason": "The story does not say whether data is shared between countries or how long it lives; the architecture keeps a store per country in session storage, discarded when the tab closes."
+        },
+        {
+          "id": "AC-024",
+          "reason": "The story does not cover entering a later step directly; the gap checklist requires stating direct entry, and a later step must not be reached without valid earlier data."
+        },
+        {
+          "id": "AC-025",
+          "reason": "The story allows the business team to change fields at any time but does not say what happens to data stored under an earlier configuration."
+        },
+        {
+          "id": "AC-026",
+          "reason": "The story does not say where entered personal data may travel; principles P4 and P5 and the engineering reference require it not to be sent to Strapi or logged in this step."
+        },
+        {
+          "id": "AC-027",
+          "reason": "The story has no accessibility criteria; principle P6 and the design reference require programmatic labels, associations and an automated scan."
+        },
+        {
+          "id": "AC-028",
+          "reason": "The story has no accessibility criteria; the design reference requires keyboard-only completion with visible focus, checked in every user interface review."
+        },
+        {
+          "id": "AC-029",
+          "reason": "The story has no responsive criteria; the design reference sets the reference widths, reflow to 320 px and minimum target size."
+        },
+        {
+          "id": "AC-030",
+          "reason": "The story has no motion criteria; the design reference requires respecting the reduced-motion preference."
+        }
+      ]
+    },
+    "deltas": [
+      {
+        "capability_id": "CAP-001",
+        "op": "add",
+        "requirement_id": "REQ-001"
+      },
+      {
+        "capability_id": "CAP-001",
+        "op": "add",
+        "requirement_id": "REQ-002"
+      },
+      {
+        "capability_id": "CAP-001",
+        "op": "add",
+        "requirement_id": "REQ-003"
+      },
+      {
+        "capability_id": "CAP-001",
+        "op": "add",
+        "requirement_id": "REQ-004"
+      },
+      {
+        "capability_id": "CAP-001",
+        "op": "add",
+        "requirement_id": "REQ-005"
+      },
+      {
+        "capability_id": "CAP-001",
+        "op": "add",
+        "requirement_id": "REQ-006"
+      },
+      {
+        "capability_id": "CAP-001",
+        "op": "add",
+        "requirement_id": "REQ-007"
+      }
+    ],
+    "dependencies": [],
+    "files": {
+      "proposal.md": "bfc6c176b8eb462b36eec5c63b26106105ec902c83d4e18275e1f2894a7defc6",
+      "sources/US-01.md": "dee556eb43d019b0ef4c8780517ac1a39ceb6720c818cf9cc76acad8d0548872"
+    },
+    "intention": "proposal.md",
+    "origins": [
+      {
+        "captured": "sources/US-01.md",
+        "criteria": [
+          "BR-01",
+          "BR-02",
+          "BR-03",
+          "BR-04",
+          "SC-01",
+          "SC-02",
+          "SC-03",
+          "SC-04"
+        ],
+        "id": "US-01",
+        "kind": "story",
+        "locator": "docs/assessment/04-user-stories.md#us-01--policyholder-and-vehicle-data-form"
+      }
+    ],
+    "proposed": [
+      {
+        "capability_id": "CAP-001",
+        "components": [
+          "app"
+        ],
+        "revision": "77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a"
+      }
+    ],
+    "references": [
+      {
+        "id": "architecture",
+        "sha256": "53e3b75fac47d734ac4e4eb5283036108a87b3d036c3f91462afbe5f3598ea76"
+      },
+      {
+        "id": "context",
+        "sha256": "d36b8a76f5656f5499291fac24b46d3b998d90fb16ca00da390f06facd3a6f03"
+      },
+      {
+        "id": "design",
+        "sha256": "c81ff9f48a6fe7b03f3e2c18a513fc8aa37a90a3f4c095dfb4876663ff2a870a"
+      },
+      {
+        "id": "engineering",
+        "sha256": "33dff2a2ef0e2fe75db14572003a6ec6ac85f1626dc5169ce09795d17b0c0fa9"
+      },
+      {
+        "id": "flow",
+        "sha256": "3ae780aad6b1fc33890a0dff47645cf0515ef6319f7c53e9c0a04f98cf4a49fc"
+      },
+      {
+        "id": "principles",
+        "sha256": "ce473af13ddb50cebb38a7ca86990363ff7b7bce5b2367ff072daaeb023edf57"
+      },
+      {
+        "id": "stack",
+        "sha256": "732c66838c0a1c836b80aa519f1f6bc98f6723a8011ae2df1ee2ecb9e4649e2f"
+      },
+      {
+        "id": "verification",
+        "sha256": "7d9becbed34cc825d1ab35f11b4bef8c4b3cc28072bf4058c4918318b41ace25"
+      }
+    ]
+  }
+}

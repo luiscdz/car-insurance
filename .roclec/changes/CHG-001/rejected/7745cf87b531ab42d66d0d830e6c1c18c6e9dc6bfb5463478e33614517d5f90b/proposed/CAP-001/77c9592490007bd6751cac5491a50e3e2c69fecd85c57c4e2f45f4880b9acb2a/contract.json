@@ -1,0 +1,386 @@
+{
+  "acceptance": [
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-001",
+      "scenario": "acceptance/AC-001.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-002",
+      "scenario": "acceptance/AC-002.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-003",
+      "scenario": "acceptance/AC-003.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-004",
+      "scenario": "acceptance/AC-004.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-005",
+      "scenario": "acceptance/AC-005.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-006",
+      "scenario": "acceptance/AC-006.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-007",
+      "scenario": "acceptance/AC-007.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-008",
+      "scenario": "acceptance/AC-008.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-009",
+      "scenario": "acceptance/AC-009.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-010",
+      "scenario": "acceptance/AC-010.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-011",
+      "scenario": "acceptance/AC-011.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-012",
+      "scenario": "acceptance/AC-012.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-013",
+      "scenario": "acceptance/AC-013.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-014",
+      "scenario": "acceptance/AC-014.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-015",
+      "scenario": "acceptance/AC-015.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-016",
+      "scenario": "acceptance/AC-016.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-017",
+      "scenario": "acceptance/AC-017.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-018",
+      "scenario": "acceptance/AC-018.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-019",
+      "scenario": "acceptance/AC-019.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-020",
+      "scenario": "acceptance/AC-020.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-021",
+      "scenario": "acceptance/AC-021.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-022",
+      "scenario": "acceptance/AC-022.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-023",
+      "scenario": "acceptance/AC-023.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-024",
+      "scenario": "acceptance/AC-024.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-025",
+      "scenario": "acceptance/AC-025.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-026",
+      "scenario": "acceptance/AC-026.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-027",
+      "scenario": "acceptance/AC-027.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-028",
+      "scenario": "acceptance/AC-028.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-029",
+      "scenario": "acceptance/AC-029.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-030",
+      "scenario": "acceptance/AC-030.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-031",
+      "scenario": "acceptance/AC-031.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-032",
+      "scenario": "acceptance/AC-032.md"
+    }
+  ],
+  "capability_id": "CAP-001",
+  "files": {
+    "acceptance/AC-001.md": "15aace0e918be11e3cf2a34f3a9e57b5dd421242fa073242b7b210726e2a29a3",
+    "acceptance/AC-002.md": "7cf8b7a49c107f7bbb4b8574f4b1e5d7407fcb2aa3d91168b313a3f9ae65eb41",
+    "acceptance/AC-003.md": "8d003ced2553e23fcab5c77ad5157aafc0e75f67e9f27154fcd6df3715350ce9",
+    "acceptance/AC-004.md": "c9a4ee1bd58490422f7a8929e3de5ad5b52fbfd867315877151261b1dfdcc4d2",
+    "acceptance/AC-005.md": "4716ce31ff03b57192eea78c728dfaf5770ae64fa641eb1f32a04b9687814893",
+    "acceptance/AC-006.md": "d99cce8d95947839402206b4ce181b745e2822b7f3e44400edc1f268ad36130f",
+    "acceptance/AC-007.md": "c2ea9024b93d6f06bb6c29d3652660384736b75db6e8a9d497da0ec22811e93e",
+    "acceptance/AC-008.md": "09bc81e356000bcacd9004ec7b2e8c661a051f20b0bc298dba96dd96ac23eddd",
+    "acceptance/AC-009.md": "d96d84bf996f4d535525906d5092690b6526402bf23fd907af0826089dc38747",
+    "acceptance/AC-010.md": "7868de3f6036bc06818b055fe19fb19e256884642b347404c9c13f88647c403b",
+    "acceptance/AC-011.md": "fa66c13576442ca4cefc2346980fc2bf61ce9c556f90841b2f8d4ae3a030e09c",
+    "acceptance/AC-012.md": "7e488843922c9b1abeed35655370b44393c3cccf0c0605394433be4459ce6da8",
+    "acceptance/AC-013.md": "823dce70f84a41793961fa9d7f952f8f1592396da07fa99d54df41eb331a47e4",
+    "acceptance/AC-014.md": "0e4836144333c9095542a92ffe8a64196bf4d428903d9c027b0146eae8095353",
+    "acceptance/AC-015.md": "6d3dc2ee8c1b9b9a5bcd4ab85291704ed4d56196a3b1f368ba5b95dbae025763",
+    "acceptance/AC-016.md": "804e8ecaada33a0c62cd102fec3a13d2df28e22a5cbf3b590dc0233acb44239c",
+    "acceptance/AC-017.md": "8cc0ba4d8f0bca6c354d24070a7f3244ccb5402917973d70c08cc050cc8828d8",
+    "acceptance/AC-018.md": "c005d64a14718e3e6ad9c01bfeb6b97ea1533d4de8aed55b9968306f876e42f3",
+    "acceptance/AC-019.md": "126b927ffd74f22eb1d2302cdc085c318475545891c36a40f875831a767fdb54",
+    "acceptance/AC-020.md": "8d7f95ffb3bb2a0aa3e855370944c67002de4d7dff69b60844aea0833d7b7184",
+    "acceptance/AC-021.md": "396efac69bd90db7aca1e7060b803977eeb9525356107092f184e5de2db990bd",
+    "acceptance/AC-022.md": "392d1ea058f9cc82ccc35ca7f684a72e685ea1d66df90b0b07e10736cbe6bc4e",
+    "acceptance/AC-023.md": "c4447422a72ea551aa2ba3e8c59cc0256e89869e5ecbd39874b6779fa8b72f06",
+    "acceptance/AC-024.md": "ce1131f0eefe74bad8b4fe36168dad26e99040ba614bd8ea814884e20fa1575f",
+    "acceptance/AC-025.md": "15b73a559b47ce37dcae2d96bd777e7d3e71d2759072a7815e81c7050269bf03",
+    "acceptance/AC-026.md": "f63189fc1c8669f48605e58cf67f5234d77bda350c5619d34def16701faf9961",
+    "acceptance/AC-027.md": "b37fcf1ccd5bb7c069aa8e5487af7cc6c1b33c792051c1a96d1f670c4aa27386",
+    "acceptance/AC-028.md": "d671a46924cf366869e835bf9716a4740f67f2ad1deee31f59d952efef19283a",
+    "acceptance/AC-029.md": "deb9f18bbf76d0494317535f7338444622e15e2e80a3aaa7eeb72ed8f4d8f9b6",
+    "acceptance/AC-030.md": "c9b38f1ebad491a128f7bc33e938b39991872dbf40153af3f28f06645ce8cfc7",
+    "acceptance/AC-031.md": "0f403b1f91e303ad8cc302576aadb1341928afb212999d85008ee04a27b9940e",
+    "acceptance/AC-032.md": "ff0697494907861cedb6a6d8d40b0eaa600b767ed2b59386945cf4f2bd36787c",
+    "requirements/REQ-001.md": "a04ec2781fd481ebecdc60ae26d1ec6bd264651a2084e6be0b811a9fe7568237",
+    "requirements/REQ-002.md": "38c0d3ea54d8d213f50fa70e6ac40ac92ec86cac8cfdd2082e894711acc272a6",
+    "requirements/REQ-003.md": "2e9254d665aee47022066d2a2764fa74a6e582a4aade1ce164aebe0205be9467",
+    "requirements/REQ-004.md": "1bd04eb0b8cb9a77345064b5fe80dffe9bb480627bf5d2b290a48ebbe1faa30f",
+    "requirements/REQ-005.md": "dad5337e051b3432e0e3536687aa418dd73536a997ff0e61b9c52fe5d1c013c7",
+    "requirements/REQ-006.md": "4de5bca995b6308900e99d8e1489a159bd1efdc13b92828bf7273d8c9d78c3ce",
+    "requirements/REQ-007.md": "ec4fe3ecb1d3b1c36cb9693907bbfef9ee0ee8f3c92b6bda53f81d2a5209a53f"
+  },
+  "model_schema": 2,
+  "references": [
+    {
+      "id": "ADR-001",
+      "sha256": "bd3697711bb77da644c103469cc41cfd63e2ab94964da397bd5c894804449e93"
+    },
+    {
+      "id": "context",
+      "sha256": "d36b8a76f5656f5499291fac24b46d3b998d90fb16ca00da390f06facd3a6f03"
+    },
+    {
+      "id": "design",
+      "sha256": "c81ff9f48a6fe7b03f3e2c18a513fc8aa37a90a3f4c095dfb4876663ff2a870a"
+    },
+    {
+      "id": "principles",
+      "sha256": "ce473af13ddb50cebb38a7ca86990363ff7b7bce5b2367ff072daaeb023edf57"
+    }
+  ],
+  "requirements": [
+    {
+      "acceptance_ids": [
+        "AC-001",
+        "AC-002",
+        "AC-003"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-001",
+      "statement": "requirements/REQ-001.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-004",
+        "AC-005",
+        "AC-006",
+        "AC-007",
+        "AC-008"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-002",
+      "statement": "requirements/REQ-002.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-009",
+        "AC-010",
+        "AC-011",
+        "AC-012",
+        "AC-013",
+        "AC-014"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-003",
+      "statement": "requirements/REQ-003.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-015",
+        "AC-016",
+        "AC-017",
+        "AC-018"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-004",
+      "statement": "requirements/REQ-004.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-019",
+        "AC-020",
+        "AC-021",
+        "AC-022",
+        "AC-023",
+        "AC-024",
+        "AC-025",
+        "AC-026"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-005",
+      "statement": "requirements/REQ-005.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-027",
+        "AC-028",
+        "AC-029",
+        "AC-030"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-006",
+      "statement": "requirements/REQ-006.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-031",
+        "AC-032"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-007",
+      "statement": "requirements/REQ-007.md"
+    }
+  ]
+}

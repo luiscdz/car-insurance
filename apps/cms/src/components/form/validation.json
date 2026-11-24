@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_form_validations",
+  "info": {
+    "displayName": "Validation",
+    "description": "Inclusive limits of a field. minAge applies to dates; yearsBefore and yearsAfter set a year range relative to the current year."
+  },
+  "options": {},
+  "attributes": {
+    "minLength": { "type": "integer", "min": 0 },
+    "maxLength": { "type": "integer", "min": 0 },
+    "pattern": { "type": "string" },
+    "min": { "type": "decimal" },
+    "max": { "type": "decimal" },
+    "integer": { "type": "boolean" },
+    "minAge": { "type": "integer", "min": 0 },
+    "yearsBefore": { "type": "integer", "min": 0 },
+    "yearsAfter": { "type": "integer", "min": 0 }
+  }
+}

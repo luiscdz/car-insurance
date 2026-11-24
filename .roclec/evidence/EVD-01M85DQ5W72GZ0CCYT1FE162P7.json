@@ -1,0 +1,212 @@
+{
+  "acceptance_ids": [
+    "AC-001",
+    "AC-002",
+    "AC-003",
+    "AC-004",
+    "AC-005",
+    "AC-006",
+    "AC-007",
+    "AC-008",
+    "AC-009",
+    "AC-010",
+    "AC-011",
+    "AC-012",
+    "AC-013",
+    "AC-014",
+    "AC-015",
+    "AC-016",
+    "AC-017",
+    "AC-018",
+    "AC-019",
+    "AC-020",
+    "AC-021",
+    "AC-022",
+    "AC-023",
+    "AC-024",
+    "AC-025",
+    "AC-026",
+    "AC-027",
+    "AC-028",
+    "AC-029",
+    "AC-030",
+    "AC-031",
+    "AC-032",
+    "AC-033",
+    "AC-034",
+    "AC-035"
+  ],
+  "actor": "roclec-reviewer",
+  "candidate_digest": "9d238b0f67d4f15a27c72dd64be6df572105459c86a955122a8e96b048076bb9",
+  "change_id": "CHG-001",
+  "checks": [
+    "Confirmed that all 185 candidate input files in the working tree match the SHA-256 values in the run manifest (inputs_digest 9d238b0f...), and that no app, e2e or shared file is outside the inputs except two .gitignore files and uploads/.gitkeep",
+    "Read the run manifest and all eight captured logs (format, lint, shared-unit 51 tests, web-unit 120 tests, cms-unit 14 tests, web-build, cms-build, e2e 105 Playwright tests in mobile, desktop and content-changes projects)",
+    "Re-ran apps/web test:ci locally: 21 files and 120 tests passed, with 97.7 % line coverage",
+    "Read every AC-001..AC-035 file, proposal.md, plan.md, constitution, architecture, engineering, stack, design, verification and ADR-001",
+    "Read the CMS schemas, routes, bootstrap permissions and seed, the shared Zod schemas, the web core, shell, form step, controls, shared UI, all unit specs that cover AC-011 and AC-034 and every e2e spec",
+    "Applied the ADR-001 compliance verification: no country-code conditions in apps/web (grep), every wizard request filters by country, the steps come from Strapi, and the seed has different step configurations for co and cl",
+    "Applied the country-content skill Verification checklist",
+    "Read-only probes of the running Compose stack: GET /api/auth/email-confirmation answered 400 ValidationError (the public role can reach it), GET /api/countries/does-not-exist answered 404, and a DELETE on a non-existent country id answered 405 (no route, nothing changed)",
+    "Scanned the built web bundle (apps/web/dist/web/browser) and public/config.json: no token, credential, admin or content-manager reference; the only API paths are /api/countries and /api/wizard-steps",
+    "Read Strapi 5 sources for the users-permissions default public permissions and for how media populate is checked (media populate needs no upload permission)"
+  ],
+  "component": "app",
+  "context": "claude-code:session-3fcd5842-fc64-40ee-adec-a1c9842ce96b/reviewer (roclec-reviewer subagent in its own context window, did not take part in implementation; it shares the host session id with the producer coordinator, so independence is at subagent-context level only)",
+  "digest": "e4c21aa2d47f082e34197fc76c2536e7ef327a85a20d39bd58855cfdb5272d04",
+  "executed_by_roclec": false,
+  "finding_parents": {},
+  "findings": [
+    {
+      "acceptance_ids": [],
+      "condition": "Any fresh start of the CMS. The users-permissions plugin gives the Public role its default actions: auth.callback, connect, forgotPassword, resetPassword, register, emailConfirmation, sendEmailConfirmation and refresh, with allow_register=true. The bootstrap only adds find and findOne and never removes these defaults. On the running stack, GET /api/auth/email-confirmation answered 400 'Invalid token' instead of 403.",
+      "description": "Violates the country-content skill Verification and principle P4. Recommendation: make the bootstrap remove, idempotently, every Public-role permission outside PUBLIC_ACTIONS (and/or set the users-permissions advanced setting allow_register=false). Unit-test that only the six read actions remain. Optionally add an e2e probe that a users-permissions auth route answers 403. If the owner prefers to keep Strapi's defaults, the architecture reference must list and justify them first.",
+      "id": "F-1",
+      "impact": "Anyone can reach the public auth endpoints, including self-registration of end-user accounts. That is a write path into the CMS database that the wizard does not need. It contradicts the architecture ('read-only access (find, findOne) ... Nothing else'), the engineering reference ('The public role has only the permissions listed in the architecture'), P4 ('Public role permissions are the minimum the wizard needs, and each one is justified'), the country-content skill Verification ('Public permissions are only find/findOne on types the wizard reads, applied in the bootstrap') and the code comment that claims nothing else is opened.",
+      "location": {
+        "line": 23,
+        "path": "apps/cms/src/bootstrap/public-permissions.ts"
+      },
+      "severity": "major"
+    },
+    {
+      "acceptance_ids": [
+        "AC-003",
+        "AC-029"
+      ],
+      "condition": "AC-003 declares 'declared manual check of the seeded themes of Colombia and Chile at both reference widths' and AC-029 declares 'declared manual check at 375 and 1280 px'. No observation with these AC IDs exists. The only manual evidence on this run, EVD-01M85DKC3CEVK2F7BTQKXZ7ECG, covers AC-028 and AC-030. The coverage gate treats AC-003 and AC-029 as covered because automated checks list them.",
+      "description": "Not a code defect but a verification gap. The owner should record manual observations for AC-003 (seeded co and cl themes at 375 and 1280 px, including AA contrast of the header and labels) and AC-029 (375 and 1280 px), or decide this finding explicitly.",
+      "id": "F-2",
+      "impact": "Part of the owner-approved verification for these two ACs is missing: theme contrast and identity at both widths, and the 1280 px layout. No check enforces it, so it can be integrated silently.",
+      "location": null,
+      "severity": "major"
+    },
+    {
+      "acceptance_ids": [
+        "AC-011",
+        "AC-027"
+      ],
+      "condition": "When continue is activated with invalid fields, markAllTouched() and then focusBoundControl() move focus synchronously, inside the event handler. At that moment the error paragraph, aria-invalid=true and the error id in aria-describedby are not rendered yet: the zoneless change detection runs later. No live region announces the error either.",
+      "description": "Recommendation: move focus after the next render (for example afterNextRender or an effect after markAllTouched), so the field is focused with its error already associated. Then verify with a screen reader (VoiceOver or NVDA) in a manual observation tagged AC-011.",
+      "id": "F-3",
+      "impact": "Depending on the browser and screen reader, the focused field may be announced without its error. AC-011 ('its error is announced') and the design reference rely on this. The unit and e2e tests check aria-describedby only after the page settles, and the owner's manual observation used no assistive technology, so the announcement itself is not demonstrated.",
+      "location": {
+        "line": 109,
+        "path": "apps/web/src/app/features/wizard/steps/form-step/form-step.ts"
+      },
+      "severity": "minor"
+    },
+    {
+      "acceptance_ids": [
+        "AC-007"
+      ],
+      "condition": "The AC-007 e2e exercises: adding a published field, a draft that never appears, a changed order and label, and an unpublish. It never observes a deleted field disappearing (the delete runs only in afterAll, unchecked), nor changed help text, error message, validation or options.",
+      "description": "Recommendation: extend the serial content-changes test to change help text, the error message, a validation (for example a pattern) and a select option, and to delete a field and check it is gone after reload. Alternatively, the owner accepts the partial e2e as sufficient.",
+      "id": "F-4",
+      "impact": "AC-007 lists these changes explicitly. Their behaviour follows from the same no-cache re-read and is likely correct, but the test does not demonstrate it.",
+      "location": {
+        "line": 44,
+        "path": "e2e/tests/content-changes.spec.ts"
+      },
+      "severity": "minor"
+    },
+    {
+      "acceptance_ids": [
+        "AC-034"
+      ],
+      "condition": "Leaving through browser back or forward (popstate) with unconfirmed values. This is declared deviation 9.",
+      "description": "Judged an acceptable, browser-inherent reading of 'before the navigation happens': a popstate cannot be intercepted before the URL changes. The final state meets 'remains on the same step at the same address'. The owner should acknowledge it.",
+      "id": "F-5",
+      "impact": "While the dialog is open, the address bar already shows the target address. On stay or Escape, canceledNavigationResolution 'computed' restores it, and the e2e confirms the URL, the values and the focus afterwards. The view never changes before the answer.",
+      "location": {
+        "line": 16,
+        "path": "apps/web/src/app/app.config.ts"
+      },
+      "severity": "info"
+    },
+    {
+      "acceptance_ids": [
+        "AC-003"
+      ],
+      "condition": "A theme with valid colors and no logo (declared deviation 7). This is the case for both seeded countries.",
+      "description": "Judged consistent with the design reference. Because the seed has no logo, the logo path is covered only by unit tests, and the AC-003 manual check cannot observe a logo. Media populate needs no extra public permission in Strapi 5 (checked in the sources), so the R5 risk does not materialise.",
+      "id": "F-6",
+      "impact": "The country colors are kept and the text placeholder is shown. AC-003 defines a valid theme as one with a logo, but a missing logo is neither 'theme missing' nor 'malformed', and the design reference says 'a text placeholder until then'.",
+      "location": {
+        "line": 36,
+        "path": "apps/web/src/app/core/country/theme.ts"
+      },
+      "severity": "info"
+    },
+    {
+      "acceptance_ids": [],
+      "condition": "Two literal points of the country-content skill. (a) Step 2 says every country-scoped type relates to Country, but FormField relates to WizardStep, as in ADR-001's illustrative model. (b) Step 3 says generated Strapi types are exposed through packages/shared, and the stack reference says the front end uses them. Instead the front end uses Zod-inferred types, and a type-level test (apps/cms/src/content-model.test-d.ts) checks they conform to the generated ones. Owner answer Q7 accepted this at plan time.",
+      "description": "Recommendation: update the stack reference and the country-content skill through foundation agree, so later reviews do not re-flag these points. The design-reference follow-up for the muted token (plan Q9) is in the same situation.",
+      "id": "F-7",
+      "impact": "No behavioural impact. The agreed references and the skill now say something different from the accepted practice.",
+      "location": {
+        "line": 17,
+        "path": "apps/cms/src/api/form-field/content-types/form-field/schema.json"
+      },
+      "severity": "info"
+    },
+    {
+      "acceptance_ids": [
+        "AC-007"
+      ],
+      "condition": "On a fresh stack without E2E_STRAPI_ADMIN_* variables, the AC-007 setup registers the first Strapi administrator with a random password that nobody keeps. The e2e profile check also runs 'docker compose down -v'.",
+      "description": "Recommendation: document this in the README or tasks (reset with down -v, or set the env credentials), or print where the generated credentials can be found. No change to the AC is needed.",
+      "id": "F-8",
+      "impact": "After a verification run, the local stack has an administrator nobody can log in as, and every local content edit is wiped. No credential reaches the browser and P4 holds: the declared deviation 5 is sound.",
+      "location": {
+        "line": 64,
+        "path": "e2e/tests/support/strapi-admin.ts"
+      },
+      "severity": "info"
+    },
+    {
+      "acceptance_ids": [],
+      "condition": "The production build of the web-build check.",
+      "description": "Not an AC or reference violation, since the build passes with a warning. Consider trimming eager imports (for example zod in the main chunk through the content reader provider) or adjusting the budget deliberately.",
+      "id": "F-9",
+      "impact": "The initial bundle is 747.63 kB against the 500 kB warning budget (main chunk 718 kB raw, 156 kB transfer), even with lazy routes (deviation 6).",
+      "location": {
+        "line": 40,
+        "path": "apps/web/angular.json"
+      },
+      "severity": "info"
+    },
+    {
+      "acceptance_ids": [
+        "AC-034"
+      ],
+      "condition": "AC-034 says that on leave 'the data of the country's completed steps is kept (AC-023)'. Neither the e2e test nor the wizard-shell unit test asserts that a completed step's stored values survive leaving with unconfirmed values. They only assert that the unconfirmed values are discarded.",
+      "description": "Recommendation: in one AC-034 test, complete Chile 'Tus datos', type in 'Tu vehículo', leave, return and assert the RUT is still there.",
+      "id": "F-10",
+      "impact": "Low risk: leaving never writes to the store. This part is insufficiently exercised rather than defective.",
+      "location": {
+        "line": 120,
+        "path": "e2e/tests/leave-confirmation.spec.ts"
+      },
+      "severity": "info"
+    }
+  ],
+  "id": "EVD-01M85DQ5W72GZ0CCYT1FE162P7",
+  "kind": "independent-review",
+  "limitations": [
+    "Independence is declared, not proven: this reviewer is a subagent that shares the host session with the coordinator that produced the run. Roclec compares only the declared context strings.",
+    "Neither the e2e suite nor the shared or cms unit tests were re-run. Their results come from the run logs, and the working tree matched the run inputs.",
+    "No screen reader or other assistive technology was used, and no manual keyboard pass was done. AC-028 and AC-030 rest on the owner observation EVD-01M85DKC3CEVK2F7BTQKXZ7ECG (desktop browser only, recorded on this run).",
+    "No visual comparison against docs/prototypes/us-01/index.html, and no contrast measurement of the rendered screens beyond reading the tokens.",
+    "Browsers other than Chromium (Firefox, Safari, iOS) were not exercised. The beforeunload behaviour in them is unverified.",
+    "The Strapi documentation MCP was not used. Strapi behaviour was checked in the installed sources and against the running stack.",
+    "Whether createdAt stays stable when Strapi 5 republishes a field (the AC-004 tie-break) was not verified."
+  ],
+  "model_schema": 2,
+  "outcome": "changes-needed",
+  "policy_id": "7a5f7387abcd3eafbf5b626d24c391890f74d6305d5d88685455f23cd69f3bb5",
+  "resolutions": [],
+  "role": "reviewer",
+  "run_id": "RUN-01M85D08S50EPR14VW56AAY9NN",
+  "supersedes": []
+}

@@ -18,11 +18,18 @@ inputs = [
   "apps/cms/package.json", "apps/cms/package-lock.json", "apps/cms/tsconfig*.json", "apps/cms/.env.example",
   "e2e/tests/**", "e2e/package.json", "e2e/package-lock.json", "e2e/playwright.config.ts",
   "docker-compose.yml", ".env.example",
+  "packages/shared/src/**", "packages/shared/package.json", "packages/shared/tsconfig*.json",
+  "packages/shared/vitest.config.ts", "packages/shared/eslint.config.js", "package-lock.json",
+  "apps/cms/Dockerfile", "apps/web/Dockerfile", "apps/web/nginx.conf", ".dockerignore", "apps/web/.postcssrc.json",
+  "apps/web/eslint.config.js", "apps/cms/eslint.config.mjs", "apps/cms/vitest.config.ts", "e2e/eslint.config.js",
+  "e2e/tsconfig.json", "package.json", ".nvmrc", ".prettierrc.json", ".prettierignore", ".editorconfig",
+  "apps/cms/favicon.png", "apps/cms/public/robots.txt",
 ]
 generated = [
-  "*node_modules/*", "apps/web/dist/**", "apps/web/.angular/**",
+  "*node_modules/*", "apps/web/dist/**", "apps/web/.angular/**", "packages/shared/dist/**",
   "apps/cms/dist/**", "apps/cms/build/**", "apps/cms/.strapi/**", "apps/cms/.tmp/**", "apps/cms/public/uploads/**",
   "e2e/test-results/**", "e2e/playwright-report/**",
+  "apps/*/coverage/**", "packages/shared/coverage/**", "apps/cms/data/**", "apps/cms/.strapi-updater.json",
 ]
 excluded = [
   ".venv/*", ".idea/*", "*.DS_Store", ".env", "apps/*/.env",
@@ -32,10 +39,15 @@ excluded = [
   ".agents/skills/design-taste-frontend/*", ".agents/skills/frontend-design/*",
   ".agents/skills/impeccable/*", ".agents/skills/strapi-docs-mcp/*",
   ".agents/skills/ui-ux-pro-max/*", ".agents/skills/web-design-guidelines/*",
-  "skills-lock.json", ".gitattributes",
+  "skills-lock.json", ".gitattributes", "docs/plans/**", "docs/prototypes/**",
 ]
 verification = [
-  {id = "web-unit", argv = ["npm", "run", "test:ci"], cwd = "apps/web", timeout_seconds = 600},
+  {id = "format", argv = ["npm", "run", "format:check"], cwd = ".", timeout_seconds = 300},
+  {id = "lint", argv = ["npm", "run", "lint"], cwd = ".", timeout_seconds = 600},
+  {id = "shared-unit", argv = ["npm", "run", "test:ci"], cwd = "packages/shared", timeout_seconds = 600, acceptance_ids = ["AC-003", "AC-004", "AC-012", "AC-017", "AC-034"]},
+  {id = "web-unit", argv = ["npm", "run", "test:ci"], cwd = "apps/web", timeout_seconds = 600, acceptance_ids = ["AC-001", "AC-002", "AC-003", "AC-004", "AC-005", "AC-006", "AC-008", "AC-009", "AC-010", "AC-011", "AC-012", "AC-013", "AC-014", "AC-015", "AC-016", "AC-017", "AC-018", "AC-019", "AC-020", "AC-021", "AC-023", "AC-024", "AC-025", "AC-027", "AC-033", "AC-034", "AC-035"]},
+  {id = "cms-unit", argv = ["npm", "run", "test:ci"], cwd = "apps/cms", timeout_seconds = 600, acceptance_ids = ["AC-031", "AC-032"]},
   {id = "web-build", argv = ["npm", "run", "build"], cwd = "apps/web", timeout_seconds = 600},
   {id = "cms-build", argv = ["npm", "run", "build"], cwd = "apps/cms", timeout_seconds = 600},
+  {id = "e2e", argv = ["sh", "-c", "docker compose down -v && docker compose up -d --build --wait && npm run test:e2e"], cwd = ".", timeout_seconds = 2400, acceptance_ids = ["AC-001", "AC-002", "AC-004", "AC-006", "AC-007", "AC-009", "AC-011", "AC-013", "AC-014", "AC-016", "AC-019", "AC-020", "AC-022", "AC-023", "AC-024", "AC-026", "AC-027", "AC-029", "AC-031", "AC-032", "AC-033", "AC-034", "AC-035"]},
 ]

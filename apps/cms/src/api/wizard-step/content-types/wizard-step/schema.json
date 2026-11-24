@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "wizard_steps",
+  "info": {
+    "singularName": "wizard-step",
+    "pluralName": "wizard-steps",
+    "displayName": "Wizard step",
+    "description": "A step of a country's wizard: form steps first, then the plan list, then summary and payment (ADR-001)."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "country": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::country.country",
+      "inversedBy": "steps"
+    },
+    "order": {
+      "type": "integer",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "string",
+      "required": true,
+      "regex": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": ["form", "plans", "summary"],
+      "required": true
+    },
+    "fields": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::form-field.form-field",
+      "mappedBy": "step"
+    }
+  }
+}

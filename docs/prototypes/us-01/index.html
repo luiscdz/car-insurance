@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cotiza tu seguro de auto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<!--
+  Prototype of CHG-001 (US-01: policyholder and vehicle data form), component app.
+  Self-contained: the Strapi responses for Colombia and Chile are simulated in CONTENT below,
+  with only fictitious data. The rendering code has no country-specific branch: every difference
+  between /co and /cl comes from CONTENT. The panel at the bottom ("Panel del prototipo") only
+  simulates content and network conditions for review; it is not part of the product.
+-->
+<style>
+  :root {
+    /* Design tokens (docs/design.md). Country theme overrides --primary and --accent at runtime. */
+    --primary: #2D6DF6;
+    --primary-strong: #0033A0;
+    --cta: #E3E829;
+    --cta-foreground: #26328C;
+    --accent: #00AEC7;
+    --foreground: #1C1C24;
+    --muted: #888B8D;
+    --border: #B4B4B5;
+    --disabled: #878789;
+    --danger: #DB1A40;
+    --surface-info: #DFEAFF;
+    --surface-cta: #F9FAE1;
+    --surface-muted: #F8F8F8;
+    --white: #FFFFFF;
+    --radius-field: 12px;
+    --radius-card: 16px;
+    --font: "Nunito Sans", sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; } /* component display rules must never reveal hidden elements */
+  html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0; font-family: var(--font); font-size: 16px; line-height: 1.5;
+    color: var(--foreground); background: var(--surface-muted); caret-color: var(--primary);
+  }
+  ::selection { background: var(--surface-info); color: var(--primary-strong); }
+  a, button, input, select, label { touch-action: manipulation; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+  :focus-visible { outline: 3px solid var(--primary-strong); outline-offset: 2px; }
+
+  /* Header */
+  .header { background: var(--primary); color: var(--white); }
+  .header__inner { max-width: 960px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+  .logo-placeholder {
+    font-weight: 700; font-size: 20px; letter-spacing: .04em; padding: 2px 12px;
+    border: 2px solid var(--white); border-radius: 8px;
+  }
+  .logo-img { height: 32px; width: auto; }
+  .nav-bar { background: var(--primary-strong); height: 6px; }
+  .accent-bar { background: var(--accent); height: 4px; }
+
+  main { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+  .card {
+    background: var(--white); border-radius: var(--radius-card); padding: 24px 16px;
+    box-shadow: 0 1px 2px rgb(0 0 0 / .06);
+  }
+  @media (min-width: 768px) { .card { padding: 32px; } }
+  h1 { font-size: 24px; line-height: 1.25; margin: 0 0 24px; color: var(--primary-strong); text-wrap: balance; }
+  @media (min-width: 768px) { h1 { font-size: 32px; } }
+  /* The step heading receives focus programmatically (AC-019) but is not operable: no ring around it. */
+  h1[tabindex="-1"]:focus { outline: none; }
+
+  /* Progress */
+  .progress { margin: 0 0 32px; }
+  .progress__label { font-size: 14px; font-weight: 600; color: var(--primary-strong); margin: 0 0 8px; }
+  .progress__list { list-style: none; margin: 0; padding: 0; display: flex; gap: 8px; flex-wrap: wrap; }
+  .progress__item {
+    display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--foreground);
+    padding: 4px 12px 4px 4px; border-radius: 999px; background: var(--surface-muted);
+  }
+  .progress__num {
+    display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--white); font-weight: 700; font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  .progress__item[aria-current="step"] { color: var(--primary-strong); background: var(--surface-info); font-weight: 700; }
+  .progress__item[aria-current="step"] .progress__num { background: var(--primary); border-color: var(--primary); color: var(--white); }
+  .progress__item.is-done .progress__num { border-color: var(--primary); color: var(--primary); }
+
+  /* Fields */
+  .fields { display: grid; gap: 20px; grid-template-columns: 1fr; }
+  @media (min-width: 768px) { .fields { grid-template-columns: 1fr 1fr; column-gap: 24px; } }
+  .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .field__label { font-size: 14px; font-weight: 600; color: var(--primary); }
+  .field__req { color: var(--danger); margin-left: 2px; }
+  .field__control {
+    font: inherit; font-weight: 600; color: var(--primary-strong); width: 100%; min-height: 48px; padding: 10px 14px;
+    border: 1px solid var(--border); border-radius: var(--radius-field); background: var(--white);
+    transition: border-color .15s ease-out;
+  }
+  .field__control:hover { border-color: var(--primary); }
+  .field__control:focus-visible { border-color: var(--primary); outline-offset: 1px; }
+  /* Placeholder and empty select use foreground at regular weight: muted is 3.4:1, below AA (owner decision). */
+  .field__control::placeholder { color: var(--foreground); font-weight: 400; opacity: 1; }
+  select.field__control { appearance: none; padding-right: 40px;
+    background-image: linear-gradient(45deg, transparent 50%, var(--primary) 50%), linear-gradient(135deg, var(--primary) 50%, transparent 50%);
+    background-position: calc(100% - 22px) 21px, calc(100% - 16px) 21px; background-size: 6px 6px; background-repeat: no-repeat; }
+  select.field__control.is-empty, input.field__control.is-empty { color: var(--foreground); font-weight: 400; }
+  select.field__control option { color: var(--foreground); font-weight: 400; }
+  .field__control[aria-invalid="true"] { border-color: var(--danger); border-width: 2px; padding: 9px 13px; }
+  .field__help { font-size: 14px; color: var(--foreground); margin: 0; }  /* muted fails AA for text (3.4:1) */
+  .field__error { font-size: 14px; color: var(--danger); margin: 0; display: flex; gap: 6px; align-items: flex-start; font-weight: 600; }
+  .field__error svg { flex: none; margin-top: 2px; }
+  .field--checkbox .check { display: flex; gap: 10px; align-items: flex-start; min-height: 24px; cursor: pointer; }
+  .field--checkbox input { width: 24px; height: 24px; margin: 0; flex: none; accent-color: var(--primary); }
+  .field--checkbox .check__text { font-size: 16px; color: var(--foreground); }
+
+  /* Actions */
+  .actions { display: flex; flex-wrap: wrap-reverse; gap: 12px; justify-content: space-between; align-items: center; margin-top: 32px; }
+  .btn {
+    font: inherit; font-weight: 700; min-height: 48px; padding: 10px 28px; border-radius: 999px;
+    cursor: pointer; border: 2px solid transparent; display: inline-flex; align-items: center; justify-content: center;
+    text-decoration: none; transition: background-color .15s ease-out, border-color .15s ease-out, transform .1s ease-out;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn--cta { background: var(--cta); color: var(--cta-foreground); margin-left: auto; }
+  .btn--cta:hover { border-color: var(--cta-foreground); }
+  .btn--cta[aria-disabled="true"] { background: var(--surface-muted); color: var(--disabled); border-color: var(--border); cursor: not-allowed; transform: none; }
+  .btn--secondary { background: var(--white); color: var(--primary); border-color: var(--primary); }
+  .btn--secondary:hover { background: var(--surface-info); }
+  .btn--link { background: none; color: var(--primary); text-decoration: underline; text-underline-offset: 3px; padding: 10px 4px; min-height: 48px; border: 0; }
+  .btn--link:hover { text-decoration-thickness: 2px; color: var(--primary-strong); }
+  @media (max-width: 479px) { .btn--cta, .btn--secondary { width: 100%; } }
+
+  /* Root */
+  .countries { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .countries { grid-template-columns: 1fr 1fr; } }
+  .country-link {
+    display: flex; align-items: center; justify-content: space-between; min-height: 72px; padding: 16px 20px;
+    background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-card);
+    color: var(--primary-strong); font-weight: 700; font-size: 20px; text-decoration: none;
+    transition: background-color .15s ease-out, border-color .15s ease-out;
+  }
+  .country-link svg { flex: none; color: var(--primary); transition: transform .15s ease-out; }
+  .country-link:hover { border-color: var(--primary); background: var(--surface-info); }
+  .country-link:hover svg { transform: translateX(3px); }
+
+  /* States */
+  .state { text-align: center; padding: 48px 16px; }
+  .state p { margin: 0 auto 16px; font-size: 18px; max-width: 40ch; text-wrap: pretty; }
+  .loader { width: 40px; height: 40px; margin: 0 auto 16px; border-radius: 50%;
+    border: 4px solid var(--surface-info); border-top-color: var(--primary); animation: spin 0.9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .state__icon { width: 40px; height: 40px; margin: 0 auto 12px; color: var(--danger); }
+
+  /* Dialog */
+  dialog.leave {
+    border: 0; border-radius: var(--radius-card); padding: 24px; max-width: min(440px, calc(100vw - 32px));
+    color: var(--foreground); box-shadow: 0 12px 40px rgb(0 0 0 / .25); overscroll-behavior: contain;
+  }
+  dialog.leave::backdrop { background: rgb(28 28 36 / .55); }
+  dialog.leave h2 { margin: 0 0 8px; font-size: 22px; line-height: 1.3; color: var(--primary-strong); text-wrap: balance; }
+  dialog.leave p { margin: 0 0 24px; text-wrap: pretty; }
+  .dialog__actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; }
+  .dialog__actions .btn--cta { margin-left: 0; }
+  /* On phones the stay action sits on top, closest to the thumb's first reach; DOM order stays leave, stay. */
+  @media (max-width: 479px) { .dialog__actions { flex-direction: column-reverse; } .dialog__actions .btn { width: 100%; } }
+
+  /* Out-of-scope step note (prototype only) */
+  .proto-note { border: 2px dashed var(--muted); border-radius: var(--radius-card); padding: 16px; color: var(--foreground); background: var(--surface-muted); font-size: 14px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+
+  /* Prototype review panel: not part of the product */
+  .proto { max-width: 960px; margin: 0 auto 32px; padding: 0 16px; font-family: ui-sans-serif, system-ui, sans-serif; }
+  .proto details { background: #24242c; color: #f2f2f2; border-radius: 12px; padding: 0 16px; }
+  .proto summary { cursor: pointer; min-height: 48px; display: flex; align-items: center; font-weight: 700; }
+  .proto__body { padding: 0 0 16px; display: grid; gap: 16px; font-size: 14px; }
+  .proto h3 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: #c9c9d1; }
+  .proto a { color: #9fc0ff; }
+  .proto .row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .proto .chip { display: inline-flex; align-items: center; min-height: 32px; padding: 4px 12px; border-radius: 999px; background: #3a3a46; color: #fff; text-decoration: none; border: 0; font: inherit; cursor: pointer; }
+  .proto label { display: flex; gap: 8px; align-items: center; min-height: 28px; }
+  .proto input[type="checkbox"] { width: 18px; height: 18px; }
+  .proto code { background: #3a3a46; padding: 1px 6px; border-radius: 6px; }
+  .proto .proto__warn { color: #ffd27a; }
+</style>
+</head>
+<body>
+<div id="theme-root">
+  <header class="header" id="header" hidden>
+    <div class="header__inner" id="header-inner"></div>
+  </header>
+  <div class="nav-bar" id="nav-bar" hidden></div>
+  <div class="accent-bar" id="accent-bar" hidden></div>
+  <main id="main"></main>
+</div>
+<div id="status" class="sr-only" role="status" aria-live="polite"></div>
+
+<dialog class="leave" id="leave-dialog" aria-labelledby="leave-title" aria-describedby="leave-message">
+  <h2 id="leave-title"></h2>
+  <p id="leave-message"></p>
+  <div class="dialog__actions">
+    <button type="button" class="btn btn--secondary" id="leave-confirm"></button>
+    <button type="button" class="btn btn--cta" id="leave-stay"></button>
+  </div>
+</dialog>
+
+<aside class="proto" aria-label="Panel del prototipo">
+  <details id="proto-details">
+    <summary>Panel del prototipo (solo para revisión, no es parte del producto)</summary>
+    <div class="proto__body">
+      <div>
+        <h3>Dirección simulada</h3>
+        <div><code id="proto-path">/</code></div>
+      </div>
+      <div>
+        <h3>Navegar dentro de la aplicación (como con atrás/adelante del navegador)</h3>
+        <div class="row">
+          <a class="chip" href="#/">/ (raíz)</a>
+          <a class="chip" href="#/co">/co</a>
+          <a class="chip" href="#/cl">/cl</a>
+          <a class="chip" href="#/cl/tu-vehiculo">/cl/tu-vehiculo (entrada directa)</a>
+          <a class="chip" href="#/xx">/xx</a>
+          <a class="chip" href="#/CO">/CO</a>
+          <a class="chip" href="#/pe">/pe (solo borrador)</a>
+        </div>
+      </div>
+      <div>
+        <h3>Simular contenido y red (se aplica recargando la aplicación)</h3>
+        <label><input type="checkbox" data-sim="slow"> Carga lenta (4 s) para ver el loader</label>
+        <label><input type="checkbox" data-sim="down"> Strapi no responde en la primera carga (“Reintentar” la recupera)</label>
+        <label><input type="checkbox" data-sim="invalid"> Contenido inválido (campo sin mensaje de error)</label>
+        <label><input type="checkbox" data-sim="emptyStep"> Primer paso de formulario sin campos publicados</label>
+        <label><input type="checkbox" data-sim="newField"> Publicar en Strapi un campo nuevo (casilla) en el primer paso</label>
+      </div>
+      <div class="row">
+        <button type="button" class="chip" id="proto-reload">Recargar la página</button>
+        <button type="button" class="chip" id="proto-clear">Borrar datos de esta pestaña</button>
+      </div>
+      <p class="proto__warn">Al recargar o cerrar con valores sin confirmar, el navegador muestra su propio aviso (AC-033). Para probar el diálogo de la aplicación (AC-034), escribe algo en el primer paso y usa “/ (raíz)” o el botón atrás del navegador.</p>
+      <div>
+        <h3>Fecha usada para validar</h3>
+        <div id="proto-today"></div>
+      </div>
+    </div>
+  </details>
+</aside>
+
+<script>
+(() => {
+  "use strict";
+
+  // ---------------------------------------------------------------------------
+  // Simulated Strapi content (fictitious). Only published entries are returned.
+  // ---------------------------------------------------------------------------
+  const SURA_THEME = { primary: "#2D6DF6", accent: "#00AEC7", logo: null };
+  const MAKES_CO = [
+    { value: "chevrolet", label: "Chevrolet", order: 1 },
+    { value: "renault", label: "Renault", order: 2 },
+    { value: "mazda", label: "Mazda", order: 3 },
+    { value: "kia", label: "Kia", order: 4 },
+  ];
+  const MAKES_CL = [
+    { value: "toyota", label: "Toyota", order: 1 },
+    { value: "hyundai", label: "Hyundai", order: 2 },
+    { value: "suzuki", label: "Suzuki", order: 3 },
+    { value: "chevrolet", label: "Chevrolet", order: 4 },
+  ];
+  const BIRTH_DATE = (order) => ({
+    id: "fecha-nacimiento", label: "Fecha de nacimiento", type: "date", required: true, order,
+    help: "Debes ser mayor de edad para contratar el seguro.",
+    error: "Ingresa una fecha válida. Debes tener 18 años o más.",
+    validations: { minAge: 18 },
+  });
+  const YEAR = (order) => ({
+    id: "anio", label: "Año del vehículo", type: "number", required: true, order,
+    placeholder: "Ej: 2020", help: "Año de fabricación que aparece en la licencia del vehículo.",
+    error: "Ingresa un año válido: el vehículo puede tener hasta 20 años de antigüedad.",
+    validations: { integer: true, yearRange: { before: 20, after: 1 } },
+  });
+
+  function baseContent() {
+    return [
+      {
+        code: "co", name: "Colombia", currency: "COP", locale: "es-CO", published: true, theme: SURA_THEME,
+        copy: {
+          continue: "Continuar", back: "Volver", progress: "Paso {current} de {total}",
+          leaveTitle: "¿Quieres salir del formulario?",
+          leaveMessage: "Perderás los datos que escribiste en este paso y aún no confirmaste.",
+          leaveStay: "Seguir en el formulario", leaveConfirm: "Salir",
+        },
+        steps: [
+          { slug: "tus-datos-y-tu-vehiculo", title: "Tus datos y tu vehículo", type: "form", order: 1, fields: [
+            { id: "tipo-documento", label: "Tipo de documento", type: "select", required: true, order: 1,
+              placeholder: "Selecciona tu tipo de documento", help: "Elige el documento con el que te identificas.",
+              error: "Selecciona un tipo de documento.",
+              options: [
+                { value: "cc", label: "Cédula de ciudadanía", order: 1 },
+                { value: "ce", label: "Cédula de extranjería", order: 2 },
+              ] },
+            { id: "numero-documento", label: "Número de documento", type: "text", required: true, order: 2,
+              placeholder: "Ej: 1234567890", help: "Solo números, sin puntos ni espacios.",
+              error: "Ingresa un número de documento de 6 a 10 dígitos.",
+              validations: { pattern: "^[0-9]{6,10}$" }, inputmode: "numeric" },
+            BIRTH_DATE(3),
+            { id: "placa", label: "Placa", type: "text", required: true, order: 4,
+              placeholder: "Ej: ABC123", help: "Tres letras seguidas de tres números.",
+              error: "Ingresa una placa con tres letras y tres números, por ejemplo ABC123.",
+              validations: { pattern: "^[A-Za-z]{3}[0-9]{3}$" } },
+            { id: "marca", label: "Marca", type: "select", required: true, order: 5,
+              placeholder: "Selecciona la marca", help: "Marca que aparece en la licencia de tránsito.",
+              error: "Selecciona la marca de tu vehículo.", options: MAKES_CO },
+            YEAR(6),
+          ] },
+          { slug: "elige-tu-plan", title: "Elige tu plan", type: "plans", order: 2 },
+          { slug: "resumen-y-pago", title: "Resumen y pago", type: "summary", order: 3 },
+        ],
+      },
+      {
+        code: "cl", name: "Chile", currency: "CLP", locale: "es-CL", published: true, theme: SURA_THEME,
+        copy: {
+          continue: "Continuar", back: "Volver", progress: "Paso {current} de {total}",
+          leaveTitle: "¿Quieres salir de la cotización?",
+          leaveMessage: "Se perderán los datos que ingresaste en este paso y que aún no confirmaste.",
+          leaveStay: "Seguir cotizando", leaveConfirm: "Salir",
+        },
+        steps: [
+          { slug: "tus-datos", title: "Tus datos", type: "form", order: 1, fields: [
+            { id: "rut", label: "RUT", type: "text", required: true, order: 1,
+              placeholder: "Ej: 12.345.678-5", help: "Con o sin puntos, con guion y dígito verificador.",
+              error: "Ingresa un RUT válido, por ejemplo 12.345.678-5.",
+              validations: { pattern: "^([0-9]{1,2}(\\.[0-9]{3}){2}|[0-9]{7,8})-[0-9Kk]$" } },
+            BIRTH_DATE(2),
+          ] },
+          { slug: "tu-vehiculo", title: "Tu vehículo", type: "form", order: 2, fields: [
+            { id: "patente", label: "Patente", type: "text", required: true, order: 1,
+              placeholder: "Ej: BBBB12", help: "Cuatro letras y dos números, o dos letras y cuatro números.",
+              error: "Ingresa una patente válida, por ejemplo BBBB12 o AB1234.",
+              validations: { pattern: "^([A-Za-z]{4}[0-9]{2}|[A-Za-z]{2}[0-9]{4})$" } },
+            { id: "marca", label: "Marca", type: "select", required: true, order: 2,
+              placeholder: "Selecciona la marca", help: "Marca que aparece en el padrón del vehículo.",
+              error: "Selecciona la marca de tu vehículo.", options: MAKES_CL },
+            YEAR(3),
+          ] },
+          { slug: "elige-tu-plan", title: "Elige tu plan", type: "plans", order: 3 },
+          { slug: "resumen-y-pago", title: "Resumen y pago", type: "summary", order: 4 },
+        ],
+      },
+      {
+        code: "pe", name: "Perú", currency: "PEN", locale: "es-PE", published: false, theme: SURA_THEME,
+        copy: {}, steps: [],
+      },
+    ];
+  }
+
+  // ---------------------------------------------------------------------------
+  // Prototype simulations (review panel only)
+  // ---------------------------------------------------------------------------
+  const SIM_KEY = "proto:sim";
+  const sim = readJSON(SIM_KEY) || {};
+
+  function simulatedContent() {
+    const all = baseContent();
+    for (const c of all) {
+      const form = c.steps.find((s) => s.type === "form");
+      if (!form) continue;
+      if (sim.newField) {
+        form.fields.push({ id: "uso-particular", label: "El vehículo es de uso particular", type: "checkbox",
+          required: false, order: 7, help: "Márcalo si el vehículo no se usa para transporte de pasajeros o carga.",
+          error: "Revisa esta opción." });
+      }
+      if (sim.emptyStep) form.fields = [];
+      if (sim.invalid) delete form.fields[0]?.error;
+    }
+    return all; // Perú exists only as a draft and is filtered out as unpublished
+  }
+
+  let attempts = 0;
+  function fetchContent() {
+    attempts++;
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (sim.down && attempts === 1) reject(new Error("network")); // only the first load fails, so retry recovers
+        else resolve(simulatedContent().filter((c) => c.published));
+      }, sim.slow ? 4000 : 450);
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Content validation (shared schema in the real app)
+  // ---------------------------------------------------------------------------
+  const TYPES = ["text", "number", "select", "date", "checkbox"];
+  function validCountry(c) {
+    const cp = c.copy || {};
+    if (!["continue", "back", "progress", "leaveTitle", "leaveMessage", "leaveStay", "leaveConfirm"].every((k) => typeof cp[k] === "string" && cp[k])) return false;
+    const steps = [...c.steps].sort(byOrder);
+    const types = steps.map((s) => s.type);
+    const firstNonForm = types.findIndex((t) => t !== "form");
+    if (firstNonForm < 1) return false;
+    if (types.slice(firstNonForm).join() !== "plans,summary") return false;
+    for (const s of steps.filter((x) => x.type === "form")) {
+      for (const f of s.fields) {
+        if (!f.label || !f.error || !TYPES.includes(f.type)) return false;
+        if (f.type === "select" && !(f.options && f.options.length)) return false;
+        const v = f.validations || {};
+        if (v.pattern) { try { new RegExp(v.pattern); } catch { return false; } }
+        if (v.min != null && v.max != null && v.min > v.max) return false;
+      }
+    }
+    return true;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Helpers
+  // ---------------------------------------------------------------------------
+  function byOrder(a, b) { return a.order - b.order; } // Array.sort is stable: equal orders keep creation order
+  function readJSON(k) { try { return JSON.parse(sessionStorage.getItem(k)); } catch { return null; } }
+  function writeJSON(k, v) { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch { /* storage unavailable */ } }
+  function el(tag, attrs = {}, children = []) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (v == null || v === false) continue;
+      if (k === "text") n.textContent = v;
+      else if (k === "class") n.className = v;
+      else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v === true ? "" : v);
+    }
+    for (const c of [].concat(children)) if (c) n.append(c);
+    return n;
+  }
+  function svgIcon(kind) {
+    const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("width", kind === "big" ? "40" : "16"); s.setAttribute("height", kind === "big" ? "40" : "16");
+    s.setAttribute("viewBox", "0 0 24 24"); s.setAttribute("aria-hidden", "true"); s.setAttribute("focusable", "false");
+    s.innerHTML = '<circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.3" fill="currentColor"/>';
+    if (kind === "big") s.classList.add("state__icon");
+    return s;
+  }
+  function chevron() {
+    const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("width", "24"); s.setAttribute("height", "24"); s.setAttribute("viewBox", "0 0 24 24");
+    s.setAttribute("aria-hidden", "true"); s.setAttribute("focusable", "false");
+    s.innerHTML = '<path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>';
+    return s;
+  }
+  function today() { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function announce(msg) { const s = document.getElementById("status"); s.textContent = ""; setTimeout(() => { s.textContent = msg; }, 30); }
+
+  // ---------------------------------------------------------------------------
+  // Field validation (AC-012, AC-013, AC-014)
+  // ---------------------------------------------------------------------------
+  function isEmpty(field, value) {
+    if (field.type === "checkbox") return value !== true;
+    return value == null || String(value).trim() === "";
+  }
+  function yearBounds(v) { const y = today().getFullYear(); return { min: y - v.yearRange.before, max: y + v.yearRange.after }; }
+  function ageOn(birth, d) {
+    let bm = birth.getMonth(), bd = birth.getDate();
+    const leap = (y) => (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+    if (bm === 1 && bd === 29 && !leap(d.getFullYear())) { bm = 2; bd = 1; }
+    let age = d.getFullYear() - birth.getFullYear();
+    if (d.getMonth() < bm || (d.getMonth() === bm && d.getDate() < bd)) age--;
+    return age;
+  }
+  function isValid(field, value) {
+    if (isEmpty(field, value)) return !field.required;
+    const v = field.validations || {};
+    const str = String(value).trim();
+    if (field.type === "text") {
+      if (v.minLength != null && str.length < v.minLength) return false;
+      if (v.maxLength != null && str.length > v.maxLength) return false;
+      if (v.pattern && !new RegExp(v.pattern).test(str)) return false;
+    }
+    if (field.type === "number") {
+      if (!/^-?\d+(\.\d+)?$/.test(str)) return false;
+      const n = Number(str);
+      if (v.integer && !Number.isInteger(n)) return false;
+      if (v.min != null && n < v.min) return false;
+      if (v.max != null && n > v.max) return false;
+      if (v.yearRange) { const b = yearBounds(v); if (n < b.min || n > b.max) return false; }
+    }
+    if (field.type === "date") {
+      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(str);
+      if (!m) return false;
+      const birth = new Date(+m[1], +m[2] - 1, +m[3]);
+      if (birth > today()) return false;
+      if (v.minAge != null && ageOn(birth, today()) < v.minAge) return false;
+    }
+    if (field.type === "select" && !field.options.some((o) => o.value === value)) return false;
+    return true;
+  }
+  function errorText(field) { return field.error; }
+
+  // ---------------------------------------------------------------------------
+  // Wizard data per country, kept in this tab (AC-022, AC-023, AC-025)
+  // ---------------------------------------------------------------------------
+  const dataKey = (code) => "wizard:" + code;
+  function loadData(country) {
+    const raw = readJSON(dataKey(country.code)) || { steps: {} };
+    // Reconcile with the current configuration: drop unknown steps/fields; a step stays complete only if still valid.
+    const out = { steps: {} };
+    for (const s of country.steps.filter((x) => x.type === "form")) {
+      const stored = raw.steps[s.slug];
+      if (!stored) continue;
+      const values = {};
+      for (const f of s.fields) if (f.id in stored.values) values[f.id] = stored.values[f.id];
+      const complete = stored.complete && s.fields.length > 0 && s.fields.every((f) => isValid(f, values[f.id]));
+      out.steps[s.slug] = { values, complete };
+    }
+    return out;
+  }
+  function saveStep(country, slug, values) {
+    const d = loadData(country);
+    d.steps[slug] = { values, complete: true };
+    writeJSON(dataKey(country.code), d);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Routing (hash simulates the path: #/co/tus-datos -> /co/tus-datos)
+  // ---------------------------------------------------------------------------
+  function parse(hash) {
+    const parts = (hash.replace(/^#/, "") || "/").split("/").filter(Boolean);
+    return { code: parts[0] || null, slug: parts[1] || null };
+  }
+  const pathOf = (hash) => { const p = parse(hash); return "/" + [p.code, p.slug].filter(Boolean).join("/"); };
+
+  // ---------------------------------------------------------------------------
+  // App state
+  // ---------------------------------------------------------------------------
+  let countries = null;      // loaded content
+  let loadError = null;      // "down" | null
+  let current = null;        // { country, step, form: {values, touched, attempted} }
+  let currentHash = location.hash || "#/";
+  let advancing = false;
+  let pendingHash = null;
+  let focusBeforeDialog = null;
+
+  const main = document.getElementById("main");
+  const header = document.getElementById("header");
+
+  function setTheme(theme) {
+    const root = document.documentElement.style;
+    const hex = /^#[0-9A-Fa-f]{6}$/;
+    const ok = theme && hex.test(theme.primary || "") && hex.test(theme.accent || "");
+    root.setProperty("--primary", ok ? theme.primary : "#2D6DF6");
+    root.setProperty("--accent", ok ? theme.accent : "#00AEC7");
+    const inner = document.getElementById("header-inner");
+    inner.replaceChildren(ok && theme.logo
+      ? el("img", { class: "logo-img", src: theme.logo, alt: "SURA" })
+      : el("span", { class: "logo-placeholder", translate: "no", text: "SURA" }));
+  }
+  function showChrome(show) {
+    header.hidden = !show;
+    document.getElementById("nav-bar").hidden = !show;
+    document.getElementById("accent-bar").hidden = !show;
+  }
+
+  function renderLoading() {
+    showChrome(false);
+    main.replaceChildren(el("div", { class: "card state" }, [el("div", { class: "loader", "aria-hidden": "true" })]));
+    announce("Cargando…");
+  }
+  function renderMessage(text, action) {
+    main.replaceChildren(el("div", { class: "card state", role: "alert" }, [svgIcon("big"), el("p", { text }), action || null]));
+  }
+
+  function boot() {
+    countries = null; loadError = null;
+    renderLoading();
+    fetchContent().then((c) => { countries = c; route(true); })
+      .catch(() => { loadError = "down"; route(true); });
+  }
+
+  function retry() { boot(); }
+
+  function route(initial) {
+    currentHash = location.hash || "#/";
+    document.getElementById("proto-path").textContent = pathOf(currentHash);
+    const { code, slug } = parse(currentHash);
+
+    if (loadError) {
+      showChrome(false); document.title = "Cotiza tu seguro de auto";
+      renderMessage("No pudimos cargar el formulario. Revisa tu conexión e inténtalo de nuevo.",
+        el("button", { type: "button", class: "btn btn--cta", text: "Reintentar", onclick: retry }));
+      current = null; return;
+    }
+
+    if (!code) { current = null; return renderRoot(); }
+
+    const country = countries.find((c) => c.code === code); // exact match only (AC-002)
+    if (!country) {
+      current = null; showChrome(false); document.title = "Cotiza tu seguro de auto";
+      renderMessage("Este país no está disponible.", el("a", { href: "#/", class: "btn btn--secondary", text: "Elegir otro país" }));
+      return;
+    }
+    if (!validCountry(country)) {
+      current = null; showChrome(false);
+      renderMessage("El formulario no está disponible en este momento. Inténtalo más tarde.");
+      return;
+    }
+
+    const steps = [...country.steps].sort(byOrder);
+    const data = loadData(country);
+    // First step that is not complete (AC-024)
+    const firstIncomplete = steps.find((s) => s.type !== "form" || !(data.steps[s.slug] && data.steps[s.slug].complete));
+    let step = steps.find((s) => s.slug === slug);
+    const idx = step ? steps.indexOf(step) : -1;
+    const allowed = step && steps.slice(0, idx).every((s) => s.type !== "form" || (data.steps[s.slug] && data.steps[s.slug].complete));
+    if (!step || !allowed) {
+      step = firstIncomplete;
+      const target = "#/" + country.code + "/" + step.slug;
+      history.replaceState(null, "", target);
+      currentHash = target;
+      document.getElementById("proto-path").textContent = pathOf(target);
+    }
+    renderStep(country, steps, step, data, !initial);
+  }
+
+  function renderRoot() {
+    showChrome(false); setTheme(null);
+    // Brand bars without the logo: the root shows no copy other than its heading and the country names (AC-001).
+    document.getElementById("nav-bar").hidden = false;
+    document.getElementById("accent-bar").hidden = false;
+    document.title = "Cotiza tu seguro de auto";
+    const h1 = el("h1", { tabindex: "-1", text: "Elige tu país para cotizar tu seguro de auto" });
+    const list = el("ul", { class: "countries" }, countries.map((c) =>
+      el("li", {}, [el("a", { class: "country-link", href: "#/" + c.code }, [c.name, chevron()])])));
+    main.replaceChildren(el("div", {}, [h1, list]));
+  }
+
+  function renderProgress(country, steps, step, data) {
+    const pos = steps.indexOf(step) + 1;
+    const label = country.copy.progress.replace("{current}", pos).replace("{total}", steps.length);
+    return el("nav", { class: "progress", "aria-label": label }, [
+      el("p", { class: "progress__label", "aria-hidden": "true", text: label }),
+      el("ol", { class: "progress__list" }, steps.map((s, i) => {
+        const done = s.type === "form" && data.steps[s.slug] && data.steps[s.slug].complete && s !== step;
+        return el("li", { class: "progress__item" + (done ? " is-done" : ""), "aria-current": s === step ? "step" : null }, [
+          el("span", { class: "progress__num", "aria-hidden": "true", text: String(i + 1) }), s.title]);
+      })),
+    ]);
+  }
+
+  function renderStep(country, steps, step, data, moveFocus) {
+    setTheme(country.theme); showChrome(true);
+    document.title = step.title + " – " + country.name;
+    const pos = steps.indexOf(step);
+    const h1 = el("h1", { tabindex: "-1", id: "step-heading", text: step.title });
+    const children = [renderProgress(country, steps, step, data), h1];
+    const prev = pos > 0 ? steps[pos - 1] : null;
+    const back = prev ? el("a", { class: "btn btn--link", href: "#/" + country.code + "/" + prev.slug, text: country.copy.back }) : null;
+
+    if (step.type !== "form") {
+      current = null;
+      children.push(el("p", { class: "proto-note", text: "Prototipo: el contenido de este paso pertenece a " + (step.type === "plans" ? "US-02" : "US-03") + " y no forma parte de CHG-001. Aquí terminan las pruebas de este cambio." }));
+      children.push(el("div", { class: "actions" }, [back]));
+      main.replaceChildren(el("div", { class: "card" }, children));
+      if (moveFocus) h1.focus();
+      return;
+    }
+
+    if (!step.fields.length) {
+      current = null;
+      children.push(el("div", { class: "state", role: "alert" }, [svgIcon("big"), el("p", { text: "El formulario no está disponible en este momento. Inténtalo más tarde." })]));
+      children.push(el("div", { class: "actions" }, [back]));
+      main.replaceChildren(el("div", { class: "card" }, children));
+      if (moveFocus) h1.focus();
+      return;
+    }
+
+    const stored = (data.steps[step.slug] && data.steps[step.slug].values) || {};
+    const fields = [...step.fields].sort(byOrder);
+    current = { country, step, fields, stored: { ...stored }, values: { ...stored } };
+
+    const form = el("form", { novalidate: true, onsubmit: (e) => { e.preventDefault(); onContinue(); } });
+    form.append(el("div", { class: "fields" }, fields.map(renderField)));
+    const cta = el("button", { type: "submit", class: "btn btn--cta", id: "continue", text: country.copy.continue });
+    form.append(el("div", { class: "actions" }, [back, cta]));
+    children.push(form);
+    main.replaceChildren(el("div", { class: "card" }, children));
+    refreshValidity();
+    if (moveFocus) h1.focus();
+  }
+
+  function renderField(f) {
+    const id = "f-" + f.id, helpId = id + "-help", errId = id + "-error";
+    const value = current.values[f.id];
+    const describedBy = [f.help ? helpId : null].filter(Boolean).join(" ") || null;
+    const onInput = (e) => {
+      current.values[f.id] = f.type === "checkbox" ? e.target.checked : e.target.value;
+      if (f.type === "select" || f.type === "date") e.target.classList.toggle("is-empty", !e.target.value);
+      refreshValidity(f.id);
+    };
+    const onBlur = () => refreshValidity(f.id, true);
+    let control;
+    if (f.type === "checkbox") {
+      control = el("input", { type: "checkbox", id, name: f.id, "aria-describedby": describedBy, "aria-required": f.required ? "true" : null, onchange: onInput, onblur: onBlur });
+      control.checked = value === true;
+      return el("div", { class: "field field--checkbox", "data-field": f.id }, [
+        el("label", { class: "check", for: id }, [control, el("span", { class: "check__text" }, [f.label, f.required ? el("span", { class: "field__req", "aria-hidden": "true", text: "*" }) : null])]),
+        f.help ? el("p", { class: "field__help", id: helpId, text: f.help }) : null,
+        el("p", { class: "field__error", id: errId, hidden: true }, [svgIcon(), el("span", { text: errorText(f) })]),
+      ]);
+    }
+    if (f.type === "select") {
+      control = el("select", { id, name: f.id, class: "field__control" + (value ? "" : " is-empty"), "aria-describedby": describedBy, "aria-required": f.required ? "true" : null, onchange: onInput, onblur: onBlur }, [
+        el("option", { value: "", disabled: true, text: f.placeholder || "" }),
+        ...[...f.options].sort(byOrder).map((o) => el("option", { value: o.value, text: o.label })),
+      ]);
+      control.value = value || "";
+    } else {
+      const type = f.type === "number" ? "text" : f.type;
+      control = el("input", {
+        id, name: f.id, type, class: "field__control" + (f.type === "date" && !value ? " is-empty" : ""), placeholder: f.placeholder || null,
+        spellcheck: f.type === "text" ? "false" : null,
+        inputmode: f.type === "number" ? "numeric" : (f.inputmode || null),
+        autocomplete: "off", "aria-describedby": describedBy, "aria-required": f.required ? "true" : null,
+        max: f.type === "date" ? "9999-12-31" : null, oninput: onInput, onblur: onBlur,
+      });
+      control.value = value == null ? "" : value;
+    }
+    return el("div", { class: "field", "data-field": f.id }, [
+      el("label", { class: "field__label", for: id }, [f.label, f.required ? el("span", { class: "field__req", "aria-hidden": "true", text: "*" }) : null]),
+      control,
+      f.help ? el("p", { class: "field__help", id: helpId, text: f.help }) : null,
+      el("p", { class: "field__error", id: errId, hidden: true }, [svgIcon(), el("span", { text: errorText(f) })]),
+    ]);
+  }
+
+  // Shows/hides errors (AC-009, AC-010) and the continue state (AC-011)
+  function refreshValidity(changedId, fromBlur, forceAll) {
+    if (!current) return;
+    let allValid = true;
+    for (const f of current.fields) {
+      const valid = isValid(f, current.values[f.id]);
+      if (!valid) allValid = false;
+      const wrap = main.querySelector('[data-field="' + f.id + '"]');
+      const control = wrap.querySelector("input, select");
+      const err = wrap.querySelector(".field__error");
+      const showing = !err.hidden;
+      // Valid: hidden at once. Invalid: shown when leaving the field or trying to advance, and kept while invalid.
+      const show = !valid && (showing || forceAll || (fromBlur && f.id === changedId));
+      err.hidden = !show;
+      control.setAttribute("aria-invalid", show ? "true" : "false");
+      const ids = [f.help ? control.id + "-help" : null, show ? control.id + "-error" : null].filter(Boolean);
+      if (ids.length) control.setAttribute("aria-describedby", ids.join(" ")); else control.removeAttribute("aria-describedby");
+    }
+    const cta = document.getElementById("continue");
+    if (cta) cta.setAttribute("aria-disabled", allValid ? "false" : "true");
+  }
+
+  function onContinue() {
+    if (!current || advancing) return;                          // single advance (AC-021)
+    const invalid = current.fields.filter((f) => !isValid(f, current.values[f.id]));
+    if (invalid.length) {
+      refreshValidity(null, false, true);
+      const first = main.querySelector('[data-field="' + invalid[0].id + '"] input, [data-field="' + invalid[0].id + '"] select');
+      first.focus();                                             // error is read through aria-describedby
+      return;
+    }
+    advancing = true;
+    const values = {};
+    for (const f of current.fields) values[f.id] = f.type === "text" || f.type === "number" ? String(current.values[f.id] ?? "").trim() : current.values[f.id];
+    saveStep(current.country, current.step.slug, values);
+    const steps = [...current.country.steps].sort(byOrder);
+    const next = steps[steps.indexOf(current.step) + 1];
+    current.stored = values; current.values = { ...values };
+    location.hash = "#/" + current.country.code + "/" + next.slug;
+    setTimeout(() => { advancing = false; }, 400);
+  }
+
+  // Unconfirmed values (N1): any field differs from stored, or from empty when never completed
+  function hasUnconfirmed() {
+    if (!current) return false;
+    return current.fields.some((f) => {
+      const a = current.values[f.id], b = current.stored[f.id];
+      const norm = (v) => (f.type === "checkbox" ? v === true : String(v ?? "").trim());
+      return norm(a) !== norm(b);
+    });
+  }
+
+  // AC-033: browser's own confirmation on reload / close
+  window.addEventListener("beforeunload", (e) => {
+    if (hasUnconfirmed()) { e.preventDefault(); e.returnValue = ""; }
+  });
+
+  // AC-034 / AC-035: navigation inside the application
+  const dialog = document.getElementById("leave-dialog");
+  window.addEventListener("hashchange", () => {
+    const target = location.hash || "#/";
+    if (pendingHash) return;
+    const from = parse(currentHash), to = parse(target);
+    const leavingWizard = current && to.code !== from.code;
+    if (leavingWizard && hasUnconfirmed()) {
+      pendingHash = target;
+      history.replaceState(null, "", currentHash);                // stay at the same address while asking
+      openDialog();
+      return;
+    }
+    route(false);
+  });
+
+  function openDialog() {
+    const cp = current.country.copy;
+    document.getElementById("leave-title").textContent = cp.leaveTitle;
+    document.getElementById("leave-message").textContent = cp.leaveMessage;
+    document.getElementById("leave-stay").textContent = cp.leaveStay;
+    document.getElementById("leave-confirm").textContent = cp.leaveConfirm;
+    focusBeforeDialog = document.activeElement;
+    dialog.showModal();
+    document.getElementById("leave-stay").focus();
+  }
+  function closeDialog(leave) {
+    const target = pendingHash;
+    dialog.close();
+    if (leave) {
+      current = null;                                            // unconfirmed values discarded
+      history.replaceState(null, "", target);
+      pendingHash = null;
+      route(false);
+    } else {
+      pendingHash = null;
+      if (focusBeforeDialog && document.contains(focusBeforeDialog)) focusBeforeDialog.focus();
+    }
+  }
+  document.getElementById("leave-stay").addEventListener("click", () => closeDialog(false));
+  document.getElementById("leave-confirm").addEventListener("click", () => closeDialog(true));
+  dialog.addEventListener("cancel", (e) => { e.preventDefault(); closeDialog(false); });   // Escape = stay
+
+  // ---------------------------------------------------------------------------
+  // Review panel wiring
+  // ---------------------------------------------------------------------------
+  for (const box of document.querySelectorAll("[data-sim]")) {
+    box.checked = !!sim[box.dataset.sim];
+    box.addEventListener("change", () => { sim[box.dataset.sim] = box.checked; writeJSON(SIM_KEY, sim); location.reload(); });
+  }
+  document.getElementById("proto-reload").addEventListener("click", () => location.reload());
+  document.getElementById("proto-clear").addEventListener("click", () => {
+    for (const k of Object.keys(sessionStorage)) if (k.startsWith("wizard:")) sessionStorage.removeItem(k);
+    current = null; location.hash = "#/"; location.reload();
+  });
+  if (readJSON("proto:open")) document.getElementById("proto-details").open = true;
+  document.getElementById("proto-details").addEventListener("toggle", (e) => writeJSON("proto:open", e.target.open));
+  const t = today();
+  const y = t.getFullYear();
+  document.getElementById("proto-today").textContent =
+    t.toLocaleDateString("es-CO", { day: "numeric", month: "long", year: "numeric" }) +
+    " · año del vehículo aceptado: " + (y - 20) + " a " + (y + 1) +
+    " · nacidos hasta el " + new Date(y - 18, t.getMonth(), t.getDate()).toLocaleDateString("es-CO") + " son mayores de edad";
+
+  if (!location.hash) history.replaceState(null, "", "#/");
+  boot();
+})();
+</script>
+</body>
+</html>
