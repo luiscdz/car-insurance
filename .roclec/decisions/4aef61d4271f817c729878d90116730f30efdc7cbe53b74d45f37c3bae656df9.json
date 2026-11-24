@@ -1,0 +1,25 @@
+{
+  "actor": "luis-cardozo",
+  "component": "app",
+  "criteria": [
+    {
+      "id": "CR-012",
+      "status": "met"
+    }
+  ],
+  "entity": "CHG-002",
+  "flow": "3ae780aad6b1fc33890a0dff47645cf0515ef6319f7c53e9c0a04f98cf4a49fc",
+  "hook": "pre-integrate",
+  "id": "4aef61d4271f817c729878d90116730f30efdc7cbe53b74d45f37c3bae656df9",
+  "kind": "checkpoint",
+  "model_schema": 2,
+  "outcome": "approved",
+  "previous": "39b6a137ef1ce50f5457666825df32d744f1dfc8e4c56e33e63c7ab246da55a2",
+  "reason": "Owner approves the reviewed CHG-002 candidate: all checks pass, F-1 fixed, remaining info findings accepted (EVD-01M85T1WX2B3FNAAHXETM7K931).",
+  "run": "RUN-01M85S3AKRGXXGGE5AQY719TXP",
+  "subject": {
+    "digest": "c121ed80d7131a9b14573b11f6d8cd0f2a2175b5dd03126a55b8935ac1288ed5",
+    "entity": "CHG-002",
+    "type": "stage"
+  }
+}

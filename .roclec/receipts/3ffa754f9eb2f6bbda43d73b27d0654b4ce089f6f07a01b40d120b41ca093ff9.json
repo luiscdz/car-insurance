@@ -1,0 +1,18 @@
+{
+  "kind": "checkpoint",
+  "model_schema": 2,
+  "operation_id": "3ffa754f9eb2f6bbda43d73b27d0654b4ce089f6f07a01b40d120b41ca093ff9",
+  "payload": {
+    "component": "app",
+    "hook": "pre-integrate",
+    "id": "CHG-002",
+    "subject": {
+      "digest": "c121ed80d7131a9b14573b11f6d8cd0f2a2175b5dd03126a55b8935ac1288ed5",
+      "entity": "CHG-002",
+      "type": "stage"
+    }
+  },
+  "writes": {
+    ".roclec/decisions/4aef61d4271f817c729878d90116730f30efdc7cbe53b74d45f37c3bae656df9.json": "c1a895ca936e50ec236b8058b91c57cb00d2c7b87762b94b6dfb95a59d75f2b4"
+  }
+}
