@@ -542,6 +542,30 @@ describe('WizardShell', () => {
     expect(await screen.findByText('CL-20261123-A9F03Z')).toBeTruthy();
   });
 
+  it('AC-083 AC-096 an approval while the leave dialog is open, then stay: focus moves to the confirmation title', async () => {
+    storage.setItem('wizard:cl', chileQuoted());
+    await open('/cl/resumen-y-pago');
+    await payAndWait();
+
+    const navigation = router().navigateByUrl('/cl/elige-tu-plan');
+    const dialog = await screen.findByRole('alertdialog', {
+      name: '¿Salir mientras procesamos el pago?',
+    });
+    payment.last().resolve({ kind: 'approved', quoteNumber: 'CL-20261123-A9F03Z' });
+    await render();
+    expect(await screen.findByText('CL-20261123-A9F03Z')).toBeTruthy();
+    expect(dialog.contains(document.activeElement)).toBe(true);
+
+    within(dialog).getByRole('button', { name: 'Seguir esperando' }).click();
+
+    await expect(navigation).resolves.toBe(false);
+    const heading = await screen.findByRole('heading', {
+      level: 1,
+      name: '¡Listo! Tu pago fue aprobado',
+    });
+    await waitFor(() => expect(document.activeElement).toBe(heading));
+  });
+
   it.each(['/', '/co', '/cl/tus-datos'])(
     'AC-096 while a payment is processed, going to %s asks; leave proceeds and the answer is ignored',
     async (target) => {

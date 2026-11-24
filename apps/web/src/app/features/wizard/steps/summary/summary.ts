@@ -264,6 +264,7 @@ export class Summary {
   private readonly router = inject(Router);
   private readonly document = inject(DOCUMENT);
   private readonly injector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
   protected readonly ids = IDS;
 
   private readonly content = computed<WizardContent | null>(() => this.context.content());
@@ -497,12 +498,44 @@ export class Summary {
     this.confirmationAnnounced.set(true);
     afterNextRender(
       () => {
-        if (!this.document.querySelector('[aria-modal="true"]')) {
-          this.document.getElementById(STEP_HEADING_ID)?.focus();
+        if (this.dialogOpen()) {
+          this.focusHeadingWhenDialogsClose();
+        } else {
+          this.focusHeading();
         }
       },
       { injector: this.injector },
     );
+  }
+
+  private dialogOpen(): boolean {
+    return this.document.querySelector('[aria-modal="true"]') !== null;
+  }
+
+  private focusHeading(): void {
+    this.document.getElementById(STEP_HEADING_ID)?.focus();
+  }
+
+  /**
+   * The confirmation replaced the summary while a dialog was open (AC-096): the dialog cannot
+   * return focus to the pay action, which no longer exists. Once every dialog has closed and
+   * focus was lost, it moves to the confirmation title (AC-083).
+   */
+  private focusHeadingWhenDialogsClose(): void {
+    const observer = new MutationObserver(() => {
+      if (this.dialogOpen()) {
+        return;
+      }
+      observer.disconnect();
+      setTimeout(() => {
+        const active = this.document.activeElement;
+        if (!active || active === this.document.body || !active.isConnected) {
+          this.focusHeading();
+        }
+      });
+    });
+    observer.observe(this.document.body, { childList: true, subtree: true, attributes: true });
+    this.destroyRef.onDestroy(() => observer.disconnect());
   }
 
   private focusAfterRender(id: string): void {

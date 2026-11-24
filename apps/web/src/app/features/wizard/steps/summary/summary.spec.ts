@@ -441,6 +441,30 @@ describe('Summary', () => {
     expect(document.activeElement).not.toBe(heading);
   });
 
+  it('AC-083 AC-096 an approval during a dialog, then stay: focus moves to the confirmation title', async () => {
+    const { payment, store, settle, heading } = await setup({ content: colombiaContent() });
+    await accept(settle);
+    payButton().focus();
+    fireEvent.click(payButton());
+    await settle();
+    const dialog = document.createElement('div');
+    dialog.setAttribute('aria-modal', 'true');
+    const stay = document.createElement('button');
+    dialog.append(stay);
+    document.body.append(dialog);
+    stay.focus();
+
+    payment.last().resolve({ kind: 'approved', quoteNumber: 'CO-20261123-7KQ2MX' });
+    await settle();
+    expect(store.data('co').confirmation).toBeDefined();
+    expect(document.activeElement).toBe(stay);
+
+    dialog.remove();
+    expect(document.activeElement).toBe(document.body);
+
+    await waitFor(() => expect(document.activeElement).toBe(heading));
+  });
+
   it('AC-074 AC-075 AC-090 view terms opens the modal dialog of the country, focused on its title; Escape returns focus', async () => {
     const { settle } = await setup({ content: colombiaContent() });
     await accept(settle);
