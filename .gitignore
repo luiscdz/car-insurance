@@ -28,3 +28,9 @@ e2e/playwright-report/
 e2e/blob-report/
 e2e/playwright/.cache/
 .nx/
+
+# Local-only files: Roclec run logs and operation lock, agent worktrees, personal preview launcher
+.roclec/runtime/logs/
+.roclec/runtime/lock/
+.claude/worktrees/
+.claude/launch.json
