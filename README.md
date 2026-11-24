@@ -70,6 +70,15 @@ In Strapi, each country is represented by a Country entry with its own wizard st
 
 I chose this strategy because the business team can publish changes for each country directly from Strapi without redeploying Angular. The configuration also lets each country define a different wizard structure. To demonstrate this, Colombia collects policyholder and vehicle details on a single screen, while Chile splits them across two screens.
 
+## Functional Scope Justification
+
+I added a fourth step to Chile’s configuration to demonstrate that Strapi can define a different wizard sequence for each country. Colombia collects policyholder and vehicle details on a single screen, while Chile splits them across two. Both configurations use the same Angular build. The extra step shows how the wizard can be configured for each market.
+
+# Technical requirement Justification
+
+The quote tool queries Strapi without sending a token. The public role allows it to read quote content and calculate a simulated price, while editing is restricted to Strapi’s authenticated admin panel.
+
 ## Questions
 
+- Why SDD tool?
 
