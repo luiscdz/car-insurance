@@ -1,0 +1,11 @@
+{
+  "kind": "run-verify",
+  "model_schema": 2,
+  "operation_id": "3009065b0334a5a3c28b9c2541da4194b07a0fb012508a875ae190c0563374a1",
+  "payload": {
+    "id": "RUN-01M85ZCQJTPW5EMYTYTTSFBP70"
+  },
+  "writes": {
+    ".roclec/runs/RUN-01M85ZCQJTPW5EMYTYTTSFBP70/manifest.json": "29ac4c433192274e73e54f58f818d67d400790712e940824738a713d57e37583"
+  }
+}
