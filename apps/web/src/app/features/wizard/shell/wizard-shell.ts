@@ -44,7 +44,7 @@ import { StatusMessage } from '../../../shared/ui/status-message';
 import { type ProgressStep, ProgressIndicator } from './components/progress-indicator';
 import { LeaveConfirmation } from './leave-confirmation';
 import type { LeaveAware } from './leave-guard';
-import { STEP_CONTEXT, type StepContext } from './step-context';
+import { STEP_CONTEXT, STEP_HEADING_ID, type StepContext } from './step-context';
 import { STEP_COMPONENTS } from './step-registry';
 
 interface LoadedWizard {
@@ -83,7 +83,8 @@ function addressSegments(router: Router, url: string): string[] {
  * The wizard of the country in the first address segment (ADR-001). It loads and validates the
  * country's content, applies its theme, resolves the step from the address, shows the progress
  * and the step component registered for the step type, and asks before unconfirmed values are
- * lost when leaving the wizard (REQ-001 to REQ-005).
+ * lost when leaving the wizard (REQ-001 to REQ-005). Plans load with the rest of the content, so
+ * their loading, failure and invalid states are the wizard's (AC-059).
  */
 @Component({
   selector: 'app-wizard-shell',
@@ -106,24 +107,25 @@ export class WizardShell implements StepContext, LeaveAware {
   private readonly leave = inject(LeaveConfirmation);
   private readonly stepComponents = inject(STEP_COMPONENTS);
   protected readonly fallback = FALLBACK_COPY;
+  protected readonly headingId = STEP_HEADING_ID;
 
-  private readonly content = resource({
+  private readonly loaded = resource({
     params: () => this.country(),
     loader: ({ params }) => this.load(params),
   });
 
   protected readonly state = computed<ShellState>(() => {
-    if (this.content.isLoading()) {
+    if (this.loaded.isLoading()) {
       return 'loading';
     }
-    if (this.content.error()) {
+    if (this.loaded.error()) {
       return 'unavailable';
     }
-    return this.content.value()?.kind ?? 'loading';
+    return this.loaded.value()?.kind ?? 'loading';
   });
 
   protected readonly wizard = computed<LoadedWizard | null>(() => {
-    const result = this.state() === 'ready' ? this.content.value() : undefined;
+    const result = this.state() === 'ready' ? this.loaded.value() : undefined;
     return result?.kind === 'ready' ? result.wizard : null;
   });
 
@@ -184,6 +186,8 @@ export class WizardShell implements StepContext, LeaveAware {
   });
 
   readonly copy = computed(() => this.wizard()?.content.country.copy ?? NO_COPY);
+
+  readonly content = computed<WizardContent | null>(() => this.wizard()?.content ?? null);
 
   readonly previousStepLink = computed<readonly string[] | null>(() => {
     const wizard = this.wizard();
@@ -247,8 +251,16 @@ export class WizardShell implements StepContext, LeaveAware {
     if (!wizard) {
       return;
     }
+    this.store.confirmStep(wizard.content.country.code, slug, values);
+    this.advance(slug);
+  }
+
+  advance(slug: string): void {
+    const wizard = this.wizard();
+    if (!wizard) {
+      return;
+    }
     const { country, steps } = wizard.content;
-    this.store.confirmStep(country.code, slug, values);
     const next = steps[steps.findIndex((step) => step.slug === slug) + 1];
     if (next) {
       void this.router.navigate(['/', country.code, next.slug]);
@@ -273,7 +285,7 @@ export class WizardShell implements StepContext, LeaveAware {
   }
 
   protected retry(): void {
-    this.content.reload();
+    this.loaded.reload();
   }
 
   private renderedKey(): string | null {
@@ -284,12 +296,12 @@ export class WizardShell implements StepContext, LeaveAware {
 
   private async load(code: string): Promise<LoadResult> {
     const raw = await this.reader.readWizard(code);
-    const result = toWizardContent(code, raw.country, raw.steps);
+    const result = toWizardContent(code, raw.country, raw.steps, raw.plans);
     if (result.kind !== 'ready') {
       return result;
     }
     const { content } = result;
-    this.store.load(code, content.steps, this.clock());
+    this.store.load(code, content, this.clock());
     const theme = resolveTheme(content.country.theme, raw.mediaBaseUrl, content.country.name);
     return { kind: 'ready', wizard: { content, theme } };
   }

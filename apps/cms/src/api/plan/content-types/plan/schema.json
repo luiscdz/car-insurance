@@ -1,0 +1,64 @@
+{
+  "kind": "collectionType",
+  "collectionName": "plans",
+  "info": {
+    "singularName": "plan",
+    "pluralName": "plans",
+    "displayName": "Plan",
+    "description": "An insurance plan of a country: shown in the plan list when it is published and active, in configured order."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "country": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::country.country",
+      "inversedBy": "plans"
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "basePrice": {
+      "type": "integer",
+      "required": true,
+      "min": 1
+    },
+    "currency": {
+      "type": "string",
+      "required": true,
+      "regex": "^[A-Z]{3}$"
+    },
+    "order": {
+      "type": "integer",
+      "required": true
+    },
+    "recommended": {
+      "type": "boolean",
+      "default": false
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "coverages": {
+      "type": "component",
+      "repeatable": true,
+      "component": "plan.coverage",
+      "required": true,
+      "min": 1
+    },
+    "benefits": {
+      "type": "component",
+      "repeatable": true,
+      "component": "plan.benefit"
+    }
+  }
+}

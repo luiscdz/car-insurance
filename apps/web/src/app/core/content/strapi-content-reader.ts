@@ -22,6 +22,7 @@ const COUNTRY_PARAMS = {
   'populate[theme][populate][logo][fields][0]': 'url',
   'populate[theme][populate][logo][fields][1]': 'alternativeText',
   'populate[copy]': 'true',
+  'populate[planCopy]': 'true',
 };
 
 const STEP_PARAMS = {
@@ -32,6 +33,16 @@ const STEP_PARAMS = {
   'populate[fields][sort][1]': 'createdAt:asc',
   'populate[fields][populate][options]': 'true',
   'populate[fields][populate][validation]': 'true',
+};
+
+/** Published plans that are active, in configured order then creation order (AC-036). */
+const PLAN_PARAMS = {
+  'filters[active][$eq]': 'true',
+  'sort[0]': 'order:asc',
+  'sort[1]': 'createdAt:asc',
+  'pagination[pageSize]': PAGE_SIZE,
+  'populate[coverages]': 'true',
+  'populate[benefits]': 'true',
 };
 
 /**
@@ -48,12 +59,14 @@ export class StrapiContentReader implements ContentReader {
   }
 
   async readWizard(code: string): Promise<RawWizardContent> {
-    const [country, steps, mediaBaseUrl] = await Promise.all([
+    const byCountry = { 'filters[country][code][$eq]': code };
+    const [country, steps, plans, mediaBaseUrl] = await Promise.all([
       this.get('/api/countries', { ...COUNTRY_PARAMS, 'filters[code][$eq]': code }),
-      this.get('/api/wizard-steps', { ...STEP_PARAMS, 'filters[country][code][$eq]': code }),
+      this.get('/api/wizard-steps', { ...STEP_PARAMS, ...byCountry }),
+      this.get('/api/plans', { ...PLAN_PARAMS, ...byCountry }),
       this.config.cmsUrl(),
     ]);
-    return { country, steps, mediaBaseUrl };
+    return { country, steps, plans, mediaBaseUrl };
   }
 
   private async get(path: string, params: Record<string, string>): Promise<unknown> {

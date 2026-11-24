@@ -4,6 +4,8 @@ import { provideRouter, withComponentInputBinding, withRouterConfig } from '@ang
 import { routes } from './app.routes';
 import { CONTENT_READER } from './core/content/content-reader';
 import { StrapiContentReader } from './core/content/strapi-content-reader';
+import { PRICE_QUOTE } from './core/quote/price-quote';
+import { StrapiPriceQuote } from './core/quote/strapi-price-quote';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,5 +18,6 @@ export const appConfig: ApplicationConfig = {
       withRouterConfig({ canceledNavigationResolution: 'computed' }),
     ),
     { provide: CONTENT_READER, useClass: StrapiContentReader },
+    { provide: PRICE_QUOTE, useClass: StrapiPriceQuote },
   ],
 };

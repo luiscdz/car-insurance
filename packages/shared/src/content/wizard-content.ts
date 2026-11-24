@@ -1,7 +1,9 @@
 import { z } from 'zod';
 import { countryDetailSchema } from './country.js';
+import { PRICING_INPUTS } from './form-field.js';
 import { sortByOrder } from './order.js';
-import { type StepType, wizardStepSchema } from './wizard-step.js';
+import { plansSchema } from './plan.js';
+import { type StepType, type WizardStep, wizardStepSchema } from './wizard-step.js';
 
 /** Step types that must follow the form steps, in this order (ADR-001). */
 const STEPS_AFTER_FORMS: readonly StepType[] = ['plans', 'summary'];
@@ -36,10 +38,30 @@ export const wizardStepsSchema = z
     }
   });
 
-/** Everything the wizard needs for one country, validated before use (P3). */
-export const wizardContentSchema = z.object({
-  country: countryDetailSchema,
-  steps: wizardStepsSchema,
-});
+function markCount(steps: readonly WizardStep[], mark: (typeof PRICING_INPUTS)[number]): number {
+  return steps.flatMap((step) => step.fields).filter((field) => field.pricingInput === mark).length;
+}
+
+/**
+ * Everything the wizard needs for one country, validated before use (P3): the country, its steps
+ * and its published, active plans. Every plan is priced in the country's currency (AC-041) and
+ * each pricing mark is on at most one field of the country (AC-044).
+ */
+export const wizardContentSchema = z
+  .object({
+    country: countryDetailSchema,
+    steps: wizardStepsSchema,
+    plans: plansSchema,
+  })
+  .superRefine((content, ctx) => {
+    if (content.plans.some((plan) => plan.currency !== content.country.currency)) {
+      ctx.addIssue({ code: 'custom', message: "Plans must use the country's currency" });
+    }
+    for (const mark of PRICING_INPUTS) {
+      if (markCount(content.steps, mark) > 1) {
+        ctx.addIssue({ code: 'custom', message: `The pricing mark ${mark} is on several fields` });
+      }
+    }
+  });
 
 export type WizardContent = z.output<typeof wizardContentSchema>;

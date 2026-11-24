@@ -1,0 +1,45 @@
+{
+  "actor": "luis-cardozo",
+  "change_id": "CHG-002",
+  "component": "app",
+  "digest": "6ec5151257eefc51337e62dd37d0d93267c95560f305e707ec41e2503f8c7736",
+  "executed_by_roclec": false,
+  "finding_parents": {
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-2": [
+      "EVD-01M85SFFY5FXSQBHAEYZJ9RWEJ"
+    ],
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-3": [
+      "EVD-01M85SFFY5FXSQBHAEYZJ9RWEJ"
+    ],
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-4": [
+      "EVD-01M85SFFY5FXSQBHAEYZJ9RWEJ"
+    ],
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-5": [
+      "EVD-01M85SFFY5FXSQBHAEYZJ9RWEJ"
+    ],
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-6": [
+      "EVD-01M85SFFY5FXSQBHAEYZJ9RWEJ"
+    ],
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-7": [
+      "EVD-01M85SFFY5FXSQBHAEYZJ9RWEJ"
+    ],
+    "EVD-01M85SFFY5FXSQBHAEYZJ9RWEJ#F-1": [
+      "EVD-01M85SFFY5FXSQBHAEYZJ9RWEJ"
+    ]
+  },
+  "findings": [
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-2",
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-3",
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-4",
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-5",
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-6",
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-7",
+    "EVD-01M85SFFY5FXSQBHAEYZJ9RWEJ#F-1"
+  ],
+  "id": "EVD-01M85T1WX2B3FNAAHXETM7K931",
+  "kind": "finding-decision",
+  "model_schema": 2,
+  "reason": "Owner accepts all open info findings of the CHG-002 reviews: bundle size predates the change, the aria-label and axe transition wait are accepted techniques, public read of published inactive plans matches AC-066, request bounds are optional hardening, the US-01 mapping is rechecked at release verification, and the T013 task wording is a plan note only.",
+  "status": "accepted",
+  "supersedes": []
+}

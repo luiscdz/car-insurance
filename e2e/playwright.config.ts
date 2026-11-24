@@ -9,8 +9,12 @@ const baseURL = process.env['E2E_BASE_URL'] ?? 'http://localhost:4200';
 /** AC-007 changes published content, so it runs alone after every other test. */
 const CONTENT_CHANGES = /content-changes\.spec\.ts/;
 
+/** AC-036, AC-039 and AC-058 change published plans, so they run alone after AC-007. */
+const PLAN_CHANGES = /plan-changes\.spec\.ts/;
+
 export default defineConfig({
   testDir: './tests',
+  globalSetup: './tests/support/global-setup.ts',
   fullyParallel: true,
   forbidOnly: !!process.env['CI'],
   retries: process.env['CI'] ? 2 : 0,
@@ -22,18 +26,25 @@ export default defineConfig({
   projects: [
     {
       name: 'mobile',
-      testIgnore: CONTENT_CHANGES,
+      testIgnore: [CONTENT_CHANGES, PLAN_CHANGES],
       use: { ...devices['Desktop Chrome'], viewport: { width: 375, height: 812 } },
     },
     {
       name: 'desktop',
-      testIgnore: CONTENT_CHANGES,
+      testIgnore: [CONTENT_CHANGES, PLAN_CHANGES],
       use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
     },
     {
       name: 'content-changes',
       testMatch: CONTENT_CHANGES,
       dependencies: ['mobile', 'desktop'],
+      fullyParallel: false,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
+    },
+    {
+      name: 'plan-changes',
+      testMatch: PLAN_CHANGES,
+      dependencies: ['content-changes'],
       fullyParallel: false,
       use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
     },

@@ -18,7 +18,7 @@ describe('WizardStateStore', () => {
   });
 
   it('AC-019 AC-026 stores confirmed values only in the session storage of the country', () => {
-    store.load('cl', chileContent().steps, TODAY);
+    store.load('cl', chileContent(), TODAY);
     store.confirmStep('cl', 'tus-datos', { rut: '1234567-8', 'fecha-nacimiento': '1990-01-01' });
 
     expect(JSON.parse(storage.getItem('wizard:cl') ?? '')).toEqual({
@@ -32,7 +32,7 @@ describe('WizardStateStore', () => {
   });
 
   it('AC-020 AC-022 restores the stored values after a reload', () => {
-    store.load('co', colombiaContent().steps, TODAY);
+    store.load('co', colombiaContent(), TODAY);
     store.confirmStep('co', 'tus-datos-y-tu-vehiculo', {
       'tipo-documento': 'cc',
       placa: 'ABC123',
@@ -40,7 +40,7 @@ describe('WizardStateStore', () => {
     });
 
     const reloaded = TestBed.runInInjectionContext(() => new WizardStateStore());
-    const data = reloaded.load('co', colombiaContent().steps, TODAY);
+    const data = reloaded.load('co', colombiaContent(), TODAY);
 
     expect(data.steps['tus-datos-y-tu-vehiculo']).toEqual({
       values: { 'tipo-documento': 'cc', placa: 'ABC123', 'uso-particular': true },
@@ -49,8 +49,8 @@ describe('WizardStateStore', () => {
   });
 
   it('AC-023 keeps the data of each country apart', () => {
-    store.load('co', colombiaContent().steps, TODAY);
-    store.load('cl', chileContent().steps, TODAY);
+    store.load('co', colombiaContent(), TODAY);
+    store.load('cl', chileContent(), TODAY);
     store.confirmStep('co', 'tus-datos-y-tu-vehiculo', { placa: 'ABC123' });
 
     expect(store.data('cl').steps).toEqual({});
@@ -60,17 +60,17 @@ describe('WizardStateStore', () => {
 
   it('AC-025 discards malformed stored data', () => {
     storage.setItem('wizard:cl', '{"steps": "roto"');
-    expect(store.load('cl', chileContent().steps, TODAY)).toEqual({ steps: {} });
+    expect(store.load('cl', chileContent(), TODAY)).toEqual({ steps: {} });
 
     storage.setItem('wizard:cl', JSON.stringify({ steps: { 'tus-datos': { values: 3 } } }));
-    expect(store.load('cl', chileContent().steps, TODAY)).toEqual({ steps: {} });
+    expect(store.load('cl', chileContent(), TODAY)).toEqual({ steps: {} });
   });
 
   it('AC-022 keeps working in memory when the storage refuses writes', () => {
     storage.setItem = () => {
       throw new Error('QuotaExceededError');
     };
-    store.load('cl', chileContent().steps, TODAY);
+    store.load('cl', chileContent(), TODAY);
     store.confirmStep('cl', 'tus-datos', { rut: '1234567-8' });
 
     expect(store.data('cl').steps['tus-datos']?.complete).toBe(true);
@@ -81,11 +81,90 @@ describe('WizardStateStore', () => {
     TestBed.configureTestingModule({ providers: [{ provide: WIZARD_STORAGE, useValue: null }] });
     const memoryOnly = TestBed.inject(WizardStateStore);
 
-    memoryOnly.load('co', colombiaContent().steps, TODAY);
+    memoryOnly.load('co', colombiaContent(), TODAY);
     memoryOnly.confirmStep('co', 'tus-datos-y-tu-vehiculo', { placa: 'ABC123' });
 
     expect(memoryOnly.data('co').steps['tus-datos-y-tu-vehiculo']?.values).toEqual({
       placa: 'ABC123',
     });
+  });
+
+  const chileValues = { rut: '1234567-8', 'fecha-nacimiento': '1990-01-01' };
+
+  it('AC-048 stores the chosen plan at once, without a final price, and replaces the previous one', () => {
+    store.load('cl', chileContent(), TODAY);
+
+    store.choosePlan('cl', 'cl-full');
+    expect(JSON.parse(storage.getItem('wizard:cl') ?? '').plan).toEqual({
+      id: 'cl-full',
+      finalPrice: null,
+    });
+
+    store.storeFinalPrice('cl', 'cl-full', 624000);
+    store.choosePlan('cl', 'cl-esencial');
+    expect(store.data('cl').plan).toEqual({ id: 'cl-esencial', finalPrice: null });
+  });
+
+  it('AC-049 choosing the plan already chosen changes nothing and late prices of other plans are ignored', () => {
+    store.load('co', colombiaContent(), TODAY);
+    store.choosePlan('co', 'co-clasico');
+    store.storeFinalPrice('co', 'co-clasico', 2312500);
+    const before = store.data('co');
+
+    store.choosePlan('co', 'co-clasico');
+    store.storeFinalPrice('co', 'co-basico', 1500000);
+
+    expect(store.data('co')).toBe(before);
+  });
+
+  it('AC-053 the chosen plan and its final price survive a reload, per country', () => {
+    store.load('cl', chileContent(), TODAY);
+    store.load('co', colombiaContent(), TODAY);
+    store.confirmStep('cl', 'tus-datos', chileValues);
+    store.choosePlan('cl', 'cl-full');
+    store.storeFinalPrice('cl', 'cl-full', 624000);
+
+    const reloaded = TestBed.runInInjectionContext(() => new WizardStateStore());
+
+    expect(reloaded.load('cl', chileContent(), TODAY).plan).toEqual({
+      id: 'cl-full',
+      finalPrice: 624000,
+    });
+    expect(reloaded.load('co', colombiaContent(), TODAY).plan).toBeUndefined();
+  });
+
+  it('AC-053 AC-056 discards the stored final price while a new one is obtained', () => {
+    store.load('cl', chileContent(), TODAY);
+    store.discardFinalPrice('cl');
+    expect(store.data('cl').plan).toBeUndefined();
+
+    store.choosePlan('cl', 'cl-full');
+    store.storeFinalPrice('cl', 'cl-full', 624000);
+    store.discardFinalPrice('cl');
+
+    expect(store.data('cl').plan).toEqual({ id: 'cl-full', finalPrice: null });
+  });
+
+  it('AC-054 confirming changed values keeps the plan and discards its final price', () => {
+    store.load('cl', chileContent(), TODAY);
+    store.confirmStep('cl', 'tus-datos', chileValues);
+    store.choosePlan('cl', 'cl-full');
+    store.storeFinalPrice('cl', 'cl-full', 624000);
+
+    store.confirmStep('cl', 'tus-datos', { ...chileValues, 'fecha-nacimiento': '2004-01-01' });
+
+    expect(store.data('cl').plan).toEqual({ id: 'cl-full', finalPrice: null });
+    expect(store.data('cl').steps['tus-datos']?.values['fecha-nacimiento']).toBe('2004-01-01');
+  });
+
+  it('AC-054 confirming unchanged values keeps the final price', () => {
+    store.load('cl', chileContent(), TODAY);
+    store.confirmStep('cl', 'tus-datos', chileValues);
+    store.choosePlan('cl', 'cl-full');
+    store.storeFinalPrice('cl', 'cl-full', 624000);
+
+    store.confirmStep('cl', 'tus-datos', { ...chileValues });
+
+    expect(store.data('cl').plan).toEqual({ id: 'cl-full', finalPrice: 624000 });
   });
 });

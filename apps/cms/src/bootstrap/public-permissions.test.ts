@@ -20,11 +20,14 @@ const PLUGIN_DEFAULTS = [
   'plugin::users-permissions.auth.refresh',
 ];
 
-const READ_ACTIONS = [
+const PUBLIC_ROLE_ACTIONS = [
   'api::country.country.find',
   'api::country.country.findOne',
   'api::form-field.form-field.find',
   'api::form-field.form-field.findOne',
+  'api::plan.plan.find',
+  'api::plan.plan.findOne',
+  'api::quote.quote.price',
   'api::wizard-step.wizard-step.find',
   'api::wizard-step.wizard-step.findOne',
 ];
@@ -72,29 +75,32 @@ const actionsOf = (permissions: Permission[], role = 2) =>
     .sort();
 
 describe('public role permissions', () => {
-  it('AC-001 AC-004 the public role ends with exactly find and findOne on the content types the wizard reads', async () => {
+  it('AC-001 AC-004 AC-066 the public role ends with exactly the read actions of the wizard content, plans included, and the price quote', async () => {
     const permissions: Permission[] = [];
 
     await restrictPublicRole(fakeStrapi(permissions));
 
-    expect(actionsOf(permissions)).toEqual(READ_ACTIONS);
+    expect(actionsOf(permissions)).toEqual(PUBLIC_ROLE_ACTIONS);
   });
 
-  it('AC-001 removes the users-permissions defaults and any other public permission', async () => {
+  it('AC-001 AC-066 removes the users-permissions defaults and any other public permission, plan writes included', async () => {
     const permissions: Permission[] = [
       ...PLUGIN_DEFAULTS,
       'api::country.country.find',
       'api::country.country.create',
+      'api::plan.plan.create',
+      'api::plan.plan.update',
+      'api::plan.plan.delete',
     ].map((action, index) => ({ id: index + 1, action, role: 2 }));
     permissions.push({ id: 99, action: 'plugin::users-permissions.user.me', role: 1 });
 
     await restrictPublicRole(fakeStrapi(permissions));
 
-    expect(actionsOf(permissions)).toEqual(READ_ACTIONS);
+    expect(actionsOf(permissions)).toEqual(PUBLIC_ROLE_ACTIONS);
     expect(actionsOf(permissions, 1)).toEqual(['plugin::users-permissions.user.me']);
   });
 
-  it('AC-001 is idempotent when the bootstrap runs again', async () => {
+  it('AC-001 AC-066 is idempotent when the bootstrap runs again', async () => {
     const permissions: Permission[] = [];
     const strapi = fakeStrapi(permissions);
 

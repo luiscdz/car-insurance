@@ -1,0 +1,11 @@
+{
+  "actor": "roclec-implementer",
+  "component": "app",
+  "entity": "CHG-002",
+  "id": "4ecb49f0510e2dabd59c5ee2099595e0a0c9cfb43b3db99c46f1e08e39a68ce5",
+  "kind": "change-start",
+  "model_schema": 2,
+  "previous": null,
+  "proposal_digest": "3347fc8a824dd931d7db10694df0cc0296b913ec4e44e51fa40f681287dd9222",
+  "reason": "Implementation prerequisites satisfied"
+}

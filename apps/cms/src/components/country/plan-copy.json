@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_country_plan_copies",
+  "info": {
+    "displayName": "Plan copy",
+    "description": "Texts of the plan list step: choice action, chosen mark, recommended badge, price labels, headings and messages."
+  },
+  "options": {},
+  "attributes": {
+    "chooseLabel": { "type": "string", "required": true },
+    "chosenLabel": { "type": "string", "required": true },
+    "recommendedLabel": { "type": "string", "required": true },
+    "basePriceLabel": { "type": "string", "required": true },
+    "finalPriceLabel": { "type": "string", "required": true },
+    "quotingLabel": { "type": "string", "required": true },
+    "coveragesHeading": { "type": "string", "required": true },
+    "benefitsHeading": { "type": "string", "required": true },
+    "noPlansMessage": { "type": "text", "required": true },
+    "choosePlanMessage": { "type": "string", "required": true },
+    "priceErrorMessage": { "type": "string", "required": true },
+    "retryLabel": { "type": "string", "required": true }
+  }
+}

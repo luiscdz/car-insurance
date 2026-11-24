@@ -1,7 +1,9 @@
 import {
   countryDetailSchema,
   type FormFieldContent,
+  type Plan,
   themeSchema,
+  wizardContentSchema,
   type WizardStep,
   wizardStepsSchema,
 } from '@car-insurance/shared';
@@ -14,6 +16,38 @@ function parse(seed: CountrySeed) {
     theme: themeSchema.parse(seed.country.theme),
     steps: wizardStepsSchema.parse(seed.steps),
   };
+}
+
+/** The seeded country validated as the wizard validates it, with fictitious document ids. */
+function content(seed: CountrySeed) {
+  return wizardContentSchema.parse({
+    country: seed.country,
+    steps: seed.steps,
+    plans: seed.plans.map((plan, index) => ({ ...plan, documentId: `seed-${index}` })),
+  });
+}
+
+function summary(plan: Plan) {
+  return [plan.order, plan.name, plan.basePrice, plan.currency, plan.recommended];
+}
+
+function expectPlanContent(plans: readonly Plan[]): void {
+  for (const plan of plans) {
+    expect(plan.description.trim()).not.toBe('');
+    expect(plan.coverages.length).toBeGreaterThanOrEqual(2);
+    expect(plan.coverages.some((coverage) => coverage.highlight !== null)).toBe(true);
+  }
+  expect(plans.map((plan) => plan.benefits.length)).toEqual([0, 1, 2]);
+}
+
+function markedFields(steps: WizardStep[]): Record<string, [string, string]> {
+  return Object.fromEntries(
+    steps.flatMap((step) =>
+      step.fields
+        .filter((field) => field.pricingInput !== null)
+        .map((field) => [field.pricingInput, [step.slug, field.label]]),
+    ),
+  );
 }
 
 function formFields(steps: WizardStep[], slug: string): FormFieldContent[] {
@@ -135,5 +169,56 @@ describe('seed content', () => {
     for (const seed of SEED_COUNTRIES) {
       expect(parse(seed).theme).toEqual({ primaryColor: '#2D6DF6', accentColor: '#00AEC7' });
     }
+  });
+
+  it('AC-064 seeds the published, active plans of Colombia in COP, in order, with their content', () => {
+    const { plans } = content(COLOMBIA);
+
+    expect(plans.map(summary)).toEqual([
+      [1, 'Plan Básico', 1200000, 'COP', false],
+      [2, 'Plan Clásico', 1850000, 'COP', true],
+      [3, 'Plan Global', 2600000, 'COP', false],
+    ]);
+    expectPlanContent(plans);
+  });
+
+  it('AC-065 seeds the published, active plans of Chile in CLP, in order, with their content', () => {
+    const { plans } = content(CHILE);
+
+    expect(plans.map(summary)).toEqual([
+      [1, 'Plan Esencial', 350000, 'CLP', false],
+      [2, 'Plan Full', 520000, 'CLP', true],
+      [3, 'Plan Premium', 690000, 'CLP', false],
+    ]);
+    expectPlanContent(plans);
+  });
+
+  it('AC-064 AC-065 seeds the plan list copy of both countries in Spanish', () => {
+    const colombia = content(COLOMBIA).country.planCopy;
+    const chile = content(CHILE).country.planCopy;
+
+    expect(colombia).toMatchObject({
+      chooseLabel: 'Elegir este plan',
+      chosenLabel: 'Plan elegido',
+      recommendedLabel: 'Recomendado',
+      basePriceLabel: 'Precio base anual',
+      finalPriceLabel: 'Tu precio anual',
+    });
+    expect(chile.noPlansMessage).not.toBe(colombia.noPlansMessage);
+    expect(Object.values(chile).every((text) => text.trim() !== '')).toBe(true);
+  });
+
+  it('AC-064 marks the birth date and the vehicle year of the Colombian form step for pricing', () => {
+    expect(markedFields(content(COLOMBIA).steps)).toEqual({
+      birthDate: ['tus-datos-y-tu-vehiculo', 'Fecha de nacimiento'],
+      vehicleYear: ['tus-datos-y-tu-vehiculo', 'Año del vehículo'],
+    });
+  });
+
+  it('AC-065 marks the birth date in "Tus datos" and the vehicle year in "Tu vehículo" for pricing', () => {
+    expect(markedFields(content(CHILE).steps)).toEqual({
+      birthDate: ['tus-datos', 'Fecha de nacimiento'],
+      vehicleYear: ['tu-vehiculo', 'Año del vehículo'],
+    });
   });
 });

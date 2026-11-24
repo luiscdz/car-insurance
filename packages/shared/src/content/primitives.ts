@@ -9,6 +9,9 @@ export const optionalTextSchema = z.string().nullish();
 /** Position of an entry among its siblings, as configured in Strapi. */
 export const orderSchema = z.number().int();
 
+/** ISO 4217 currency code of a country, for example `COP` or `CLP`. */
+export const currencyCodeSchema = z.string().regex(/^[A-Z]{3}$/);
+
 /** Creation timestamp Strapi adds to every entry; used to break ties between equal orders. */
 export const createdAtSchema = z.string().optional();
 

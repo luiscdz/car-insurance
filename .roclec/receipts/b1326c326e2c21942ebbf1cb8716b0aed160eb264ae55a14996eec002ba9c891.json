@@ -1,0 +1,11 @@
+{
+  "kind": "evidence-record",
+  "model_schema": 2,
+  "operation_id": "b1326c326e2c21942ebbf1cb8716b0aed160eb264ae55a14996eec002ba9c891",
+  "payload": {
+    "id": "EVD-01M85SMX0VBB5DME96EQ7B3NYD"
+  },
+  "writes": {
+    ".roclec/evidence/EVD-01M85SMX0VBB5DME96EQ7B3NYD.json": "286ab2111b274b9ac6814c330ca4a5a92143489689e74d09bd625efb2512c839"
+  }
+}

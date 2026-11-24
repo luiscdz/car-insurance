@@ -1,6 +1,6 @@
 import { expect, test } from './fixtures.js';
-import type { Page } from '@playwright/test';
 import { boundaries } from './support/dates.js';
+import { expectNoHorizontalOverflow, expectTargetsOfAtLeast24px } from './support/layout.js';
 import {
   activateContinue,
   fillChilePersonal,
@@ -9,27 +9,6 @@ import {
   SEEDED_COPY,
   SEEDED_STEPS,
 } from './support/wizard.js';
-
-async function expectNoHorizontalOverflow(page: Page): Promise<void> {
-  const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-  );
-  expect(overflow).toBeLessThanOrEqual(0);
-}
-
-async function expectTargetsOfAtLeast24px(page: Page): Promise<void> {
-  const small = await page.evaluate(() =>
-    [...document.querySelectorAll<HTMLElement>('a, button, input, select')]
-      .filter((element) => element.offsetParent !== null)
-      .map((element) => ({
-        element: element.outerHTML.slice(0, 80),
-        box: element.getBoundingClientRect(),
-      }))
-      .filter(({ box }) => box.width < 24 || box.height < 24)
-      .map(({ element }) => element),
-  );
-  expect(small).toEqual([]);
-}
 
 /** The form steps of each country: Colombia has one, Chile two. */
 const FORM_STEPS = {

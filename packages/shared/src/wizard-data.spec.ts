@@ -13,6 +13,27 @@ describe('wizard data schema', () => {
     expect(wizardDataSchema.parse(data)).toEqual(data);
   });
 
+  it('AC-048 AC-053 accepts a chosen plan with or without its final price', () => {
+    const chosen = { steps: {}, plan: { id: 'co-clasico', finalPrice: null } };
+    const priced = { steps: {}, plan: { id: 'co-clasico', finalPrice: 2312500 } };
+
+    expect(wizardDataSchema.parse(chosen)).toEqual(chosen);
+    expect(wizardDataSchema.parse(priced)).toEqual(priced);
+  });
+
+  it('AC-053 data stored before plans existed is still valid', () => {
+    expect(wizardDataSchema.parse({ steps: {} })).toEqual({ steps: {} });
+  });
+
+  it.each([
+    { id: '', finalPrice: null },
+    { id: 'x', finalPrice: 0 },
+    { id: 'x', finalPrice: 10.5 },
+    { id: 'x' },
+  ])('AC-053 rejects a malformed stored plan %j', (plan) => {
+    expect(wizardDataSchema.safeParse({ steps: {}, plan }).success).toBe(false);
+  });
+
   it.each([null, { steps: [] }, { steps: { a: { values: { x: 1 }, complete: true } } }, 'texto'])(
     'AC-025 rejects malformed stored data %j',
     (raw) => {
