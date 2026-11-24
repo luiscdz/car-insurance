@@ -1,0 +1,158 @@
+{
+  "acceptance_ids": [
+    "AC-067",
+    "AC-068",
+    "AC-069",
+    "AC-070",
+    "AC-071",
+    "AC-072",
+    "AC-073",
+    "AC-074",
+    "AC-075",
+    "AC-076",
+    "AC-077",
+    "AC-078",
+    "AC-079",
+    "AC-080",
+    "AC-081",
+    "AC-082",
+    "AC-083",
+    "AC-084",
+    "AC-085",
+    "AC-086",
+    "AC-087",
+    "AC-088",
+    "AC-089",
+    "AC-090",
+    "AC-094",
+    "AC-095",
+    "AC-096",
+    "AC-097"
+  ],
+  "actor": "roclec-reviewer subagent (Claude Opus 5.5)",
+  "candidate_digest": "57dfbe63871455d50953782ed1e97d06c53d2d7954d7975a1122ff2cb721575b",
+  "change_id": "CHG-003",
+  "checks": [
+    "Confirmed RUN-01M85ZCQJTPW5EMYTYTTSFBP70: change CHG-003, component app, head 3d964a0, base eb09a1f, not dirty, proposal_digest 7accb35a... (approval current), inputs_digest 57dfbe63.... All 260 candidate input files match the working tree byte for byte (HEAD 313e647 differs from 3d964a0 only in .roclec run records). Producer context is the implementer subagent; this review's context differs",
+    "Recomputed the SHA-256 of the 16 log files under .roclec/runtime/logs/RUN-01M85ZCQJTPW5EMYTYTTSFBP70; all match the manifest. All 8 checks passed with return code 0: format, lint, shared-unit, web-unit (36 files, 319 tests, 98.55 % lines), cms-unit (84 tests, type check clean), web-build, cms-build, e2e (docker compose down -v, up --build, 271 Playwright tests passed, no failures, retries or flaky tests)",
+    "Re-ran the unit suites myself on the candidate inputs: packages/shared (100 % lines), apps/web (319 passed, 98.55 % lines) and apps/cms (84 passed). Did not re-run e2e or docker compose",
+    "Read the full diff 39aa291..3d964a0 (99 files): shared schemas (summaryCopySchema, FIELD_KINDS and the text-only rule, termsSchema of exactly one entry, the exactly-one identityDocumentNumber refinement, strict paymentRequestSchema, quote number pattern, optional storedConfirmation), Strapi (terms collection with Country relation and draft and publish, summary-copy component, FormField.kind enum, POST /api/quote/pay with shared findOfferedPlan, pure quoteNumber with injected clock and crypto.randomInt, public role, seed), web (content reader fourth request filtered by country, StrapiPayment, mask and date utilities, wizard-data and store confirmation rules, shell processing guard and heading override, Summary, SummarySection, TermsDialog, ConfirmationPanel) and e2e",
+    "Judged per AC that the mapped tests exercise behavior, not only titles: e.g. AC-069 unit checks the masked DD and absence of the full value from document.body.innerHTML, e2e checks page.content(); AC-078 unit and e2e double click/Enter with a held answer count exactly one request and assert locked links lose href; AC-079 e2e parses the payment body keys, checks URLs, address and console for every entered value on summary and confirmation; AC-080 unit and public-access e2e cover approved, other-country and malformed; AC-081 covers rejected, HTTP error, network abort and invalid answer; AC-084 unit covers UTC just before and after midnight; AC-085/AC-086 cover every keep and discard path in wizard-data and the store; AC-096 e2e exercises the native beforeunload with stay and leave and the app dialog with stay and leave for both countries, unit covers the late answer after destroy and the answer while a dialog is open",
+    "Applied ADR-001 compliance verification: no added app code names a country code, locale, field or step (grep over added non-test lines found none); every new content request filters by country (terms request with filters[country][code][$eq]); steps still come from Strapi; seed covers Colombia (one form step) and Chile (two form steps); tests exercise both countries",
+    "Applied the country-content skill Verification (sha256 6076186f..., approved, no drift): fits ADR-001; terms schema.json committed with manyToOne Country and draftAndPublish; generated types regenerated and conformance tests tie terms, summary copy and the kind enum to the Zod schemas; public role adds only find/findOne on api::terms.term plus api::quote.quote.pay in the bootstrap; seed has both countries with different step configurations and kind only on numero-documento and rut; requests filter by country code; tests cover both countries and cite AC IDs. No violation found",
+    "Checked principles: P1 no country branches; P3 summary copy, terms and kind validated with the content and shown as AC-016/AC-017 states; P4 no token, payment and terms requests carry no authorization header (unit and e2e); P5 fictitious terms text, endpoint stateless, writes nothing and calls no logger (unit with spy logger); P6 headings, dt/dd pairs, edit names including the section title, aria-disabled/aria-busy, live regions, axe clean in every listed state for both countries",
+    "Checked the profile mapping in .roclec/project.toml against plan.md (owner answer Q2): only acceptance_ids changed, AC-066 removed, no command changed; no AC-066 remains in app or test sources",
+    "Judged the implementer-reported deviations: see F-3 to F-6",
+    "Confirmed CHG-003 has no open findings in scope from earlier reviews (inspect findings is empty), so no resolutions are due"
+  ],
+  "component": "app",
+  "context": "claude-code:session-09861b42-41c1-46b0-bb41-09d2a2bbc32b/roclec-reviewer (separate subagent context window that did not take part in implementing CHG-003; it shares the host session id with the coordinator and the implementer subagent, so independence is at subagent-context level only)",
+  "digest": "15bfe7bd86444097280bd30d2e316a960598d185a8ff38a2e3710e0bf883d731",
+  "executed_by_roclec": false,
+  "finding_parents": {},
+  "findings": [
+    {
+      "acceptance_ids": [
+        "AC-083",
+        "AC-096"
+      ],
+      "condition": "A payment is approved while the AC-096 leave dialog is open (the N3 path) and the person then chooses stay",
+      "description": "No code moves focus to the confirmation heading once the dialog closes, and the unit test 'AC-096 an answer while a dialog is open...' only asserts focus stays in a fake dialog; nothing tests the state after stay. Recommendation: when the confirmation is shown while a dialog is open, move focus to STEP_HEADING_ID after that dialog closes (for example wait for the LeaveConfirmation pending promise, or check document.activeElement === body on the next render), and add a unit test for approve-during-dialog then stay",
+      "id": "F-1",
+      "impact": "showConfirmation skips moving focus because a dialog is open; the dialog then restores focus to the pay button, which no longer exists because the confirmation replaced the summary. Focus falls to the document body instead of the confirmation title, so keyboard and screen reader users lose their place (AC-083 focus on the title; AC-034 focus returns after stay)",
+      "location": {
+        "line": 496,
+        "path": "apps/web/src/app/features/wizard/steps/summary/summary.ts"
+      },
+      "severity": "minor"
+    },
+    {
+      "acceptance_ids": [
+        "AC-094",
+        "AC-095"
+      ],
+      "condition": "A person reads the seeded terms of Colombia (line 263) or Chile (line 405)",
+      "description": "Seed content only, no code defect; AC-094/AC-095 are otherwise met (exactly one published entry, at least two paragraphs, different per country, fictitious). Recommendation: reword both sentences, for example 'salvo el país, el plan elegido y las edades usadas para calcular el precio', or drop the claim. The seed runs only on an empty database, so existing stacks need down -v or an edit in Strapi",
+      "id": "F-2",
+      "impact": "The fictitious terms state that no data leaves the browser except the country and the chosen plan, but the price-quote request of CAP-002 (AC-046) also sends the policyholder's age and the vehicle's age derived from entered data. The demo's own privacy statement is inaccurate",
+      "location": {
+        "line": 263,
+        "path": "apps/cms/src/seed/countries.ts"
+      },
+      "severity": "minor"
+    },
+    {
+      "acceptance_ids": [],
+      "condition": "npm run build in apps/web",
+      "description": "Implementer claim checked against earlier Roclec run logs: 747.63 kB in RUN-01M85D08S50EPR14VW56AAY9NN and RUN-01M85E31K8Y0MSRPVH0HA3XZAJ, 753.38 kB in the CHG-002 runs RUN-01M85R6D8S73WE32Z0MQPKQ3E4 and RUN-01M85S3AKRGXXGGE5AQY719TXP. The warning is pre-existing; CHG-003 adds 5.18 kB. Same item as CHG-002 review finding EVD-01M85RS3K5ZFE9HS008V1RV19T#F-2; a FUT candidate, not a blocker",
+      "id": "F-3",
+      "impact": "The initial bundle exceeds the 500 kB warning budget: 758.56 kB raw (163.49 kB transfer). The build still passes",
+      "location": {
+        "line": 40,
+        "path": "apps/web/angular.json"
+      },
+      "severity": "info"
+    },
+    {
+      "acceptance_ids": [
+        "AC-069"
+      ],
+      "condition": "The CHG-001 form-step specs run against the Colombia web fixture",
+      "description": "Accepted deviation. The new exactly-one-kind refinement (AC-069) makes a Colombia fixture without that field invalid content, and the seed already had numero-documento, so the fixture now matches the seed. The CHG-001 tests still assert configured order, focus on the first invalid field and stored values; nothing in CAP-001 behavior changed",
+      "id": "F-4",
+      "impact": "The fixture gains the numero-documento field with kind identityDocumentNumber, so form-step.spec.ts (AC-004, AC-012, AC-019 expectations) now lists four labels and three text inputs",
+      "location": {
+        "line": 194,
+        "path": "apps/web/src/testing/content-fixtures.ts"
+      },
+      "severity": "info"
+    },
+    {
+      "acceptance_ids": [
+        "AC-089",
+        "AC-096"
+      ],
+      "condition": "Any navigation inside a country's wizard",
+      "description": "Accepted as decision D10. canLeave returns true for in-wizard moves unless a payment is processed, so AC-035 and AC-089 hold; shell unit tests show one dialog per navigation and stay/leave semantics, and the e2e AC-096 tests pass for both countries. Note for later step types: any step that reports processing will make every navigation, redirects included, ask",
+      "id": "F-5",
+      "impact": "runGuardsAndResolvers 'always' makes leaveWizardGuard run on every step change and on the shell's own replaceUrl redirects",
+      "location": {
+        "line": 22,
+        "path": "apps/web/src/app/app.routes.ts"
+      },
+      "severity": "info"
+    },
+    {
+      "acceptance_ids": [
+        "AC-077"
+      ],
+      "condition": "Unit coverage of a failure of only the terms request",
+      "description": "Accepted. The terms-only failure is covered where it is decided: strapi-content-reader.spec.ts (the whole read rejects when the terms request fails with an HTTP error or network failure), the existing shell test for a failed read, and content-states.spec.ts e2e for co and cl (terms request aborted, unavailable state, retry loads) plus an HTTP 500 on the summary address. The contrast changes the implementer reported (text-primary-strong on summary and confirmation values) stay within the design tokens, and axe reports no WCAG 2.2 AA violation in every summary state for both countries",
+      "id": "F-6",
+      "impact": "FakeContentReader has a single fail flag and no terms-only failure, so the shell component test of AC-077 covers the invalid terms cases but not a terms-only network failure",
+      "location": {
+        "line": 498,
+        "path": "apps/web/src/testing/content-fixtures.ts"
+      },
+      "severity": "info"
+    }
+  ],
+  "id": "EVD-01M8601XTDJ2HKWVGJEN2410M2",
+  "kind": "independent-review",
+  "limitations": [
+    "Independence is declared, not proven: this reviewer is a subagent sharing host session 09861b42-41c1-46b0-bb41-09d2a2bbc32b with the coordinator and the implementer subagent. Roclec compares only declared contexts. No agent-session EVD was imported (session_evidence is optional for review)",
+    "AC-091 (keyboard-only use), AC-093 (reduced motion) and the manual part of AC-092 (375 and 1280 px), plus CAP-002 AC-061 and AC-063 on the revised base, were not observed. They are left out of acceptance_ids and need the owner's recorded observation before integration. AC-092 automated part (no overflow at 320/375 px, targets >= 24 px, terms scroll with title and close in view) passed in the run",
+    "F-1 is inferred from reading the code and the Spartan restoreFocus behavior; it was not reproduced in a browser",
+    "The e2e suite was not re-run by this reviewer; its result comes from the Roclec-executed run log. No screen reader or real-device testing was done",
+    "The run used Node v26.12.1 while .nvmrc pins 26.13.1",
+    "Whether R1 (angular-developer) and R2 (strapi-docs-mcp) were confirmed before T010/T002 is not evidenced in the repository; the behavior they protect is covered by passing tests",
+    "Roclec checks scope, freshness and declared contexts, not the semantic sufficiency of this review"
+  ],
+  "model_schema": 2,
+  "outcome": "ready",
+  "policy_id": "682534f0fcab334af1341181da525fe37393b6435dae1a27640fe3d6acbcd53d",
+  "resolutions": [],
+  "role": "reviewer",
+  "run_id": "RUN-01M85ZCQJTPW5EMYTYTTSFBP70",
+  "supersedes": []
+}
