@@ -1,5 +1,27 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface CountryPlanCopy extends Struct.ComponentSchema {
+  collectionName: 'components_country_plan_copies';
+  info: {
+    description: 'Texts of the plan list step: choice action, chosen mark, recommended badge, price labels, headings and messages.';
+    displayName: 'Plan copy';
+  };
+  attributes: {
+    basePriceLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    benefitsHeading: Schema.Attribute.String & Schema.Attribute.Required;
+    chooseLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    choosePlanMessage: Schema.Attribute.String & Schema.Attribute.Required;
+    chosenLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    coveragesHeading: Schema.Attribute.String & Schema.Attribute.Required;
+    finalPriceLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    noPlansMessage: Schema.Attribute.Text & Schema.Attribute.Required;
+    priceErrorMessage: Schema.Attribute.String & Schema.Attribute.Required;
+    quotingLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    recommendedLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    retryLabel: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface CountryTheme extends Struct.ComponentSchema {
   collectionName: 'components_country_themes';
   info: {
@@ -92,13 +114,39 @@ export interface FormValidation extends Struct.ComponentSchema {
   };
 }
 
+export interface PlanBenefit extends Struct.ComponentSchema {
+  collectionName: 'components_plan_benefits';
+  info: {
+    description: 'A benefit of a plan.';
+    displayName: 'Benefit';
+  };
+  attributes: {
+    text: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface PlanCoverage extends Struct.ComponentSchema {
+  collectionName: 'components_plan_coverages';
+  info: {
+    description: 'A coverage of a plan; the highlighted value is optional free text, for example a limit.';
+    displayName: 'Coverage';
+  };
+  attributes: {
+    highlight: Schema.Attribute.String;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 declare module '@strapi/strapi' {
   export namespace Public {
     export interface ComponentSchemas {
+      'country.plan-copy': CountryPlanCopy;
       'country.theme': CountryTheme;
       'country.wizard-copy': CountryWizardCopy;
       'form.option': FormOption;
       'form.validation': FormValidation;
+      'plan.benefit': PlanBenefit;
+      'plan.coverage': PlanCoverage;
     }
   }
 }

@@ -1,31 +1,12 @@
-import { DestroyRef, signal } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import type { FieldValue, StoredStep, WizardCopy, WizardStep } from '@car-insurance/shared';
+import type { WizardStep } from '@car-insurance/shared';
 import { fireEvent, render, screen } from '@testing-library/angular';
 import { chileContent, colombiaContent, TODAY } from '../../../../../testing/content-fixtures';
+import { FakeStepContext } from '../../../../../testing/fake-step-context';
 import { CLOCK } from '../../../../core/clock';
 import { FALLBACK_COPY } from '../../../../core/content/fallback-copy';
-import { STEP_CONTEXT, type StepContext } from '../../shell/step-context';
+import { STEP_CONTEXT } from '../../shell/step-context';
 import { FormStep } from './form-step';
-
-class FakeStepContext implements StepContext {
-  readonly copy = signal<WizardCopy>(colombiaContent().country.copy);
-  readonly previousStepLink = signal<readonly string[] | null>(null);
-  readonly stored: Record<string, StoredStep> = {};
-  readonly confirmed: { slug: string; values: Readonly<Record<string, FieldValue>> }[] = [];
-  unconfirmed: (() => boolean) | null = null;
-
-  storedStep(slug: string): StoredStep | undefined {
-    return this.stored[slug];
-  }
-  confirm(slug: string, values: Readonly<Record<string, FieldValue>>): void {
-    this.confirmed.push({ slug, values });
-  }
-  trackUnconfirmed(check: () => boolean, destroyRef: DestroyRef): void {
-    this.unconfirmed = check;
-    destroyRef.onDestroy(() => (this.unconfirmed = null));
-  }
-}
 
 async function setup(step: WizardStep, context = new FakeStepContext()) {
   const result = await render(FormStep, {

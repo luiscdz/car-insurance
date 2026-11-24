@@ -1,4 +1,11 @@
-import type { FieldValue, FormFieldContent, WizardData, WizardStep } from '@car-insurance/shared';
+import type {
+  FieldValue,
+  FormFieldContent,
+  StoredPlan,
+  WizardContent,
+  WizardData,
+  WizardStep,
+} from '@car-insurance/shared';
 import { isFieldValueValid } from '../../shared/utils/field-validation/validate-field';
 
 /** Wizard data with no stored step. */
@@ -36,34 +43,73 @@ export function areStepValuesValid(
   );
 }
 
+/** Whether two sets of stored values hold the same fields with the same values. */
+export function sameValues(a: Values, b: Values): boolean {
+  const keys = Object.keys(a);
+  return keys.length === Object.keys(b).length && keys.every((key) => a[key] === b[key]);
+}
+
+/** Data with a plan, or without any when `plan` is undefined. */
+function withPlan(data: WizardData, plan: StoredPlan | undefined): WizardData {
+  return plan === undefined ? { steps: data.steps } : { steps: data.steps, plan };
+}
+
+/** Data whose chosen plan is `id`, with no final price yet (AC-048). */
+export function withChosenPlan(data: WizardData, id: string): WizardData {
+  return withPlan(data, { id, finalPrice: null });
+}
+
+/** Data with the final price of the chosen plan, when `id` is still the chosen plan (AC-049). */
+export function withFinalPrice(data: WizardData, id: string, finalPrice: number): WizardData {
+  return data.plan?.id === id ? withPlan(data, { id, finalPrice }) : data;
+}
+
+/** Data that keeps the chosen plan but no longer its final price (AC-054). */
+export function withoutFinalPrice(data: WizardData): WizardData {
+  return data.plan ? withPlan(data, { id: data.plan.id, finalPrice: null }) : data;
+}
+
 /**
  * Reconciles stored data with the current configuration (AC-025): values of fields and steps that
  * are no longer published are discarded, and a step stays complete only while its stored values
- * still satisfy the current configuration.
+ * still satisfy the current configuration. A chosen plan is kept only while it is still offered
+ * (AC-055), and its final price only while the form values it was obtained with are unchanged.
  */
-export function reconcile(
-  stored: WizardData,
-  steps: readonly WizardStep[],
-  today: Date,
-): WizardData {
-  const reconciled: WizardData = { steps: {} };
-  for (const step of steps) {
+export function reconcile(stored: WizardData, content: WizardContent, today: Date): WizardData {
+  const steps: WizardData['steps'] = {};
+  let valuesChanged = false;
+  for (const step of content.steps) {
     const storedStep = stored.steps[step.slug];
     if (step.type !== 'form' || storedStep === undefined) {
       continue;
     }
     const values = currentValues(step.fields, storedStep.values);
-    reconciled.steps[step.slug] = {
+    valuesChanged ||= !sameValues(values, storedStep.values);
+    steps[step.slug] = {
       values,
       complete: storedStep.complete && areStepValuesValid(step.fields, values, today),
     };
   }
-  return reconciled;
+  valuesChanged ||= Object.keys(stored.steps).some((slug) => steps[slug] === undefined);
+  const offered = content.plans.some((plan) => plan.documentId === stored.plan?.id);
+  const reconciled = withPlan({ steps }, offered ? stored.plan : undefined);
+  return valuesChanged ? withoutFinalPrice(reconciled) : reconciled;
 }
 
-/** A form step is complete once confirmed with valid data; other step types never are here. */
+/**
+ * Whether a step is complete: a form step once confirmed with valid data (AC-019); the plan step
+ * while a plan is chosen and its final price for the current data is stored (AC-056). The summary
+ * step is never complete here.
+ */
 export function isStepComplete(data: WizardData, step: WizardStep): boolean {
-  return step.type === 'form' && data.steps[step.slug]?.complete === true;
+  switch (step.type) {
+    case 'form':
+      return data.steps[step.slug]?.complete === true;
+    case 'plans':
+      return data.plan !== undefined && data.plan.finalPrice !== null;
+    default:
+      return false;
+  }
 }
 
 /** Index of the first step that is not complete (AC-024). */

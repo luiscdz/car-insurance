@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { nonBlankTextSchema } from './primitives.js';
+import { currencyCodeSchema, nonBlankTextSchema } from './primitives.js';
 
 /** Country code used as the first route segment (ADR-001): two lower-case letters. */
 export const countryCodeSchema = z.string().regex(/^[a-z]{2}$/);
@@ -22,6 +22,25 @@ export const wizardCopySchema = z.object({
   leaveMessage: nonBlankTextSchema,
   leaveStayLabel: nonBlankTextSchema,
   leaveConfirmLabel: nonBlankTextSchema,
+});
+
+/**
+ * The plan list copy of a country (AC-040). Every text is required, so missing or blank plan list
+ * copy makes the content invalid (AC-017).
+ */
+export const planCopySchema = z.object({
+  chooseLabel: nonBlankTextSchema,
+  chosenLabel: nonBlankTextSchema,
+  recommendedLabel: nonBlankTextSchema,
+  basePriceLabel: nonBlankTextSchema,
+  finalPriceLabel: nonBlankTextSchema,
+  quotingLabel: nonBlankTextSchema,
+  coveragesHeading: nonBlankTextSchema,
+  benefitsHeading: nonBlankTextSchema,
+  noPlansMessage: nonBlankTextSchema,
+  choosePlanMessage: nonBlankTextSchema,
+  priceErrorMessage: nonBlankTextSchema,
+  retryLabel: nonBlankTextSchema,
 });
 
 const hexColorSchema = z.string().regex(/^#[0-9A-Fa-f]{6}$/);
@@ -51,14 +70,16 @@ function isLocale(value: string): boolean {
 
 /** A country with the data its wizard needs; the theme is kept raw and validated separately. */
 export const countryDetailSchema = countrySummarySchema.extend({
-  currency: z.string().regex(/^[A-Z]{3}$/),
+  currency: currencyCodeSchema,
   formatLocale: z.string().refine(isLocale, 'Unknown locale'),
   copy: wizardCopySchema,
+  planCopy: planCopySchema,
   theme: z.unknown(),
 });
 
 export type CountrySummary = z.output<typeof countrySummarySchema>;
 export type WizardCopy = z.output<typeof wizardCopySchema>;
+export type PlanCopy = z.output<typeof planCopySchema>;
 export type Theme = z.output<typeof themeSchema>;
 export type CountryDetail = z.output<typeof countryDetailSchema>;
 export type CountryDetailInput = z.input<typeof countryDetailSchema>;

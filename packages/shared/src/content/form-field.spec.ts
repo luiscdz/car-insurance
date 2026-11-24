@@ -84,4 +84,34 @@ describe('form field schema', () => {
       }).success,
     ).toBe(true);
   });
+
+  it('AC-044 accepts the birth date mark on a date field and the vehicle year mark on a number field', () => {
+    const birth = formFieldSchema.parse(
+      fieldFixture({ name: 'nacimiento', type: 'date', pricingInput: 'birthDate' }),
+    );
+    const year = formFieldSchema.parse(
+      fieldFixture({ name: 'anio', type: 'number', pricingInput: 'vehicleYear' }),
+    );
+    const unmarked = formFieldSchema.parse(fieldFixture({ name: 'placa', pricingInput: null }));
+
+    expect([birth.pricingInput, year.pricingInput, unmarked.pricingInput]).toEqual([
+      'birthDate',
+      'vehicleYear',
+      null,
+    ]);
+  });
+
+  it.each([
+    ['the birth date mark on a text field', { type: 'text', pricingInput: 'birthDate' }],
+    ['the birth date mark on a number field', { type: 'number', pricingInput: 'birthDate' }],
+    ['the vehicle year mark on a date field', { type: 'date', pricingInput: 'vehicleYear' }],
+    ['the vehicle year mark on a select field', { type: 'select', pricingInput: 'vehicleYear' }],
+    ['an unknown mark', { type: 'number', pricingInput: 'vehicleValue' }],
+  ])('AC-044 AC-017 rejects %s', (_, overrides) => {
+    const candidate = {
+      ...fieldFixture({ name: 'campo', options: [{ value: 'a', label: 'A', order: 1 }] }),
+      ...overrides,
+    };
+    expect(formFieldSchema.safeParse(candidate).success).toBe(false);
+  });
 });

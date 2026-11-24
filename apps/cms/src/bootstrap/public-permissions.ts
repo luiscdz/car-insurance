@@ -8,13 +8,19 @@ export const PUBLIC_READ_CONTENT_TYPES = [
   'api::country.country',
   'api::wizard-step.wizard-step',
   'api::form-field.form-field',
+  'api::plan.plan',
 ] as const;
+
+/** Custom endpoints the browser calls without a token: the price quote (AC-066). */
+export const PUBLIC_ENDPOINT_ACTIONS = ['api::quote.quote.price'] as const;
 
 const READ_ACTIONS = ['find', 'findOne'] as const;
 
-export const PUBLIC_ACTIONS: readonly string[] = PUBLIC_READ_CONTENT_TYPES.flatMap((uid) =>
-  READ_ACTIONS.map((action) => `${uid}.${action}`),
-);
+/** Every action of the public role: the read actions plus the custom endpoints, nothing else. */
+export const PUBLIC_ACTIONS: readonly string[] = [
+  ...PUBLIC_READ_CONTENT_TYPES.flatMap((uid) => READ_ACTIONS.map((action) => `${uid}.${action}`)),
+  ...PUBLIC_ENDPOINT_ACTIONS,
+];
 
 const ROLE_UID = 'plugin::users-permissions.role';
 const PERMISSION_UID = 'plugin::users-permissions.permission';
@@ -25,9 +31,9 @@ interface StoredPermission {
 }
 
 /**
- * Leaves the public role with exactly the read actions of {@link PUBLIC_ACTIONS}: any other
+ * Leaves the public role with exactly the actions of {@link PUBLIC_ACTIONS}: any other
  * permission, including the users-permissions defaults (register, callback, connect, password
- * reset, email confirmation, refresh), is removed, and missing read actions are added. Running it
+ * reset, email confirmation, refresh), is removed, and missing actions are added. Running it
  * again changes nothing (idempotent).
  */
 export async function restrictPublicRole(strapi: Core.Strapi): Promise<void> {

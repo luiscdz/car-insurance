@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { chile, chileSteps, colombia, colombiaSteps, fieldFixture } from '../test-fixtures.js';
+import {
+  chile,
+  chilePlans,
+  chileSteps,
+  colombia,
+  colombiaPlans,
+  colombiaSteps,
+  fieldFixture,
+  planFixture,
+} from '../test-fixtures.js';
 import { compareByOrder, sortByOrder } from './order.js';
 import { wizardContentSchema, wizardStepsSchema } from './wizard-content.js';
 import { wizardStepSchema } from './wizard-step.js';
@@ -12,12 +21,17 @@ describe('wizard content schema', () => {
     expect(steps[0]?.fields.map((field) => field.name)).toEqual([
       'tipo-documento',
       'placa',
+      'fecha-nacimiento',
       'anio',
     ]);
   });
 
   it('AC-004 keeps Chile two form steps in order', () => {
-    const content = wizardContentSchema.parse({ country: chile(), steps: chileSteps() });
+    const content = wizardContentSchema.parse({
+      country: chile(),
+      steps: chileSteps(),
+      plans: chilePlans(),
+    });
 
     expect(content.steps.map((step) => step.slug)).toEqual([
       'tus-datos',
@@ -125,6 +139,96 @@ describe('wizard content schema', () => {
     const country = colombia();
     country.copy = { ...country.copy, progressLabel: '' };
 
-    expect(wizardContentSchema.safeParse({ country, steps: colombiaSteps() }).success).toBe(false);
+    expect(
+      wizardContentSchema.safeParse({ country, steps: colombiaSteps(), plans: colombiaPlans() })
+        .success,
+    ).toBe(false);
+  });
+
+  it('AC-036 AC-041 accepts the content of each country with its plans in configured order', () => {
+    const colombiaContent = wizardContentSchema.parse({
+      country: colombia(),
+      steps: colombiaSteps(),
+      plans: colombiaPlans(),
+    });
+    const chileContent = wizardContentSchema.parse({
+      country: chile(),
+      steps: chileSteps(),
+      plans: chilePlans(),
+    });
+
+    expect(colombiaContent.plans.map((plan) => plan.documentId)).toEqual([
+      'co-basico',
+      'co-clasico',
+      'co-global',
+    ]);
+    expect(chileContent.plans.map((plan) => plan.documentId)).toEqual(['cl-full', 'cl-esencial']);
+  });
+
+  it('AC-058 accepts a country without plans', () => {
+    expect(
+      wizardContentSchema.safeParse({ country: chile(), steps: chileSteps(), plans: [] }).success,
+    ).toBe(true);
+  });
+
+  it('AC-041 AC-017 rejects a plan whose currency differs from the country currency', () => {
+    const plans = [...chilePlans(), planFixture({ documentId: 'otro', currency: 'COP' })];
+
+    expect(
+      wizardContentSchema.safeParse({ country: chile(), steps: chileSteps(), plans }).success,
+    ).toBe(false);
+    expect(
+      wizardContentSchema.safeParse({
+        country: colombia(),
+        steps: colombiaSteps(),
+        plans: chilePlans(),
+      }).success,
+    ).toBe(false);
+  });
+
+  it('AC-041 AC-017 rejects content whose plans are missing or one plan is invalid', () => {
+    const invalid = [...colombiaPlans(), planFixture({ documentId: 'x', basePrice: 0 })];
+
+    expect(
+      wizardContentSchema.safeParse({ country: colombia(), steps: colombiaSteps() }).success,
+    ).toBe(false);
+    expect(
+      wizardContentSchema.safeParse({ country: colombia(), steps: colombiaSteps(), plans: invalid })
+        .success,
+    ).toBe(false);
+  });
+
+  it('AC-044 AC-017 rejects the same pricing mark on two fields of the country', () => {
+    const steps = chileSteps().map((step) =>
+      step.slug === 'tu-vehiculo'
+        ? {
+            ...step,
+            fields: [
+              ...(step.fields ?? []),
+              fieldFixture({
+                name: 'otra-fecha',
+                type: 'date',
+                order: 3,
+                pricingInput: 'birthDate',
+              }),
+            ],
+          }
+        : step,
+    );
+
+    expect(
+      wizardContentSchema.safeParse({ country: chile(), steps, plans: chilePlans() }).success,
+    ).toBe(false);
+  });
+
+  it('AC-044 accepts a country without pricing marks', () => {
+    const steps = chileSteps().map((step) => ({
+      ...step,
+      fields: (step.fields ?? []).map((field) => ({ ...field, pricingInput: null })),
+    }));
+
+    expect(
+      wizardContentSchema.safeParse({ country: chile(), steps, plans: chilePlans() }).success,
+    ).toBe(true);
   });
 });

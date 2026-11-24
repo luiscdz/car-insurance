@@ -1,11 +1,18 @@
 import { DOCUMENT, Injectable, InjectionToken, inject, signal } from '@angular/core';
 import {
   type FieldValue,
+  type WizardContent,
   type WizardData,
   wizardDataSchema,
-  type WizardStep,
 } from '@car-insurance/shared';
-import { EMPTY_WIZARD_DATA, reconcile } from './wizard-data';
+import {
+  EMPTY_WIZARD_DATA,
+  reconcile,
+  sameValues,
+  withChosenPlan,
+  withFinalPrice,
+  withoutFinalPrice,
+} from './wizard-data';
 
 /** The tab's session storage; `null` when the browser does not offer it. */
 export const WIZARD_STORAGE = new InjectionToken<Storage | null>('WIZARD_STORAGE', {
@@ -43,20 +50,52 @@ export class WizardStateStore {
 
   /**
    * Restores a country's data from session storage and reconciles it with the current
-   * configuration (AC-025). Malformed stored data is discarded.
+   * configuration and plans (AC-025, AC-055). Malformed stored data is discarded.
    */
-  load(code: string, steps: readonly WizardStep[], today: Date): WizardData {
-    const data = reconcile(this.read(code), steps, today);
+  load(code: string, content: WizardContent, today: Date): WizardData {
+    const data = reconcile(this.read(code), content, today);
     this.save(code, data);
     return data;
   }
 
-  /** Stores the confirmed values of a step and marks it complete (AC-019). */
+  /**
+   * Stores the confirmed values of a step and marks it complete (AC-019). Values that differ from
+   * the stored ones discard the chosen plan's final price, which was obtained with them (AC-054).
+   */
   confirmStep(code: string, slug: string, values: Readonly<Record<string, FieldValue>>): void {
     const current = this.data(code);
-    this.save(code, {
+    const stored = current.steps[slug]?.values;
+    const confirmed: WizardData = {
+      ...current,
       steps: { ...current.steps, [slug]: { values: { ...values }, complete: true } },
-    });
+    };
+    const unchanged = stored !== undefined && sameValues(stored, values);
+    this.save(code, unchanged ? confirmed : withoutFinalPrice(confirmed));
+  }
+
+  /** Stores the chosen plan at once, without a final price (AC-048); the same plan changes nothing. */
+  choosePlan(code: string, id: string): void {
+    const current = this.data(code);
+    if (current.plan?.id !== id) {
+      this.save(code, withChosenPlan(current, id));
+    }
+  }
+
+  /** Discards the stored final price while a new one is obtained (AC-053, AC-056). */
+  discardFinalPrice(code: string): void {
+    const current = this.data(code);
+    if (current.plan?.finalPrice != null) {
+      this.save(code, withoutFinalPrice(current));
+    }
+  }
+
+  /** Stores the final price of a plan only while it is still the chosen one (AC-049, AC-050). */
+  storeFinalPrice(code: string, id: string, finalPrice: number): void {
+    const current = this.data(code);
+    const priced = withFinalPrice(current, id, finalPrice);
+    if (priced !== current) {
+      this.save(code, priced);
+    }
   }
 
   private read(code: string): WizardData {

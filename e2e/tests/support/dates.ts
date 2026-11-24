@@ -36,3 +36,15 @@ export async function boundaries(page: Page): Promise<Boundaries> {
     };
   });
 }
+
+/** A birth date whose age on the browser's date is exactly `age`: 1 January of Y − age. */
+export async function birthDateForAge(page: Page, age: number): Promise<string> {
+  const year = await page.evaluate(() => new Date().getFullYear());
+  return `${year - age}-01-01`;
+}
+
+/** The model year of a vehicle that is `age` years old on the browser's date: Y − age. */
+export async function vehicleYearForAge(page: Page, age: number): Promise<string> {
+  const year = await page.evaluate(() => new Date().getFullYear());
+  return String(year - age);
+}

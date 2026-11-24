@@ -1,7 +1,16 @@
-// Seed content for Colombia and Chile (AC-031, AC-032). Only fictitious example values (P5).
+// Seed content for Colombia and Chile (AC-031, AC-032, AC-064, AC-065). Only fictitious example
+// values (P5): plans, prices, coverages and benefits are invented for the simulation.
 // Both countries share the SURA theme today (docs/design.md); no logo is seeded, so the text
 // placeholder is shown until the business team uploads the official one.
-import type { CountryDetailInput, FormFieldInput, WizardStepInput } from '@car-insurance/shared';
+import type {
+  CountryDetailInput,
+  FormFieldInput,
+  PlanInput,
+  WizardStepInput,
+} from '@car-insurance/shared';
+
+/** A seeded plan; Strapi assigns its document id and creation time. */
+export type PlanSeed = Omit<PlanInput, 'documentId' | 'createdAt'>;
 
 /** The data of one seeded country, in the shape the content API returns it. */
 export interface CountrySeed {
@@ -11,6 +20,8 @@ export interface CountrySeed {
   readonly steps: readonly (Omit<WizardStepInput, 'fields'> & {
     readonly fields?: readonly FormFieldInput[];
   })[];
+  /** Published, active plans of the country, in creation order. */
+  readonly plans: readonly PlanSeed[];
 }
 
 const SURA_THEME = { primaryColor: '#2D6DF6', accentColor: '#00AEC7' };
@@ -24,6 +35,7 @@ const birthDate = (order: number): FormFieldInput => ({
   errorMessage: 'Ingresa una fecha válida. Debes tener 18 años o más.',
   order,
   validation: { minAge: 18 },
+  pricingInput: 'birthDate',
 });
 
 const vehicleYear = (order: number): FormFieldInput => ({
@@ -36,6 +48,7 @@ const vehicleYear = (order: number): FormFieldInput => ({
   errorMessage: 'Ingresa un año válido: el vehículo puede tener hasta 20 años de antigüedad.',
   order,
   validation: { integer: true, yearsBefore: 20, yearsAfter: 1 },
+  pricingInput: 'vehicleYear',
 });
 
 const make = (order: number, helpText: string, labels: readonly string[]): FormFieldInput => ({
@@ -59,6 +72,27 @@ const planSteps = (firstOrder: number): CountrySeed['steps'] => [
   { slug: 'resumen-y-pago', title: 'Resumen y pago', type: 'summary', order: firstOrder + 1 },
 ];
 
+/** Plan list copy both countries share; each country adds the texts that differ. */
+const PLAN_COPY = {
+  chooseLabel: 'Elegir este plan',
+  chosenLabel: 'Plan elegido',
+  recommendedLabel: 'Recomendado',
+  basePriceLabel: 'Precio base anual',
+  finalPriceLabel: 'Tu precio anual',
+  quotingLabel: 'Calculando tu precio…',
+  coveragesHeading: 'Coberturas',
+  benefitsHeading: 'Beneficios',
+  retryLabel: 'Reintentar',
+};
+
+const plan = (currency: string, seed: Omit<PlanSeed, 'currency'>): PlanSeed => ({
+  currency,
+  ...seed,
+});
+
+const colombianPlan = (seed: Omit<PlanSeed, 'currency'>) => plan('COP', seed);
+const chileanPlan = (seed: Omit<PlanSeed, 'currency'>) => plan('CLP', seed);
+
 export const COLOMBIA: CountrySeed = {
   country: {
     code: 'co',
@@ -74,6 +108,12 @@ export const COLOMBIA: CountrySeed = {
       leaveMessage: 'Perderás los datos que escribiste en este paso y aún no confirmaste.',
       leaveStayLabel: 'Seguir en el formulario',
       leaveConfirmLabel: 'Salir',
+    },
+    planCopy: {
+      ...PLAN_COPY,
+      noPlansMessage: 'Por ahora no tenemos planes disponibles para cotizar. Inténtalo más tarde.',
+      choosePlanMessage: 'Elige un plan para continuar.',
+      priceErrorMessage: 'No pudimos calcular tu precio.',
     },
   },
   steps: [
@@ -131,6 +171,52 @@ export const COLOMBIA: CountrySeed = {
     },
     ...planSteps(2),
   ],
+  plans: [
+    colombianPlan({
+      name: 'Plan Básico',
+      description: 'Lo esencial para circular tranquilo y cumplir con terceros.',
+      basePrice: 1200000,
+      order: 1,
+      recommended: false,
+      coverages: [
+        { name: 'Responsabilidad civil extracontractual', highlight: 'Hasta $ 1.000 millones' },
+        { name: 'Asistencia en carretera', highlight: 'Grúa hasta 50 km' },
+        { name: 'Asistencia jurídica' },
+      ],
+      benefits: [],
+    }),
+    colombianPlan({
+      name: 'Plan Clásico',
+      description: 'Protección completa para tu carro en el día a día.',
+      basePrice: 1850000,
+      order: 2,
+      recommended: true,
+      coverages: [
+        { name: 'Responsabilidad civil extracontractual', highlight: 'Hasta $ 2.000 millones' },
+        { name: 'Pérdida total por daños o hurto', highlight: '100 % del valor comercial' },
+        { name: 'Pérdida parcial por daños', highlight: 'Deducible de $ 1.000.000' },
+        { name: 'Asistencia en carretera', highlight: 'Grúa hasta 150 km' },
+      ],
+      benefits: [{ text: 'Vehículo de reemplazo por 10 días' }],
+    }),
+    colombianPlan({
+      name: 'Plan Global',
+      description: 'La cobertura más amplia, sin deducible en pérdidas parciales.',
+      basePrice: 2600000,
+      order: 3,
+      recommended: false,
+      coverages: [
+        { name: 'Responsabilidad civil extracontractual', highlight: 'Hasta $ 4.000 millones' },
+        { name: 'Pérdida total por daños o hurto', highlight: '100 % del valor comercial' },
+        { name: 'Pérdida parcial por daños', highlight: 'Sin deducible' },
+        { name: 'Asistencia en carretera', highlight: 'Grúa sin límite de km' },
+      ],
+      benefits: [
+        { text: 'Vehículo de reemplazo por 20 días' },
+        { text: 'Conductor elegido 4 veces al año' },
+      ],
+    }),
+  ],
 };
 
 export const CHILE: CountrySeed = {
@@ -148,6 +234,13 @@ export const CHILE: CountrySeed = {
       leaveMessage: 'Se perderán los datos que ingresaste en este paso y que aún no confirmaste.',
       leaveStayLabel: 'Seguir cotizando',
       leaveConfirmLabel: 'Salir',
+    },
+    planCopy: {
+      ...PLAN_COPY,
+      noPlansMessage:
+        'En este momento no hay planes disponibles para cotizar. Vuelve a intentarlo más tarde.',
+      choosePlanMessage: 'Selecciona un plan para continuar.',
+      priceErrorMessage: 'No pudimos calcular tu precio en este momento.',
     },
   },
   steps: [
@@ -198,6 +291,49 @@ export const CHILE: CountrySeed = {
       ],
     },
     ...planSteps(3),
+  ],
+  plans: [
+    chileanPlan({
+      name: 'Plan Esencial',
+      description: 'Cubre los daños que puedas causar a terceros.',
+      basePrice: 350000,
+      order: 1,
+      recommended: false,
+      coverages: [
+        { name: 'Responsabilidad civil', highlight: 'Hasta UF 500' },
+        { name: 'Asistencia en ruta', highlight: 'Grúa hasta 50 km' },
+      ],
+      benefits: [],
+    }),
+    chileanPlan({
+      name: 'Plan Full',
+      description: 'Protege tu auto y a terceros con un deducible moderado.',
+      basePrice: 520000,
+      order: 2,
+      recommended: true,
+      coverages: [
+        { name: 'Responsabilidad civil', highlight: 'Hasta UF 1.000' },
+        { name: 'Daños propios y robo', highlight: 'Deducible UF 5' },
+        { name: 'Asistencia en ruta', highlight: 'Grúa hasta 200 km' },
+      ],
+      benefits: [{ text: 'Auto de reemplazo por 7 días' }],
+    }),
+    chileanPlan({
+      name: 'Plan Premium',
+      description: 'La protección más completa, con deducible reducido.',
+      basePrice: 690000,
+      order: 3,
+      recommended: false,
+      coverages: [
+        { name: 'Responsabilidad civil', highlight: 'Hasta UF 2.000' },
+        { name: 'Daños propios y robo', highlight: 'Deducible UF 3' },
+        { name: 'Asistencia en ruta', highlight: 'Grúa sin límite de km' },
+      ],
+      benefits: [
+        { text: 'Auto de reemplazo por 15 días' },
+        { text: 'Revisión técnica a domicilio' },
+      ],
+    }),
   ],
 };
 

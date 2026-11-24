@@ -23,6 +23,35 @@ describe('country schemas', () => {
     },
   );
 
+  it.each([
+    'chooseLabel',
+    'chosenLabel',
+    'recommendedLabel',
+    'basePriceLabel',
+    'finalPriceLabel',
+    'quotingLabel',
+    'coveragesHeading',
+    'benefitsHeading',
+    'noPlansMessage',
+    'choosePlanMessage',
+    'priceErrorMessage',
+    'retryLabel',
+  ])('AC-040 AC-017 rejects a country whose plan list copy %s is missing or blank', (key) => {
+    const missing = colombia();
+    missing.planCopy = Object.fromEntries(
+      Object.entries(missing.planCopy).filter(([name]) => name !== key),
+    ) as typeof missing.planCopy;
+    const blank = chile();
+    (blank.planCopy as Record<string, unknown>)[key] = ' ';
+
+    expect(countryDetailSchema.safeParse(missing).success).toBe(false);
+    expect(countryDetailSchema.safeParse(blank).success).toBe(false);
+  });
+
+  it('AC-040 AC-017 rejects a country without plan list copy', () => {
+    expect(countryDetailSchema.safeParse({ ...colombia(), planCopy: null }).success).toBe(false);
+  });
+
   it('AC-017 rejects an unknown currency format, locale or code', () => {
     expect(countryDetailSchema.safeParse({ ...colombia(), currency: 'cop' }).success).toBe(false);
     expect(

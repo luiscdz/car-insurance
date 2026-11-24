@@ -12,6 +12,16 @@ type Fixtures = {
 export const test = base.extend<Fixtures>({
   expectNoAxeViolations: async ({ page }, use) => {
     await use(async () => {
+      // Colors are checked at rest: finite transitions (for example of a button that has just
+      // changed state) finish first; endless ones, like a spinner, are not awaited.
+      await page.evaluate(() =>
+        Promise.all(
+          document
+            .getAnimations()
+            .filter((animation) => animation.effect?.getTiming().iterations !== Infinity)
+            .map((animation) => animation.finished.catch(() => undefined)),
+        ),
+      );
       const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
       expect(results.violations).toEqual([]);
     });

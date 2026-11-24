@@ -7,6 +7,11 @@ import {
   fieldValidationSchema,
   formFieldSchema,
   KEY_PATTERN,
+  planBenefitSchema,
+  planCopySchema,
+  planCoverageSchema,
+  planSchema,
+  PRICING_INPUTS,
   STEP_TYPES,
   themeSchema,
   wizardCopySchema,
@@ -15,11 +20,15 @@ import {
 import { describe, expect, it } from 'vitest';
 import country from './api/country/content-types/country/schema.json';
 import formField from './api/form-field/content-types/form-field/schema.json';
+import plan from './api/plan/content-types/plan/schema.json';
 import wizardStep from './api/wizard-step/content-types/wizard-step/schema.json';
+import planCopy from './components/country/plan-copy.json';
 import theme from './components/country/theme.json';
 import wizardCopy from './components/country/wizard-copy.json';
 import option from './components/form/option.json';
 import validation from './components/form/validation.json';
+import benefit from './components/plan/benefit.json';
+import coverage from './components/plan/coverage.json';
 
 /** Attributes the content API returns, without the relations used only to filter by country. */
 function contentKeys(attributes: Record<string, unknown>, relations: string[] = []): string[] {
@@ -28,18 +37,20 @@ function contentKeys(attributes: Record<string, unknown>, relations: string[] = 
     .sort();
 }
 
+/** Keys of a shared schema, without the identifiers and timestamps Strapi adds to every entry. */
 function schemaKeys(shape: Record<string, unknown>): string[] {
   return Object.keys(shape)
-    .filter((key) => key !== 'createdAt')
+    .filter((key) => key !== 'createdAt' && key !== 'documentId')
     .sort();
 }
 
 describe('content model conformance', () => {
   it('AC-031 AC-032 country attributes match the shared country schema', () => {
-    expect(contentKeys(country.attributes, ['steps'])).toEqual(
+    expect(contentKeys(country.attributes, ['steps', 'plans'])).toEqual(
       schemaKeys(countryDetailSchema.shape),
     );
     expect(contentKeys(wizardCopy.attributes)).toEqual(schemaKeys(wizardCopySchema.shape));
+    expect(contentKeys(planCopy.attributes)).toEqual(schemaKeys(planCopySchema.shape));
     expect(contentKeys(theme.attributes)).toEqual(schemaKeys(themeSchema.shape));
   });
 
@@ -59,10 +70,24 @@ describe('content model conformance', () => {
     expect(formField.attributes.name.regex).toBe(KEY_PATTERN.source);
     expect(contentKeys(option.attributes)).toEqual(schemaKeys(fieldOptionSchema.shape));
     expect(contentKeys(validation.attributes)).toEqual(schemaKeys(fieldValidationSchema.shape));
+    expect(formField.attributes.pricingInput.enum).toEqual([...PRICING_INPUTS]);
   });
 
-  it('AC-007 every content type the wizard reads has draft and publish', () => {
-    for (const schema of [country, wizardStep, formField]) {
+  it('AC-036 AC-041 AC-064 AC-065 plan attributes match the shared plan schema', () => {
+    // `country` and `active` are only used to filter which plans the wizard receives (AC-036).
+    expect(contentKeys(plan.attributes, ['country', 'active'])).toEqual(
+      schemaKeys(planSchema.in.shape),
+    );
+    expect(contentKeys(coverage.attributes)).toEqual(schemaKeys(planCoverageSchema.in.shape));
+    expect(contentKeys(benefit.attributes)).toEqual(schemaKeys(planBenefitSchema.shape));
+    expect(plan.attributes.country.target).toBe('api::country.country');
+    expect(plan.attributes.active.default).toBe(true);
+    expect(plan.attributes.recommended.default).toBe(false);
+    expect(plan.attributes.basePrice.min).toBe(1);
+  });
+
+  it('AC-007 AC-039 every content type the wizard reads has draft and publish', () => {
+    for (const schema of [country, wizardStep, formField, plan]) {
       expect(schema.options.draftAndPublish).toBe(true);
     }
   });

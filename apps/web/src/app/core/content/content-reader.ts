@@ -4,6 +4,8 @@ import { InjectionToken } from '@angular/core';
 export interface RawWizardContent {
   readonly country: unknown;
   readonly steps: unknown;
+  /** The country's published, active plans (AC-036, AC-059). */
+  readonly plans: unknown;
   /** Base address media URLs from Strapi are relative to. */
   readonly mediaBaseUrl: string;
 }

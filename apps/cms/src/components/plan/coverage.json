@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_plan_coverages",
+  "info": {
+    "displayName": "Coverage",
+    "description": "A coverage of a plan; the highlighted value is optional free text, for example a limit."
+  },
+  "options": {},
+  "attributes": {
+    "name": { "type": "string", "required": true },
+    "highlight": { "type": "string" }
+  }
+}

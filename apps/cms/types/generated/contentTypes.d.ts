@@ -434,7 +434,7 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
 export interface ApiCountryCountry extends Struct.CollectionTypeSchema {
   collectionName: 'countries';
   info: {
-    description: 'A country served by the wizard: identity, formatting, theme and wizard copy (ADR-001).';
+    description: 'A country served by the wizard: identity, formatting, theme, wizard copy and plan list copy (ADR-001).';
     displayName: 'Country';
     pluralName: 'countries';
     singularName: 'country';
@@ -453,6 +453,8 @@ export interface ApiCountryCountry extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::country.country'> &
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
+    planCopy: Schema.Attribute.Component<'country.plan-copy', false> & Schema.Attribute.Required;
+    plans: Schema.Attribute.Relation<'oneToMany', 'api::plan.plan'>;
     publishedAt: Schema.Attribute.DateTime;
     steps: Schema.Attribute.Relation<'oneToMany', 'api::wizard-step.wizard-step'>;
     theme: Schema.Attribute.Component<'country.theme', false>;
@@ -464,7 +466,7 @@ export interface ApiCountryCountry extends Struct.CollectionTypeSchema {
 export interface ApiFormFieldFormField extends Struct.CollectionTypeSchema {
   collectionName: 'form_fields';
   info: {
-    description: 'A field of a form step: type, texts, required flag, validations and, for selects, options.';
+    description: 'A field of a form step: type, texts, required flag, validations, for selects, options, and the optional mark of a price rule input.';
     displayName: 'Form field';
     pluralName: 'form-fields';
     singularName: 'form-field';
@@ -485,6 +487,7 @@ export interface ApiFormFieldFormField extends Struct.CollectionTypeSchema {
     options: Schema.Attribute.Component<'form.option', true>;
     order: Schema.Attribute.Integer & Schema.Attribute.Required;
     placeholder: Schema.Attribute.String;
+    pricingInput: Schema.Attribute.Enumeration<['birthDate', 'vehicleYear']>;
     publishedAt: Schema.Attribute.DateTime;
     required: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     step: Schema.Attribute.Relation<'manyToOne', 'api::wizard-step.wizard-step'>;
@@ -493,6 +496,53 @@ export interface ApiFormFieldFormField extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> & Schema.Attribute.Private;
     validation: Schema.Attribute.Component<'form.validation', false>;
+  };
+}
+
+export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
+  collectionName: 'plans';
+  info: {
+    description: 'An insurance plan of a country: shown in the plan list when it is published and active, in configured order.';
+    displayName: 'Plan';
+    pluralName: 'plans';
+    singularName: 'plan';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    active: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    basePrice: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      >;
+    benefits: Schema.Attribute.Component<'plan.benefit', true>;
+    country: Schema.Attribute.Relation<'manyToOne', 'api::country.country'>;
+    coverages: Schema.Attribute.Component<'plan.coverage', true> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> & Schema.Attribute.Private;
+    currency: Schema.Attribute.String & Schema.Attribute.Required;
+    description: Schema.Attribute.Text & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::plan.plan'> &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    order: Schema.Attribute.Integer & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    recommended: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> & Schema.Attribute.Private;
   };
 }
 
@@ -978,6 +1028,7 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::country.country': ApiCountryCountry;
       'api::form-field.form-field': ApiFormFieldFormField;
+      'api::plan.plan': ApiPlanPlan;
       'api::wizard-step.wizard-step': ApiWizardStepWizardStep;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

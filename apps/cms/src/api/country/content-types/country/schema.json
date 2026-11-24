@@ -5,7 +5,7 @@
     "singularName": "country",
     "pluralName": "countries",
     "displayName": "Country",
-    "description": "A country served by the wizard: identity, formatting, theme and wizard copy (ADR-001)."
+    "description": "A country served by the wizard: identity, formatting, theme, wizard copy and plan list copy (ADR-001)."
   },
   "options": {
     "draftAndPublish": true
@@ -42,10 +42,22 @@
       "component": "country.wizard-copy",
       "required": true
     },
+    "planCopy": {
+      "type": "component",
+      "repeatable": false,
+      "component": "country.plan-copy",
+      "required": true
+    },
     "steps": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::wizard-step.wizard-step",
+      "mappedBy": "country"
+    },
+    "plans": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::plan.plan",
       "mappedBy": "country"
     }
   }
