@@ -1,0 +1,11 @@
+{
+  "kind": "run-start",
+  "model_schema": 2,
+  "operation_id": "198456b6b746a25e01ca6c8f81dd24caa84d0cca51e6244c054f3d2091cd1535",
+  "payload": {
+    "id": "RUN-01M86072VGD503MD3V0GAH1YRJ"
+  },
+  "writes": {
+    ".roclec/runs/RUN-01M86072VGD503MD3V0GAH1YRJ/start.json": "71f1998a28b949cf353668e67712a7b161c597b8d968eaf7d83a9df0dd22f320"
+  }
+}
