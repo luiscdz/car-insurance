@@ -260,7 +260,7 @@ export const COLOMBIA: CountrySeed = {
       'El seguro de auto cubre, durante un año contado desde la fecha del pago, los riesgos descritos en el plan elegido, con los valores asegurados y deducibles que el plan indica.',
       'El valor a pagar es el precio anual mostrado en el resumen. Si los datos que ingresaste no son correctos, la aseguradora ficticia podrá ajustar el precio o terminar el contrato.',
       'Puedes retractarte dentro de los cinco días hábiles siguientes al pago, sin costo, escribiendo a la línea de atención ficticia.\nLínea de atención: 601 000 0000\nHorario: lunes a viernes, 8:00 a 18:00',
-      'La aseguradora ficticia trata tus datos solo para gestionar esta cotización. En esta demostración ningún dato sale de tu navegador, salvo el país y el plan elegido.',
+      'La aseguradora ficticia trata tus datos solo para gestionar esta cotización. En esta demostración ningún dato que ingresas sale de tu navegador: solo se envían el país, el plan elegido y, para calcular el precio, tu edad y la antigüedad del vehículo calculadas en tu navegador.',
       'Las exclusiones generales, como conducir sin licencia vigente o bajo los efectos del alcohol, aplican a todos los planes.',
     ].join('\n\n'),
   },
@@ -402,7 +402,7 @@ export const CHILE: CountrySeed = {
       'El seguro automotriz rige por doce meses desde la fecha del pago y cubre los riesgos indicados en el plan contratado, con los montos y deducibles en UF que el plan señala.',
       'La prima es el monto anual informado en el resumen. Declarar información inexacta puede dar lugar al ajuste de la prima o al término anticipado del seguro.',
       'Puedes solicitar el término del seguro en cualquier momento a través del canal de atención ficticio; la devolución de la prima no consumida se calcula por días.\nCanal de atención: 600 000 0000',
-      'Tus datos personales se usan solo para esta cotización y no se envían a ningún servidor en esta demostración, salvo el país y el plan elegido.',
+      'Tus datos personales se usan solo para esta cotización. En esta demostración ningún dato que ingresas sale de tu navegador: solo se envían el país, el plan elegido y, para calcular la prima, tu edad y los años del vehículo calculados en tu navegador.',
     ].join('\n\n'),
   },
 };

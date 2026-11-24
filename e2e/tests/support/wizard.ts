@@ -251,7 +251,7 @@ export const SEEDED_TERMS = {
   cl: {
     first:
       'Las presentes condiciones son ficticias y se usan únicamente para esta demostración. No corresponden a una póliza real.',
-    last: 'Tus datos personales se usan solo para esta cotización y no se envían a ningún servidor en esta demostración, salvo el país y el plan elegido.',
+    last: 'Tus datos personales se usan solo para esta cotización. En esta demostración ningún dato que ingresas sale de tu navegador: solo se envían el país, el plan elegido y, para calcular la prima, tu edad y los años del vehículo calculados en tu navegador.',
     paragraphs: 5,
   },
 } as const;
