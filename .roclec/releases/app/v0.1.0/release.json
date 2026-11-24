@@ -8,6 +8,10 @@
     {
       "change_id": "CHG-002",
       "intent_revision": "3347fc8a824dd931d7db10694df0cc0296b913ec4e44e51fa40f681287dd9222"
+    },
+    {
+      "change_id": "CHG-003",
+      "intent_revision": "7accb35a366cb95f381d78714ee8a0db6096052ee5bd44abeb19c19348b66615"
     }
   ],
   "component": "app",
