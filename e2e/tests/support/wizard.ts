@@ -1,4 +1,4 @@
-import { expect, type Locator, type Page } from '@playwright/test';
+import { expect, type Locator, type Page, type Route } from '@playwright/test';
 import { birthDateForAge, vehicleYearForAge } from './dates.js';
 
 /** Fallback copy of the front end (apps/web core/content/fallback-copy.ts). */
@@ -197,4 +197,190 @@ export const SEEDED_FORMAT = {
 /** A price of a seeded country formatted as the application shows it (AC-042). */
 export async function price(page: Page, code: CountryCode, amount: number): Promise<string> {
   return formatted(page, amount, SEEDED_FORMAT[code].currency, SEEDED_FORMAT[code].locale);
+}
+
+/** Seeded summary copy shown by the tests (AC-073, AC-094, AC-095). */
+const SUMMARY_COPY = {
+  planHeading: 'Tu plan',
+  edit: 'Editar',
+  changePlan: 'Cambiar plan',
+  acceptTerms: 'Acepto los términos y condiciones',
+  viewTerms: 'Ver términos y condiciones',
+  termsClose: 'Cerrar',
+  pay: 'Pagar',
+  processing: 'Procesando tu pago…',
+  processingLeaveTitle: '¿Quieres salir mientras procesamos tu pago?',
+  processingLeaveStay: 'Esperar el pago',
+  processingLeaveConfirm: 'Salir',
+  quoteNumber: 'Número de cotización',
+  plan: 'Plan',
+  newQuote: 'Nueva cotización',
+} as const;
+
+export const SEEDED_SUMMARY_COPY = {
+  co: {
+    ...SUMMARY_COPY,
+    finalPrice: 'Tu precio anual',
+    termsTitle: 'Términos y condiciones',
+    acceptTermsMessage: 'Acepta los términos y condiciones para poder pagar.',
+    paymentError: 'No pudimos procesar tu pago. Tus datos siguen aquí; inténtalo de nuevo.',
+    confirmationTitle: '¡Listo! Recibimos tu pago',
+    confirmationMessage: 'Tu seguro de auto quedó contratado. Guarda tu número de cotización.',
+    amountPaid: 'Valor pagado',
+  },
+  cl: {
+    ...SUMMARY_COPY,
+    finalPrice: 'Tu monto anual',
+    termsTitle: 'Condiciones del seguro',
+    acceptTermsMessage: 'Debes aceptar los términos y condiciones para pagar.',
+    paymentError: 'No fue posible procesar tu pago. Tus datos se mantienen; vuelve a intentarlo.',
+    confirmationTitle: '¡Listo! Tu pago fue aprobado',
+    confirmationMessage: 'Tu seguro automotriz quedó contratado. Guarda tu número de cotización.',
+    amountPaid: 'Monto pagado',
+  },
+} as const;
+
+/** First and last paragraph of each country's seeded terms (AC-094, AC-095). */
+export const SEEDED_TERMS = {
+  co: {
+    first:
+      'Estos términos y condiciones son ficticios y existen solo para esta demostración. No constituyen una oferta real de seguro.',
+    last: 'Las exclusiones generales, como conducir sin licencia vigente o bajo los efectos del alcohol, aplican a todos los planes.',
+    paragraphs: 6,
+  },
+  cl: {
+    first:
+      'Las presentes condiciones son ficticias y se usan únicamente para esta demostración. No corresponden a una póliza real.',
+    last: 'Tus datos personales se usan solo para esta cotización y no se envían a ningún servidor en esta demostración, salvo el país y el plan elegido.',
+    paragraphs: 5,
+  },
+} as const;
+
+/** The recommended seeded plan of each country, which `reachSummary` chooses. */
+export const RECOMMENDED_PLAN = { co: 'Plan Clásico', cl: 'Plan Full' } as const;
+
+export const PAYMENT_REQUESTS = '**/api/quote/pay';
+
+/**
+ * Completes a country's form steps, chooses its recommended plan, waits for its final price and
+ * continues to the summary. Returns the plan name and the final price the plan step showed.
+ */
+export async function reachSummary(
+  page: Page,
+  code: CountryCode,
+  ages: Ages = NEUTRAL_AGES,
+): Promise<{ readonly plan: string; readonly finalPrice: string }> {
+  await reachPlans(page, code, ages);
+  const plan = RECOMMENDED_PLAN[code];
+  await chooseButton(page, plan).click();
+  const status = priceStatus(page, plan);
+  await expect(status).toContainText(SEEDED_PLAN_COPY[code].finalPrice);
+  const text = (await status.textContent()) ?? '';
+  const finalPrice = text.replace(SEEDED_PLAN_COPY[code].finalPrice, '').trim();
+  await continueButton(page).click();
+  await expect(heading(page)).toHaveText(SUMMARY_STEP);
+  return { plan, finalPrice };
+}
+
+/** The pay action; it stays focusable while it looks disabled (AC-076). */
+export function payButton(page: Page, code: CountryCode): Locator {
+  return page.getByRole('button', {
+    name: new RegExp(
+      `^(${SEEDED_SUMMARY_COPY[code].pay}|${SEEDED_SUMMARY_COPY[code].processing})$`,
+    ),
+  });
+}
+
+export function termsCheckbox(page: Page, code: CountryCode): Locator {
+  return page.getByRole('checkbox', { name: SEEDED_SUMMARY_COPY[code].acceptTerms });
+}
+
+export function viewTermsButton(page: Page, code: CountryCode): Locator {
+  return page.getByRole('button', { name: SEEDED_SUMMARY_COPY[code].viewTerms });
+}
+
+/** The edit action of a section, named with the section title (AC-071). */
+export function editLink(page: Page, code: CountryCode, title: string): Locator {
+  return page.getByRole('link', { name: `${SEEDED_SUMMARY_COPY[code].edit} ${title}` });
+}
+
+export function changePlanLink(page: Page, code: CountryCode): Locator {
+  return page.getByRole('link', { name: SEEDED_SUMMARY_COPY[code].changePlan });
+}
+
+/** Activates pay like a person does: it may look disabled, so the click is forced (AC-076). */
+export async function activatePay(page: Page, code: CountryCode): Promise<void> {
+  await payButton(page, code).click({ force: true });
+}
+
+/** Payment requests held by the test until it answers them (AC-078, AC-081, AC-096). */
+export interface HeldPayments {
+  /** Payment requests the browser sent so far. */
+  count(): number;
+  /** Waits until `n` payment requests were sent. */
+  waitFor(n: number): Promise<void>;
+  /** Lets every held request reach the endpoint. */
+  release(): Promise<void>;
+  /** Answers every held request as rejected by the endpoint. */
+  reject(): Promise<void>;
+  /** Fails every held request as a network failure. */
+  abort(): Promise<void>;
+  /** Stops holding: later requests reach the endpoint. */
+  stop(): Promise<void>;
+}
+
+/** Holds the browser's payment requests so the test can observe the processing state. */
+export async function holdPayment(page: Page): Promise<HeldPayments> {
+  const held: Route[] = [];
+  let sent = 0;
+  const cors = {
+    'access-control-allow-origin': '*',
+    'access-control-allow-headers': '*',
+    'access-control-allow-methods': 'POST, OPTIONS',
+  };
+  await page.route(PAYMENT_REQUESTS, async (route) => {
+    if (route.request().method() === 'OPTIONS') {
+      await route.fulfill({ status: 204, headers: cors });
+      return;
+    }
+    sent += 1;
+    held.push(route);
+  });
+  const drain = async (answer: (route: Route) => Promise<void>) => {
+    for (const route of held.splice(0)) {
+      await answer(route);
+    }
+  };
+  return {
+    count: () => sent,
+    waitFor: (n) => expect.poll(() => sent).toBeGreaterThanOrEqual(n),
+    release: () => drain((route) => route.continue()),
+    reject: () =>
+      drain((route) =>
+        route.fulfill({
+          status: 200,
+          headers: cors,
+          contentType: 'application/json',
+          body: JSON.stringify({ data: { status: 'rejected' } }),
+        }),
+      ),
+    abort: () => drain((route) => route.abort('connectionrefused')),
+    stop: () => page.unroute(PAYMENT_REQUESTS),
+  };
+}
+
+/** Formats a stored calendar date as the summary shows it, with the browser's `Intl` (AC-068). */
+export async function calendarDate(page: Page, iso: string, locale: string): Promise<string> {
+  return page.evaluate(
+    ([value, tag]) => {
+      const [year, month, day] = value.split('-').map(Number) as [number, number, number];
+      return new Intl.DateTimeFormat(tag, {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        timeZone: 'UTC',
+      }).format(new Date(Date.UTC(year, month - 1, day)));
+    },
+    [iso, locale] as const,
+  );
 }

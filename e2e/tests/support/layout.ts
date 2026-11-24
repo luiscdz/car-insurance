@@ -22,3 +22,19 @@ export async function expectTargetsOfAtLeast24px(page: Page): Promise<void> {
   );
   expect(small).toEqual([]);
 }
+
+/** Runs `check` at each width with the current page, then restores the viewport (AC-092). */
+export async function atWidths(
+  page: Page,
+  widths: readonly number[],
+  check: (width: number) => Promise<void>,
+): Promise<void> {
+  const original = page.viewportSize();
+  for (const width of widths) {
+    await page.setViewportSize({ width, height: original?.height ?? 800 });
+    await check(width);
+  }
+  if (original) {
+    await page.setViewportSize(original);
+  }
+}

@@ -1,7 +1,8 @@
 import { randomBytes } from 'node:crypto';
 
 /**
- * Test-only Strapi client for the specs that change content (AC-007, AC-036, AC-039, AC-058). It
+ * Test-only Strapi client for the specs that change content (AC-007, AC-036, AC-039, AC-058,
+ * AC-074). It
  * runs in Node only and uses the admin content manager API; nothing reaches the browser, and the
  * web application keeps reading through the public role (P4). Credentials come from the
  * environment; on a fresh stack without them, the global setup registers a fictitious
@@ -14,6 +15,7 @@ const PASSWORD_VARIABLE = 'E2E_STRAPI_ADMIN_PASSWORD';
 
 const FIELD_MODEL = 'api::form-field.form-field';
 const PLAN_MODEL = 'api::plan.plan';
+const TERMS_MODEL = 'api::terms.term';
 
 export interface FieldData {
   readonly name: string;
@@ -56,6 +58,12 @@ export interface PublishedPlan {
   readonly order: number;
   readonly recommended: boolean;
   readonly active: boolean;
+}
+
+/** A published terms entry as the public API returns it. */
+export interface PublishedTerms {
+  readonly documentId: string;
+  readonly text: string;
 }
 
 async function call<T>(path: string, init: RequestInit & { token?: string } = {}): Promise<T> {
@@ -150,6 +158,31 @@ export class StrapiAdmin {
       '&fields[0]=name&fields[1]=basePrice&fields[2]=order&fields[3]=recommended&fields[4]=active';
     const plans = await call<DataResponse<PublishedPlan[]>>(`/api/plans?${query}`);
     return plans.data;
+  }
+
+  /** The published terms entries of a country, read through the public content API. */
+  static async publishedTerms(code: string): Promise<PublishedTerms[]> {
+    const query = `filters[country][code][$eq]=${code}&fields[0]=text`;
+    const terms = await call<DataResponse<PublishedTerms[]>>(`/api/terms?${query}`);
+    return terms.data;
+  }
+
+  /** Creates a terms entry of a country, published or only as a draft; returns its document id. */
+  async createTerms(countryId: string, text: string, publish: boolean): Promise<string> {
+    return this.create(
+      TERMS_MODEL,
+      { text, country: { connect: [{ documentId: countryId }] } },
+      publish,
+    );
+  }
+
+  /** Changes and publishes a terms entry. */
+  async publishTerms(id: string, changes: { readonly text: string }): Promise<void> {
+    await this.publish(TERMS_MODEL, id, changes);
+  }
+
+  async deleteTerms(id: string): Promise<void> {
+    await this.remove(TERMS_MODEL, id);
   }
 
   /** Creates a field in a step, published or only as a draft; returns its document id. */

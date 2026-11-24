@@ -3,6 +3,7 @@ import type { Page } from '@playwright/test';
 import { birthDateForAge, boundaries, vehicleYearForAge } from './support/dates.js';
 import {
   activateContinue,
+  activatePay,
   backLink,
   chooseButton,
   type CountryCode,
@@ -12,8 +13,12 @@ import {
   openWizard,
   priceStatus,
   reachPlans,
+  reachSummary,
   SEEDED_PLAN_COPY,
   SEEDED_PLANS,
+  SEEDED_SUMMARY_COPY,
+  termsCheckbox,
+  viewTermsButton,
 } from './support/wizard.js';
 
 interface Observed {
@@ -111,7 +116,7 @@ function recordRequests(page: Page): SentRequest[] {
 }
 
 for (const code of ['co', 'cl'] as const satisfies readonly CountryCode[]) {
-  test(`AC-046 AC-066 ${code}: the price request carries only the country, the plan and the two ages, without a token`, async ({
+  test(`AC-046 AC-097 ${code}: the price request carries only the country, the plan and the two ages, without a token`, async ({
     page,
   }) => {
     const sent = recordRequests(page);
@@ -148,6 +153,50 @@ for (const code of ['co', 'cl'] as const satisfies readonly CountryCode[]) {
     const planReads = toStrapi.filter((request) => request.url.includes('/api/plans'));
     expect(planReads.length).toBeGreaterThan(0);
     for (const request of [...planReads, ...quotes]) {
+      expect(request.authorization, request.url).toBeUndefined();
+    }
+  });
+}
+
+for (const code of ['co', 'cl'] as const satisfies readonly CountryCode[]) {
+  test(`AC-079 AC-082 ${code}: paying sends only the country and the plan, without a token, and no entered value leaves the browser`, async ({
+    page,
+  }) => {
+    const sent = recordRequests(page);
+    const console: string[] = [];
+    page.on('console', (message) => console.push(message.text()));
+    await reachSummary(page, code, { policyholder: 33, vehicle: 4 });
+    const birthDate = await birthDateForAge(page, 33);
+    const year = await vehicleYearForAge(page, 4);
+    const onSummary = sent.length;
+
+    await viewTermsButton(page, code).click();
+    await page.keyboard.press('Escape');
+    await termsCheckbox(page, code).check();
+    await activatePay(page, code);
+    await expect(heading(page)).toHaveText(SEEDED_SUMMARY_COPY[code].confirmationTitle);
+    await page.reload();
+    await expect(heading(page)).toHaveText(SEEDED_SUMMARY_COPY[code].confirmationTitle);
+
+    const payments = sent.filter((request) => request.url.endsWith('/api/quote/pay'));
+    expect(payments).toHaveLength(1);
+    const body = JSON.parse(payments[0]?.body ?? '{}') as Record<string, unknown>;
+    expect(Object.keys(body).sort()).toEqual(['country', 'plan']);
+    expect(body['country']).toBe(code);
+    expect(new URL(payments[0]?.url ?? '').search).toBe('');
+
+    const toStrapi = sent.slice(onSummary).filter((request) => request.url.includes('/api/'));
+    for (const value of [...ENTERED[code], birthDate, year]) {
+      const leaks = toStrapi.filter(
+        (request) => request.url.includes(value) || request.body.includes(value),
+      );
+      expect(leaks, value).toEqual([]);
+      expect(page.url()).not.toContain(value);
+      expect(console.filter((line) => line.includes(value))).toEqual([]);
+    }
+    const termsReads = sent.filter((request) => request.url.includes('/api/terms'));
+    expect(termsReads.length).toBeGreaterThan(0);
+    for (const request of [...termsReads, ...payments]) {
       expect(request.authorization, request.url).toBeUndefined();
     }
   });
