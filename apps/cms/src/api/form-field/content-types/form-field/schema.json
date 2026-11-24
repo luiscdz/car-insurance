@@ -1,0 +1,64 @@
+{
+  "kind": "collectionType",
+  "collectionName": "form_fields",
+  "info": {
+    "singularName": "form-field",
+    "pluralName": "form-fields",
+    "displayName": "Form field",
+    "description": "A field of a form step: type, texts, required flag, validations and, for selects, options."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "step": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::wizard-step.wizard-step",
+      "inversedBy": "fields"
+    },
+    "name": {
+      "type": "string",
+      "required": true,
+      "regex": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": ["text", "number", "select", "date", "checkbox"],
+      "required": true
+    },
+    "required": {
+      "type": "boolean",
+      "default": false
+    },
+    "placeholder": {
+      "type": "string"
+    },
+    "helpText": {
+      "type": "text"
+    },
+    "errorMessage": {
+      "type": "string",
+      "required": true
+    },
+    "order": {
+      "type": "integer",
+      "required": true
+    },
+    "options": {
+      "type": "component",
+      "repeatable": true,
+      "component": "form.option"
+    },
+    "validation": {
+      "type": "component",
+      "repeatable": false,
+      "component": "form.validation"
+    }
+  }
+}

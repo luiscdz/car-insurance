@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_form_options",
+  "info": {
+    "displayName": "Option",
+    "description": "An option of a select field."
+  },
+  "options": {},
+  "attributes": {
+    "value": { "type": "string", "required": true },
+    "label": { "type": "string", "required": true },
+    "order": { "type": "integer", "required": true }
+  }
+}

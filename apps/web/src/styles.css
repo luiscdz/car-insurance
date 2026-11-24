@@ -56,7 +56,8 @@
   --secondary: var(--sura-surface-info);
   --secondary-foreground: var(--sura-primary-strong);
   --muted: var(--sura-surface-muted);
-  --muted-foreground: var(--sura-muted);
+  /* Secondary text uses the foreground color: muted (#888B8D) is 3.4:1 on white, below AA. */
+  --muted-foreground: var(--sura-foreground);
   --accent: var(--sura-accent);
   --accent-foreground: var(--sura-foreground);
   --destructive: var(--sura-danger);
@@ -91,17 +92,17 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background font-sans text-base text-foreground;
+    @apply bg-surface-muted font-sans text-base leading-normal text-foreground;
   }
 }
 
+/* Reduced motion: no animation or transition is played (AC-030). */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    animation: none !important;
+    transition: none !important;
     scroll-behavior: auto !important;
   }
 }

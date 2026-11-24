@@ -1,0 +1,52 @@
+{
+  "kind": "collectionType",
+  "collectionName": "countries",
+  "info": {
+    "singularName": "country",
+    "pluralName": "countries",
+    "displayName": "Country",
+    "description": "A country served by the wizard: identity, formatting, theme and wizard copy (ADR-001)."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "code": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "regex": "^[a-z]{2}$"
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "currency": {
+      "type": "string",
+      "required": true,
+      "regex": "^[A-Z]{3}$"
+    },
+    "formatLocale": {
+      "type": "string",
+      "required": true
+    },
+    "theme": {
+      "type": "component",
+      "repeatable": false,
+      "component": "country.theme"
+    },
+    "copy": {
+      "type": "component",
+      "repeatable": false,
+      "component": "country.wizard-copy",
+      "required": true
+    },
+    "steps": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::wizard-step.wizard-step",
+      "mappedBy": "country"
+    }
+  }
+}
