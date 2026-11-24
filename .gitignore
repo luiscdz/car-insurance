@@ -28,7 +28,3 @@ e2e/playwright-report/
 e2e/blob-report/
 e2e/playwright/.cache/
 .nx/
-
-# Local-only files: Roclec raw run output and the personal preview launcher
-.roclec/runtime/logs/
-.claude/launch.json
