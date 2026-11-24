@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { chile, colombia } from '../test-fixtures.js';
-import { countryDetailSchema, countrySummarySchema, themeSchema } from './country.js';
+import {
+  countryDetailSchema,
+  countrySummarySchema,
+  summaryCopySchema,
+  themeSchema,
+} from './country.js';
 import { collectionResponseSchema } from './strapi-envelope.js';
 
 describe('country schemas', () => {
@@ -91,5 +96,27 @@ describe('country schemas', () => {
     { primaryColor: '#2D6DF6' },
   ])('AC-003 rejects the missing or malformed theme %j', (theme) => {
     expect(themeSchema.safeParse(theme).success).toBe(false);
+  });
+  it.each(Object.keys(colombia().summaryCopy))(
+    'AC-073 AC-017 rejects a country whose summary copy %s is missing or blank',
+    (key) => {
+      const missing = colombia();
+      missing.summaryCopy = Object.fromEntries(
+        Object.entries(missing.summaryCopy).filter(([name]) => name !== key),
+      ) as typeof missing.summaryCopy;
+      const blank = chile();
+      (blank.summaryCopy as Record<string, unknown>)[key] = '  ';
+
+      expect(countryDetailSchema.safeParse(missing).success).toBe(false);
+      expect(countryDetailSchema.safeParse(blank).success).toBe(false);
+    },
+  );
+
+  it('AC-073 AC-017 rejects a country without summary copy and keeps the 24 summary texts', () => {
+    expect(countryDetailSchema.safeParse({ ...chile(), summaryCopy: null }).success).toBe(false);
+    expect(Object.keys(summaryCopySchema.shape)).toHaveLength(24);
+    expect(countryDetailSchema.parse(chile()).summaryCopy.termsTitle).toBe(
+      'Condiciones del seguro',
+    );
   });
 });

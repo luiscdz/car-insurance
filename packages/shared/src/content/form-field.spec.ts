@@ -114,4 +114,26 @@ describe('form field schema', () => {
     };
     expect(formFieldSchema.safeParse(candidate).success).toBe(false);
   });
+  it('AC-069 accepts the identity document number kind on a text field; no kind means none', () => {
+    const marked = formFieldSchema.parse(
+      fieldFixture({ name: 'rut', kind: 'identityDocumentNumber' }),
+    );
+    const unmarked = formFieldSchema.parse(fieldFixture({ name: 'placa' }));
+
+    expect([marked.kind, unmarked.kind]).toEqual(['identityDocumentNumber', null]);
+  });
+
+  it.each([
+    ['on a number field', { type: 'number', kind: 'identityDocumentNumber' }],
+    ['on a select field', { type: 'select', kind: 'identityDocumentNumber' }],
+    ['on a date field', { type: 'date', kind: 'identityDocumentNumber' }],
+    ['on a checkbox field', { type: 'checkbox', kind: 'identityDocumentNumber' }],
+    ['that is unknown', { type: 'text', kind: 'phoneNumber' }],
+  ])('AC-069 AC-017 rejects a field kind %s', (_, overrides) => {
+    const candidate = {
+      ...fieldFixture({ name: 'campo', options: [{ value: 'a', label: 'A', order: 1 }] }),
+      ...overrides,
+    };
+    expect(formFieldSchema.safeParse(candidate).success).toBe(false);
+  });
 });

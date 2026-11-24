@@ -43,6 +43,38 @@ export const planCopySchema = z.object({
   retryLabel: nonBlankTextSchema,
 });
 
+/**
+ * The summary and payment copy of a country (AC-073): summary sections, terms, pay, the leave
+ * dialog shown while a payment is processed (AC-096), the payment error and the confirmation.
+ * Every text is required, so missing or blank summary copy makes the content invalid (AC-017).
+ */
+export const summaryCopySchema = z.object({
+  planHeading: nonBlankTextSchema,
+  finalPriceLabel: nonBlankTextSchema,
+  editLabel: nonBlankTextSchema,
+  changePlanLabel: nonBlankTextSchema,
+  yesLabel: nonBlankTextSchema,
+  noLabel: nonBlankTextSchema,
+  acceptTermsLabel: nonBlankTextSchema,
+  viewTermsLabel: nonBlankTextSchema,
+  termsTitle: nonBlankTextSchema,
+  termsCloseLabel: nonBlankTextSchema,
+  acceptTermsMessage: nonBlankTextSchema,
+  payLabel: nonBlankTextSchema,
+  processingLabel: nonBlankTextSchema,
+  processingLeaveTitle: nonBlankTextSchema,
+  processingLeaveMessage: nonBlankTextSchema,
+  processingLeaveStayLabel: nonBlankTextSchema,
+  processingLeaveConfirmLabel: nonBlankTextSchema,
+  paymentErrorMessage: nonBlankTextSchema,
+  confirmationTitle: nonBlankTextSchema,
+  confirmationMessage: nonBlankTextSchema,
+  quoteNumberLabel: nonBlankTextSchema,
+  planLabel: nonBlankTextSchema,
+  amountPaidLabel: nonBlankTextSchema,
+  newQuoteLabel: nonBlankTextSchema,
+});
+
 const hexColorSchema = z.string().regex(/^#[0-9A-Fa-f]{6}$/);
 
 /**
@@ -74,12 +106,14 @@ export const countryDetailSchema = countrySummarySchema.extend({
   formatLocale: z.string().refine(isLocale, 'Unknown locale'),
   copy: wizardCopySchema,
   planCopy: planCopySchema,
+  summaryCopy: summaryCopySchema,
   theme: z.unknown(),
 });
 
 export type CountrySummary = z.output<typeof countrySummarySchema>;
 export type WizardCopy = z.output<typeof wizardCopySchema>;
 export type PlanCopy = z.output<typeof planCopySchema>;
+export type SummaryCopy = z.output<typeof summaryCopySchema>;
 export type Theme = z.output<typeof themeSchema>;
 export type CountryDetail = z.output<typeof countryDetailSchema>;
 export type CountryDetailInput = z.input<typeof countryDetailSchema>;

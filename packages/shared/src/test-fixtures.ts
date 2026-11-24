@@ -29,6 +29,47 @@ const planCopy = {
   retryLabel: 'Reintentar',
 };
 
+const summaryCopy = {
+  planHeading: 'Tu plan',
+  finalPriceLabel: 'Tu precio anual',
+  editLabel: 'Editar',
+  changePlanLabel: 'Cambiar plan',
+  yesLabel: 'Sí',
+  noLabel: 'No',
+  acceptTermsLabel: 'Acepto los términos y condiciones',
+  viewTermsLabel: 'Ver términos y condiciones',
+  termsTitle: 'Términos y condiciones',
+  termsCloseLabel: 'Cerrar',
+  acceptTermsMessage: 'Acepta los términos y condiciones para poder pagar.',
+  payLabel: 'Pagar',
+  processingLabel: 'Procesando tu pago…',
+  processingLeaveTitle: '¿Quieres salir mientras procesamos tu pago?',
+  processingLeaveMessage: 'Si sales ahora, tu pago no quedará registrado.',
+  processingLeaveStayLabel: 'Esperar el pago',
+  processingLeaveConfirmLabel: 'Salir',
+  paymentErrorMessage: 'No pudimos procesar tu pago.',
+  confirmationTitle: '¡Listo! Recibimos tu pago',
+  confirmationMessage: 'Guarda tu número de cotización.',
+  quoteNumberLabel: 'Número de cotización',
+  planLabel: 'Plan',
+  amountPaidLabel: 'Valor pagado',
+  newQuoteLabel: 'Nueva cotización',
+};
+
+/** Published terms of Colombia: paragraphs, an inner line break and markup-like text (AC-074). */
+export function colombiaTerms(): { text: string }[] {
+  return [
+    {
+      text: 'Términos ficticios de Colombia.\n\nLínea de atención: 601 000 0000\nHorario: lunes a viernes.\n\nEl texto <b>no</b> interpreta **marcas**.',
+    },
+  ];
+}
+
+/** Published terms of Chile, different from Colombia's (AC-074). */
+export function chileTerms(): { text: string }[] {
+  return [{ text: 'Condiciones ficticias de Chile.\n\nCanal de atención: 600 000 0000' }];
+}
+
 export function colombia(): CountryDetailInput {
   return {
     code: 'co',
@@ -37,6 +78,7 @@ export function colombia(): CountryDetailInput {
     formatLocale: 'es-CO',
     copy: { ...copy },
     planCopy: { ...planCopy },
+    summaryCopy: { ...summaryCopy },
     theme: { primaryColor: '#2D6DF6', accentColor: '#00AEC7', logo: null },
   };
 }
@@ -49,6 +91,12 @@ export function chile(): CountryDetailInput {
     formatLocale: 'es-CL',
     copy: { ...copy, leaveStayLabel: 'Seguir cotizando' },
     planCopy: { ...planCopy, chooseLabel: 'Quiero este plan', recommendedLabel: 'El más elegido' },
+    summaryCopy: {
+      ...summaryCopy,
+      finalPriceLabel: 'Tu monto anual',
+      termsTitle: 'Condiciones del seguro',
+      amountPaidLabel: 'Monto pagado',
+    },
     theme: null,
   };
 }
@@ -78,6 +126,7 @@ export function colombiaSteps(): WizardStepInput[] {
       order: 1,
       fields: [
         field({ name: 'placa', order: 4, validation: { pattern: '^[A-Za-z]{3}[0-9]{3}$' } }),
+        field({ name: 'numero-documento', order: 2, kind: 'identityDocumentNumber' }),
         field({
           name: 'tipo-documento',
           type: 'select',
@@ -115,7 +164,7 @@ export function chileSteps(): WizardStepInput[] {
       type: 'form',
       order: 1,
       fields: [
-        field({ name: 'rut', order: 1 }),
+        field({ name: 'rut', order: 1, kind: 'identityDocumentNumber' }),
         field({
           name: 'fecha-nacimiento',
           type: 'date',

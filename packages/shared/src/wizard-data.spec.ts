@@ -42,6 +42,38 @@ describe('wizard data schema', () => {
   );
 });
 
+describe('stored confirmation', () => {
+  const confirmation = {
+    planId: 'co-clasico',
+    planName: 'Plan Clásico',
+    amount: 2312500,
+    quoteNumber: 'CO-20261123-7KQ2MX',
+  };
+
+  it('AC-085 accepts wizard data with the confirmation of a payment', () => {
+    const data = { steps: {}, plan: { id: 'co-clasico', finalPrice: 2312500 }, confirmation };
+
+    expect(wizardDataSchema.parse(data)).toEqual(data);
+  });
+
+  it('AC-085 data stored before the confirmation existed is still valid', () => {
+    const data = { steps: {}, plan: { id: 'cl-full', finalPrice: 520000 } };
+
+    expect(wizardDataSchema.parse(data)).toEqual(data);
+  });
+
+  it.each([
+    { ...confirmation, quoteNumber: 'co-20261123-7KQ2MX' },
+    { ...confirmation, quoteNumber: 'CO-2026112-7KQ2MX' },
+    { ...confirmation, planName: ' ' },
+    { ...confirmation, amount: 0 },
+    { ...confirmation, planId: '' },
+    { planId: 'x', planName: 'X', amount: 1 },
+  ])('AC-085 rejects a malformed stored confirmation %j', (stored) => {
+    expect(wizardDataSchema.safeParse({ steps: {}, confirmation: stored }).success).toBe(false);
+  });
+});
+
 describe('runtime config schema', () => {
   it('AC-001 reads the CMS address without a trailing slash', () => {
     expect(runtimeConfigSchema.parse({ cmsUrl: 'http://localhost:1337/' })).toEqual({
