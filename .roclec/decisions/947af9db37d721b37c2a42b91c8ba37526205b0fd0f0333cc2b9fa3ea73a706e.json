@@ -1,0 +1,53 @@
+{
+  "actor": "luis-cardozo",
+  "addresses": {
+    "corrections": [
+      {
+        "id": "R-1",
+        "reason": "The proposal records the answers to Q1 to Q16 and the acceptance of N1 to N3 under 'Owner answers', with the alternatives kept as options considered; no question remains open. Q1: the identity document number is identified by a fixed field kind and always masked with the fixed rule, with no Strapi masking option (AC-069, AC-090, AC-094, AC-095). Q13: leaving while a payment is processed asks first with the leave confirmations of AC-033 and AC-034, using its own copy (new AC-096; AC-073, AC-078, AC-089, AC-090 to AC-093). Q15: CAP-002 is a base at its integrated revision and REQ-009 is revised to retire AC-066, so AC-082 is the only statement of the public role; because a revised requirement needs a new acceptance criterion, REQ-009 gains AC-097 (the final price is requested without a token). Q16: dependencies on CAP-001 and CAP-002, both integrated.",
+        "status": "addressed"
+      }
+    ],
+    "rejection": "01595ad54c3cd543149d446c5cf05ae72a92586e9519b1dce3a68f7fb9b53e61"
+  },
+  "criteria": [
+    {
+      "id": "CR-004",
+      "status": "met"
+    },
+    {
+      "id": "CR-005",
+      "status": "met"
+    },
+    {
+      "id": "CR-006",
+      "status": "met"
+    },
+    {
+      "id": "CR-007",
+      "status": "met"
+    },
+    {
+      "id": "CR-008",
+      "status": "met"
+    }
+  ],
+  "entity": "CHG-003",
+  "flow": "3ae780aad6b1fc33890a0dff47645cf0515ef6319f7c53e9c0a04f98cf4a49fc",
+  "id": "947af9db37d721b37c2a42b91c8ba37526205b0fd0f0333cc2b9fa3ea73a706e",
+  "kind": "change-approve",
+  "model_schema": 2,
+  "previous": "01595ad54c3cd543149d446c5cf05ae72a92586e9519b1dce3a68f7fb9b53e61",
+  "proposal_digest": "7accb35a366cb95f381d78714ee8a0db6096052ee5bd44abeb19c19348b66615",
+  "reason": "Owner approves the US-03 summary and payment proposal with the answers to Q1-Q16 and N1-N3 recorded, including the derived AC-097.",
+  "skills": [
+    {
+      "id": "country-content",
+      "sha256": "6076186fc9d8a667a83862233be6ea9042afab7338a6a38104cac1f15da88d4c"
+    },
+    {
+      "id": "story-spec",
+      "sha256": "e9a6fa88cf5747adbef0843ecec49081c786c90b3dcc28d874eccb702c4be997"
+    }
+  ]
+}

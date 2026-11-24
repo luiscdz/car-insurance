@@ -1,0 +1,333 @@
+{
+  "id": "CHG-003",
+  "kind": "evolution",
+  "model_schema": 2,
+  "proposal_digest": "7accb35a366cb95f381d78714ee8a0db6096052ee5bd44abeb19c19348b66615",
+  "semantic": {
+    "addresses": {
+      "corrections": [
+        {
+          "id": "R-1",
+          "reason": "The proposal records the answers to Q1 to Q16 and the acceptance of N1 to N3 under 'Owner answers', with the alternatives kept as options considered; no question remains open. Q1: the identity document number is identified by a fixed field kind and always masked with the fixed rule, with no Strapi masking option (AC-069, AC-090, AC-094, AC-095). Q13: leaving while a payment is processed asks first with the leave confirmations of AC-033 and AC-034, using its own copy (new AC-096; AC-073, AC-078, AC-089, AC-090 to AC-093). Q15: CAP-002 is a base at its integrated revision and REQ-009 is revised to retire AC-066, so AC-082 is the only statement of the public role; because a revised requirement needs a new acceptance criterion, REQ-009 gains AC-097 (the final price is requested without a token). Q16: dependencies on CAP-001 and CAP-002, both integrated.",
+          "status": "addressed"
+        }
+      ],
+      "rejection": "01595ad54c3cd543149d446c5cf05ae72a92586e9519b1dce3a68f7fb9b53e61"
+    },
+    "architecture_decisions": {
+      "adrs": [
+        {
+          "id": "ADR-001",
+          "sha256": "bd3697711bb77da644c103469cc41cfd63e2ab94964da397bd5c894804449e93"
+        }
+      ]
+    },
+    "bases": [
+      {
+        "capability_id": "CAP-002",
+        "component": "app",
+        "revision": "c8a973e708d69f46246a2ca995ddbfd53b1843b7b0c7925b1d2cfae054b35a36"
+      },
+      {
+        "capability_id": "CAP-003",
+        "component": "app",
+        "revision": null
+      }
+    ],
+    "components": [
+      "app"
+    ],
+    "coverage": {
+      "criteria": [
+        {
+          "acceptance_ids": [
+            "AC-067",
+            "AC-068",
+            "AC-070"
+          ],
+          "criterion": "BR-01",
+          "origin": "US-03",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-069",
+            "AC-094",
+            "AC-095"
+          ],
+          "criterion": "BR-02",
+          "origin": "US-03",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-071",
+            "AC-072"
+          ],
+          "criterion": "BR-03",
+          "origin": "US-03",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-076"
+          ],
+          "criterion": "BR-04",
+          "origin": "US-03",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-078",
+            "AC-085"
+          ],
+          "criterion": "BR-05",
+          "origin": "US-03",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-083",
+            "AC-084"
+          ],
+          "criterion": "BR-06",
+          "origin": "US-03",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-067",
+            "AC-070",
+            "AC-088"
+          ],
+          "criterion": "SC-01",
+          "origin": "US-03",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-074",
+            "AC-076",
+            "AC-094",
+            "AC-095"
+          ],
+          "criterion": "SC-02",
+          "origin": "US-03",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-078",
+            "AC-080",
+            "AC-083"
+          ],
+          "criterion": "SC-03",
+          "origin": "US-03",
+          "status": "covered"
+        },
+        {
+          "acceptance_ids": [
+            "AC-080",
+            "AC-081"
+          ],
+          "criterion": "SC-04",
+          "origin": "US-03",
+          "status": "covered"
+        }
+      ],
+      "derived": [
+        {
+          "id": "AC-073",
+          "reason": "The story names the summary's elements but not their copy; the engineering reference requires all user-facing copy to come from Strapi except the fallback, as AC-008 and AC-040 do for the earlier steps, and missing copy must be invalid content (P3)."
+        },
+        {
+          "id": "AC-075",
+          "reason": "The story says the person views the terms but not how; the design reference places a terms link below the call to action and requires keyboard operation, visible focus and no traps, so the dialog's focus, closing and scrolling must be stated."
+        },
+        {
+          "id": "AC-077",
+          "reason": "The story has no loading, unavailable, missing or duplicated terms case; principle P3, the architecture (terms are read with the country's content) and the gap checklist (Strapi unavailable, content not published) require controlled states, as AC-015 to AC-017 and AC-059 do."
+        },
+        {
+          "id": "AC-079",
+          "reason": "The story does not say what leaves the browser to pay; principles P4 and P5, the engineering reference (personal data is not logged) and AC-026 and AC-046 require the minimum: country and plan only, nothing stored or logged by the stateless endpoint."
+        },
+        {
+          "id": "AC-082",
+          "reason": "The story needs terms and a payment endpoint but says nothing about access; principle P4 and the architecture limit the public role to read actions on wizard content types plus the two custom endpoints, with no token in the browser."
+        },
+        {
+          "id": "AC-086",
+          "reason": "The story does not say what happens when the person returns to earlier steps after paying; without a rule the person could pay the same quote twice or lose the confirmation, and AC-020 and AC-053 keep earlier steps navigable."
+        },
+        {
+          "id": "AC-087",
+          "reason": "The story ends at the confirmation and does not say how a person quotes again in the same tab; the wizard data is kept per tab (AC-023), so without an explicit action the paid quote would stay on every visit."
+        },
+        {
+          "id": "AC-089",
+          "reason": "The story does not cover reloading or leaving the summary; the gap checklist requires stating reload and navigation, and CHG-001's leave confirmation (AC-033, AC-034) needs a statement for this step when no payment is processed, as AC-057 gives for the plan step."
+        },
+        {
+          "id": "AC-090",
+          "reason": "The story has no accessibility criteria; principle P6 and the design reference require programmatic names, associations, announced states and an automated scan in every state."
+        },
+        {
+          "id": "AC-091",
+          "reason": "The story has no accessibility criteria; the design reference requires keyboard-only completion with visible focus and no traps, checked in every user interface review."
+        },
+        {
+          "id": "AC-092",
+          "reason": "The story has no responsive criteria; the design reference sets the reference widths, reflow to 320 px without horizontal scrolling and the minimum target size."
+        },
+        {
+          "id": "AC-093",
+          "reason": "The story has no motion criteria; the design reference requires respecting the reduced-motion preference."
+        },
+        {
+          "id": "AC-096",
+          "reason": "The story does not cover leaving while a payment is processed; the owner answered Q13 that leaving then asks first, reusing the leave confirmations of AC-033 and AC-034, so the behavior, its copy and the browsers without the native confirmation must be stated."
+        },
+        {
+          "id": "AC-097",
+          "reason": "Retiring AC-066 (owner answer Q15) revises REQ-009, which needs a new acceptance criterion; AC-097 keeps the price-quote part of AC-066 (no token in the browser, P4), while AC-082 stays the only list of the public role's actions."
+        }
+      ]
+    },
+    "deltas": [
+      {
+        "add_acceptance_ids": [
+          "AC-097"
+        ],
+        "capability_id": "CAP-002",
+        "op": "revise",
+        "requirement_id": "REQ-009",
+        "retire_acceptance_ids": [
+          "AC-066"
+        ]
+      },
+      {
+        "capability_id": "CAP-003",
+        "op": "add",
+        "requirement_id": "REQ-014"
+      },
+      {
+        "capability_id": "CAP-003",
+        "op": "add",
+        "requirement_id": "REQ-015"
+      },
+      {
+        "capability_id": "CAP-003",
+        "op": "add",
+        "requirement_id": "REQ-016"
+      },
+      {
+        "capability_id": "CAP-003",
+        "op": "add",
+        "requirement_id": "REQ-017"
+      },
+      {
+        "capability_id": "CAP-003",
+        "op": "add",
+        "requirement_id": "REQ-018"
+      },
+      {
+        "capability_id": "CAP-003",
+        "op": "add",
+        "requirement_id": "REQ-019"
+      },
+      {
+        "capability_id": "CAP-003",
+        "op": "add",
+        "requirement_id": "REQ-020"
+      }
+    ],
+    "dependencies": [
+      {
+        "capability_id": "CAP-001",
+        "component": "app",
+        "revision": "d9a109a9933d4153ee9a5295d15a679e3561ced3e0104bcbf99c35f5fe2120fb"
+      },
+      {
+        "capability_id": "CAP-002",
+        "component": "app",
+        "revision": "c8a973e708d69f46246a2ca995ddbfd53b1843b7b0c7925b1d2cfae054b35a36"
+      }
+    ],
+    "files": {
+      "proposal.md": "6bc5a49a0acba44c61537d98e3a3e8f751ecbd38702fd1ff0b4587305309d6cb",
+      "sources/US-03.md": "2196c5b5c657ca4efd1c62294664c055891f53085443763d9b3468dc6b2d24fa"
+    },
+    "intention": "proposal.md",
+    "origins": [
+      {
+        "captured": "sources/US-03.md",
+        "criteria": [
+          "BR-01",
+          "BR-02",
+          "BR-03",
+          "BR-04",
+          "BR-05",
+          "BR-06",
+          "SC-01",
+          "SC-02",
+          "SC-03",
+          "SC-04"
+        ],
+        "id": "US-03",
+        "kind": "story",
+        "locator": "docs/assessment/04-user-stories.md#us-03--summary-and-payment"
+      }
+    ],
+    "proposed": [
+      {
+        "capability_id": "CAP-002",
+        "components": [
+          "app"
+        ],
+        "revision": "f29abb81f63df4683cf63f9bdb62da57d2b93b092b57e0fa2ccada61e64aeb42"
+      },
+      {
+        "capability_id": "CAP-003",
+        "components": [
+          "app"
+        ],
+        "revision": "f5362186c534c567b96ed8755910b794ad6d13bc76a738ce6ce9acecd79f80b3"
+      }
+    ],
+    "references": [
+      {
+        "id": "architecture",
+        "sha256": "53e3b75fac47d734ac4e4eb5283036108a87b3d036c3f91462afbe5f3598ea76"
+      },
+      {
+        "id": "context",
+        "sha256": "d36b8a76f5656f5499291fac24b46d3b998d90fb16ca00da390f06facd3a6f03"
+      },
+      {
+        "id": "design",
+        "sha256": "c81ff9f48a6fe7b03f3e2c18a513fc8aa37a90a3f4c095dfb4876663ff2a870a"
+      },
+      {
+        "id": "engineering",
+        "sha256": "33dff2a2ef0e2fe75db14572003a6ec6ac85f1626dc5169ce09795d17b0c0fa9"
+      },
+      {
+        "id": "flow",
+        "sha256": "3ae780aad6b1fc33890a0dff47645cf0515ef6319f7c53e9c0a04f98cf4a49fc"
+      },
+      {
+        "id": "principles",
+        "sha256": "ce473af13ddb50cebb38a7ca86990363ff7b7bce5b2367ff072daaeb023edf57"
+      },
+      {
+        "id": "stack",
+        "sha256": "732c66838c0a1c836b80aa519f1f6bc98f6723a8011ae2df1ee2ecb9e4649e2f"
+      },
+      {
+        "id": "verification",
+        "sha256": "7d9becbed34cc825d1ab35f11b4bef8c4b3cc28072bf4058c4918318b41ace25"
+      }
+    ]
+  }
+}
