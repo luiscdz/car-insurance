@@ -1,0 +1,14 @@
+{
+  "kind": "checkpoint",
+  "model_schema": 2,
+  "operation_id": "46eac9efd6866bc82ad4bad47285f07959a764527cb34a14144feac2ec64f8a1",
+  "payload": {
+    "id": "docs/prototypes/us-02/index.html",
+    "source_guards": {
+      "docs/prototypes/us-02/index.html": "98b01e080e241306797deaa64386ff09f3167e1ec974ffdc983ba8572f0a548a"
+    }
+  },
+  "writes": {
+    ".roclec/decisions/396e4bd4c6b87c93fb36f7933c223b0a96f257dc5a4fa73ee1aceb88c032edfe.json": "ff5b9dbec5bb28a716989fd99ce0d4f74bfa275b9edcd091668119591fa61539"
+  }
+}
