@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "terms",
+  "info": {
+    "singularName": "term",
+    "pluralName": "terms",
+    "displayName": "Terms",
+    "description": "The terms and conditions of a country, as plain text: paragraphs separated by a blank line. The summary shows the country's single published entry (ADR-001)."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "country": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::country.country",
+      "inversedBy": "terms"
+    },
+    "text": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

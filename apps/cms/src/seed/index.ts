@@ -40,15 +40,20 @@ async function createField(strapi: Core.Strapi, stepId: string, field: FieldSeed
       options: (field.options ?? []).map(({ value, label, order }) => ({ value, label, order })),
       validation: field.validation ?? null,
       pricingInput: field.pricingInput ?? null,
+      kind: field.kind ?? null,
     },
   });
 }
 
 async function createCountry(strapi: Core.Strapi, seed: CountrySeed): Promise<void> {
-  const { code, name, currency, formatLocale, theme, copy, planCopy } = seed.country;
+  const { code, name, currency, formatLocale, theme, copy, planCopy, summaryCopy } = seed.country;
   const country = await strapi.documents('api::country.country').create({
     status: 'published',
-    data: { code, name, currency, formatLocale, theme, copy, planCopy },
+    data: { code, name, currency, formatLocale, theme, copy, planCopy, summaryCopy },
+  });
+  await strapi.documents('api::terms.term').create({
+    status: 'published',
+    data: { country: country.documentId, text: seed.terms.text },
   });
   for (const step of seed.steps) {
     const created = await strapi.documents('api::wizard-step.wizard-step').create({
@@ -71,9 +76,9 @@ async function createCountry(strapi: Core.Strapi, seed: CountrySeed): Promise<vo
 }
 
 /**
- * Seeds Colombia and Chile with their steps, fields and plans, published, only when no country
- * exists yet, so later edits made by
- * the business team are never overwritten (docs/architecture.md).
+ * Seeds Colombia and Chile with their steps, fields, plans and terms, published, only when no
+ * country exists yet, so later edits made by the business team are never overwritten
+ * (docs/architecture.md).
  */
 export async function seedWhenEmpty(strapi: Core.Strapi): Promise<boolean> {
   const countries = await strapi.db.query('api::country.country').count();

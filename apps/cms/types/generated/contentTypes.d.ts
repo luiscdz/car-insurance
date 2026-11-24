@@ -434,7 +434,7 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
 export interface ApiCountryCountry extends Struct.CollectionTypeSchema {
   collectionName: 'countries';
   info: {
-    description: 'A country served by the wizard: identity, formatting, theme, wizard copy and plan list copy (ADR-001).';
+    description: 'A country served by the wizard: identity, formatting, theme, wizard copy, plan list copy, summary copy and terms (ADR-001).';
     displayName: 'Country';
     pluralName: 'countries';
     singularName: 'country';
@@ -457,6 +457,9 @@ export interface ApiCountryCountry extends Struct.CollectionTypeSchema {
     plans: Schema.Attribute.Relation<'oneToMany', 'api::plan.plan'>;
     publishedAt: Schema.Attribute.DateTime;
     steps: Schema.Attribute.Relation<'oneToMany', 'api::wizard-step.wizard-step'>;
+    summaryCopy: Schema.Attribute.Component<'country.summary-copy', false> &
+      Schema.Attribute.Required;
+    terms: Schema.Attribute.Relation<'oneToMany', 'api::terms.term'>;
     theme: Schema.Attribute.Component<'country.theme', false>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> & Schema.Attribute.Private;
@@ -466,7 +469,7 @@ export interface ApiCountryCountry extends Struct.CollectionTypeSchema {
 export interface ApiFormFieldFormField extends Struct.CollectionTypeSchema {
   collectionName: 'form_fields';
   info: {
-    description: 'A field of a form step: type, texts, required flag, validations, for selects, options, and the optional mark of a price rule input.';
+    description: 'A field of a form step: type, texts, required flag, validations, for selects, options, the optional mark of a price rule input and the optional kind that names what the field holds.';
     displayName: 'Form field';
     pluralName: 'form-fields';
     singularName: 'form-field';
@@ -479,6 +482,7 @@ export interface ApiFormFieldFormField extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> & Schema.Attribute.Private;
     errorMessage: Schema.Attribute.String & Schema.Attribute.Required;
     helpText: Schema.Attribute.Text;
+    kind: Schema.Attribute.Enumeration<['identityDocumentNumber']>;
     label: Schema.Attribute.String & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::form-field.form-field'> &
@@ -541,6 +545,31 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
     order: Schema.Attribute.Integer & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     recommended: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> & Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTermsTerm extends Struct.CollectionTypeSchema {
+  collectionName: 'terms';
+  info: {
+    description: "The terms and conditions of a country, as plain text: paragraphs separated by a blank line. The summary shows the country's single published entry (ADR-001).";
+    displayName: 'Terms';
+    pluralName: 'terms';
+    singularName: 'term';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    country: Schema.Attribute.Relation<'manyToOne', 'api::country.country'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> & Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::terms.term'> &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    text: Schema.Attribute.Text & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> & Schema.Attribute.Private;
   };
@@ -1029,6 +1058,7 @@ declare module '@strapi/strapi' {
       'api::country.country': ApiCountryCountry;
       'api::form-field.form-field': ApiFormFieldFormField;
       'api::plan.plan': ApiPlanPlan;
+      'api::terms.term': ApiTermsTerm;
       'api::wizard-step.wizard-step': ApiWizardStepWizardStep;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

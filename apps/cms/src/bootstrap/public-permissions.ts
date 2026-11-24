@@ -9,10 +9,14 @@ export const PUBLIC_READ_CONTENT_TYPES = [
   'api::wizard-step.wizard-step',
   'api::form-field.form-field',
   'api::plan.plan',
+  'api::terms.term',
 ] as const;
 
-/** Custom endpoints the browser calls without a token: the price quote (AC-066). */
-export const PUBLIC_ENDPOINT_ACTIONS = ['api::quote.quote.price'] as const;
+/**
+ * Custom endpoints the browser calls without a token: the price quote and the simulated payment
+ * (AC-082).
+ */
+export const PUBLIC_ENDPOINT_ACTIONS = ['api::quote.quote.price', 'api::quote.quote.pay'] as const;
 
 const READ_ACTIONS = ['find', 'findOne'] as const;
 

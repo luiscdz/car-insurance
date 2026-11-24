@@ -7,6 +7,8 @@ import type {
   PlanBenefit as SharedPlanBenefit,
   PlanCopy,
   PlanInput,
+  SummaryCopy,
+  TermsEntry,
   Theme,
   WizardCopy,
   WizardStepInput,
@@ -14,6 +16,7 @@ import type {
 import { describe, expectTypeOf, it } from 'vitest';
 import type {
   CountryPlanCopy,
+  CountrySummaryCopy,
   CountryTheme,
   CountryWizardCopy,
   FormOption,
@@ -25,6 +28,7 @@ import type {
   ApiCountryCountry,
   ApiFormFieldFormField,
   ApiPlanPlan,
+  ApiTermsTerm,
   ApiWizardStepWizardStep,
 } from '../types/generated/contentTypes';
 
@@ -46,5 +50,11 @@ describe('generated Strapi types', () => {
     expectTypeOf<Exclude<keyof PlanInput, 'documentId'>>().toExtend<Attributes<ApiPlanPlan>>();
     expectTypeOf<keyof PlanInput['coverages'][number]>().toEqualTypeOf<Attributes<PlanCoverage>>();
     expectTypeOf<keyof SharedPlanBenefit>().toEqualTypeOf<Attributes<PlanBenefit>>();
+  });
+  it('AC-069 AC-073 AC-077 declare every attribute the shared summary and terms types read', () => {
+    expectTypeOf<keyof SummaryCopy>().toEqualTypeOf<Attributes<CountrySummaryCopy>>();
+    expectTypeOf<keyof TermsEntry>().toExtend<Attributes<ApiTermsTerm>>();
+    expectTypeOf<'summaryCopy' | 'terms'>().toExtend<Attributes<ApiCountryCountry>>();
+    expectTypeOf<'kind'>().toExtend<Attributes<ApiFormFieldFormField>>();
   });
 });

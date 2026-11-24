@@ -22,6 +22,40 @@ export interface CountryPlanCopy extends Struct.ComponentSchema {
   };
 }
 
+export interface CountrySummaryCopy extends Struct.ComponentSchema {
+  collectionName: 'components_country_summary_copies';
+  info: {
+    description: 'Texts of the summary and payment step: sections, terms, pay, the leave dialog while a payment is processed, the payment error and the confirmation.';
+    displayName: 'Summary copy';
+  };
+  attributes: {
+    acceptTermsLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    acceptTermsMessage: Schema.Attribute.Text & Schema.Attribute.Required;
+    amountPaidLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    changePlanLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    confirmationMessage: Schema.Attribute.Text & Schema.Attribute.Required;
+    confirmationTitle: Schema.Attribute.String & Schema.Attribute.Required;
+    editLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    finalPriceLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    newQuoteLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    noLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    payLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    paymentErrorMessage: Schema.Attribute.Text & Schema.Attribute.Required;
+    planHeading: Schema.Attribute.String & Schema.Attribute.Required;
+    planLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    processingLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    processingLeaveConfirmLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    processingLeaveMessage: Schema.Attribute.Text & Schema.Attribute.Required;
+    processingLeaveStayLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    processingLeaveTitle: Schema.Attribute.String & Schema.Attribute.Required;
+    quoteNumberLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    termsCloseLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    termsTitle: Schema.Attribute.String & Schema.Attribute.Required;
+    viewTermsLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    yesLabel: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface CountryTheme extends Struct.ComponentSchema {
   collectionName: 'components_country_themes';
   info: {
@@ -141,6 +175,7 @@ declare module '@strapi/strapi' {
   export namespace Public {
     export interface ComponentSchemas {
       'country.plan-copy': CountryPlanCopy;
+      'country.summary-copy': CountrySummaryCopy;
       'country.theme': CountryTheme;
       'country.wizard-copy': CountryWizardCopy;
       'form.option': FormOption;

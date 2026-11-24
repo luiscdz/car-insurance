@@ -1,5 +1,6 @@
-// Seed content for Colombia and Chile (AC-031, AC-032, AC-064, AC-065). Only fictitious example
-// values (P5): plans, prices, coverages and benefits are invented for the simulation.
+// Seed content for Colombia and Chile (AC-031, AC-032, AC-064, AC-065, AC-094, AC-095). Only
+// fictitious example values (P5): plans, prices, coverages, benefits and terms are invented for
+// the simulation.
 // Both countries share the SURA theme today (docs/design.md); no logo is seeded, so the text
 // placeholder is shown until the business team uploads the official one.
 import type {
@@ -22,6 +23,8 @@ export interface CountrySeed {
   })[];
   /** Published, active plans of the country, in creation order. */
   readonly plans: readonly PlanSeed[];
+  /** The country's single published terms and conditions entry, as plain text (AC-074). */
+  readonly terms: { readonly text: string };
 }
 
 const SURA_THEME = { primaryColor: '#2D6DF6', accentColor: '#00AEC7' };
@@ -85,6 +88,26 @@ const PLAN_COPY = {
   retryLabel: 'Reintentar',
 };
 
+/** Summary copy both countries share; each country adds the texts that differ (AC-073). */
+const SUMMARY_COPY = {
+  planHeading: 'Tu plan',
+  editLabel: 'Editar',
+  changePlanLabel: 'Cambiar plan',
+  yesLabel: 'Sí',
+  noLabel: 'No',
+  acceptTermsLabel: 'Acepto los términos y condiciones',
+  viewTermsLabel: 'Ver términos y condiciones',
+  termsCloseLabel: 'Cerrar',
+  payLabel: 'Pagar',
+  processingLabel: 'Procesando tu pago…',
+  processingLeaveTitle: '¿Quieres salir mientras procesamos tu pago?',
+  processingLeaveStayLabel: 'Esperar el pago',
+  processingLeaveConfirmLabel: 'Salir',
+  quoteNumberLabel: 'Número de cotización',
+  planLabel: 'Plan',
+  newQuoteLabel: 'Nueva cotización',
+};
+
 const plan = (currency: string, seed: Omit<PlanSeed, 'currency'>): PlanSeed => ({
   currency,
   ...seed,
@@ -114,6 +137,19 @@ export const COLOMBIA: CountrySeed = {
       noPlansMessage: 'Por ahora no tenemos planes disponibles para cotizar. Inténtalo más tarde.',
       choosePlanMessage: 'Elige un plan para continuar.',
       priceErrorMessage: 'No pudimos calcular tu precio.',
+    },
+    summaryCopy: {
+      ...SUMMARY_COPY,
+      finalPriceLabel: 'Tu precio anual',
+      termsTitle: 'Términos y condiciones',
+      acceptTermsMessage: 'Acepta los términos y condiciones para poder pagar.',
+      processingLeaveMessage:
+        'Si sales ahora, tu pago no quedará registrado y tendrás que pagar de nuevo.',
+      paymentErrorMessage:
+        'No pudimos procesar tu pago. Tus datos siguen aquí; inténtalo de nuevo.',
+      confirmationTitle: '¡Listo! Recibimos tu pago',
+      confirmationMessage: 'Tu seguro de auto quedó contratado. Guarda tu número de cotización.',
+      amountPaidLabel: 'Valor pagado',
     },
   },
   steps: [
@@ -147,6 +183,7 @@ export const COLOMBIA: CountrySeed = {
           errorMessage: 'Ingresa un número de documento de 6 a 10 dígitos.',
           order: 2,
           validation: { pattern: '^[0-9]{6,10}$' },
+          kind: 'identityDocumentNumber',
         },
         birthDate(3),
         {
@@ -217,6 +254,16 @@ export const COLOMBIA: CountrySeed = {
       ],
     }),
   ],
+  terms: {
+    text: [
+      'Estos términos y condiciones son ficticios y existen solo para esta demostración. No constituyen una oferta real de seguro.',
+      'El seguro de auto cubre, durante un año contado desde la fecha del pago, los riesgos descritos en el plan elegido, con los valores asegurados y deducibles que el plan indica.',
+      'El valor a pagar es el precio anual mostrado en el resumen. Si los datos que ingresaste no son correctos, la aseguradora ficticia podrá ajustar el precio o terminar el contrato.',
+      'Puedes retractarte dentro de los cinco días hábiles siguientes al pago, sin costo, escribiendo a la línea de atención ficticia.\nLínea de atención: 601 000 0000\nHorario: lunes a viernes, 8:00 a 18:00',
+      'La aseguradora ficticia trata tus datos solo para gestionar esta cotización. En esta demostración ningún dato sale de tu navegador, salvo el país y el plan elegido.',
+      'Las exclusiones generales, como conducir sin licencia vigente o bajo los efectos del alcohol, aplican a todos los planes.',
+    ].join('\n\n'),
+  },
 };
 
 export const CHILE: CountrySeed = {
@@ -242,6 +289,19 @@ export const CHILE: CountrySeed = {
       choosePlanMessage: 'Selecciona un plan para continuar.',
       priceErrorMessage: 'No pudimos calcular tu precio en este momento.',
     },
+    summaryCopy: {
+      ...SUMMARY_COPY,
+      finalPriceLabel: 'Tu monto anual',
+      termsTitle: 'Condiciones del seguro',
+      acceptTermsMessage: 'Debes aceptar los términos y condiciones para pagar.',
+      processingLeaveMessage:
+        'Si sales ahora, el pago no quedará registrado y deberás pagar otra vez.',
+      paymentErrorMessage:
+        'No fue posible procesar tu pago. Tus datos se mantienen; vuelve a intentarlo.',
+      confirmationTitle: '¡Listo! Tu pago fue aprobado',
+      confirmationMessage: 'Tu seguro automotriz quedó contratado. Guarda tu número de cotización.',
+      amountPaidLabel: 'Monto pagado',
+    },
   },
   steps: [
     {
@@ -260,6 +320,7 @@ export const CHILE: CountrySeed = {
           errorMessage: 'Ingresa un RUT válido, por ejemplo 12.345.678-5.',
           order: 1,
           validation: { pattern: '^([0-9]{1,2}(\\.[0-9]{3}){2}|[0-9]{7,8})-[0-9Kk]$' },
+          kind: 'identityDocumentNumber',
         },
         birthDate(2),
       ],
@@ -335,6 +396,15 @@ export const CHILE: CountrySeed = {
       ],
     }),
   ],
+  terms: {
+    text: [
+      'Las presentes condiciones son ficticias y se usan únicamente para esta demostración. No corresponden a una póliza real.',
+      'El seguro automotriz rige por doce meses desde la fecha del pago y cubre los riesgos indicados en el plan contratado, con los montos y deducibles en UF que el plan señala.',
+      'La prima es el monto anual informado en el resumen. Declarar información inexacta puede dar lugar al ajuste de la prima o al término anticipado del seguro.',
+      'Puedes solicitar el término del seguro en cualquier momento a través del canal de atención ficticio; la devolución de la prima no consumida se calcula por días.\nCanal de atención: 600 000 0000',
+      'Tus datos personales se usan solo para esta cotización y no se envían a ningún servidor en esta demostración, salvo el país y el plan elegido.',
+    ].join('\n\n'),
+  },
 };
 
 export const SEED_COUNTRIES: readonly CountrySeed[] = [COLOMBIA, CHILE];

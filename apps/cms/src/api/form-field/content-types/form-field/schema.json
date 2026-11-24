@@ -5,7 +5,7 @@
     "singularName": "form-field",
     "pluralName": "form-fields",
     "displayName": "Form field",
-    "description": "A field of a form step: type, texts, required flag, validations, for selects, options, and the optional mark of a price rule input."
+    "description": "A field of a form step: type, texts, required flag, validations, for selects, options, the optional mark of a price rule input and the optional kind that names what the field holds."
   },
   "options": {
     "draftAndPublish": true
@@ -63,6 +63,10 @@
     "pricingInput": {
       "type": "enumeration",
       "enum": ["birthDate", "vehicleYear"]
+    },
+    "kind": {
+      "type": "enumeration",
+      "enum": ["identityDocumentNumber"]
     }
   }
 }
