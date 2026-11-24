@@ -12,6 +12,7 @@ import {
   inject,
   input,
   resource,
+  signal,
   untracked,
   viewChild,
 } from '@angular/core';
@@ -41,8 +42,9 @@ import { WizardStateStore } from '../../../core/wizard-state/wizard-state';
 import { Button } from '../../../shared/ui/button';
 import { Loader } from '../../../shared/ui/loader';
 import { StatusMessage } from '../../../shared/ui/status-message';
+import type { LeaveDialogCopy } from './components/leave-dialog';
 import { type ProgressStep, ProgressIndicator } from './components/progress-indicator';
-import { LeaveConfirmation } from './leave-confirmation';
+import { LeaveConfirmation, type ProcessingCheck } from './leave-confirmation';
 import type { LeaveAware } from './leave-guard';
 import { STEP_CONTEXT, STEP_HEADING_ID, type StepContext } from './step-context';
 import { STEP_COMPONENTS } from './step-registry';
@@ -79,12 +81,23 @@ function addressSegments(router: Router, url: string): string[] {
   return (router.parseUrl(url).root.children[PRIMARY_OUTLET]?.segments ?? []).map((s) => s.path);
 }
 
+/** The wizard's leave dialog copy for unconfirmed values (AC-034). */
+function unconfirmedLeaveCopy(copy: WizardCopy): LeaveDialogCopy {
+  return {
+    title: copy.leaveTitle,
+    message: copy.leaveMessage,
+    stayLabel: copy.leaveStayLabel,
+    leaveLabel: copy.leaveConfirmLabel,
+  };
+}
+
 /**
  * The wizard of the country in the first address segment (ADR-001). It loads and validates the
  * country's content, applies its theme, resolves the step from the address, shows the progress
  * and the step component registered for the step type, and asks before unconfirmed values are
- * lost when leaving the wizard (REQ-001 to REQ-005). Plans load with the rest of the content, so
- * their loading, failure and invalid states are the wizard's (AC-059).
+ * lost when leaving the wizard (REQ-001 to REQ-005) and before any move while a payment is
+ * processed (AC-096). Plans and terms load with the rest of the content, so their loading, failure
+ * and invalid states are the wizard's (AC-059, AC-077).
  */
 @Component({
   selector: 'app-wizard-shell',
@@ -157,6 +170,14 @@ export class WizardShell implements StepContext, LeaveAware {
 
   protected readonly currentIndex = computed(() => this.resolution()?.index ?? 0);
 
+  /** A heading the active step shows in place of its title, such as the confirmation's. */
+  private readonly headingOverride = signal<string | null>(null);
+
+  /** The page heading: the step title, or the active step's own heading (AC-083). */
+  protected readonly pageHeading = computed(
+    () => this.headingOverride() ?? this.currentStep()?.title ?? null,
+  );
+
   protected readonly currentStep = computed(() => {
     const index = this.resolution()?.index;
     return index === undefined ? null : (this.wizard()?.content.steps[index] ?? null);
@@ -196,7 +217,7 @@ export class WizardShell implements StepContext, LeaveAware {
     return wizard && previous ? ['/', wizard.content.country.code, previous.slug] : null;
   });
 
-  private readonly heading = viewChild<ElementRef<HTMLElement>>('heading');
+  private readonly headingElement = viewChild<ElementRef<HTMLElement>>('heading');
   private readonly stepKey = computed(() => this.renderedKey());
   private lastStepKey: string | null = null;
 
@@ -207,9 +228,9 @@ export class WizardShell implements StepContext, LeaveAware {
     effect(() => theme.apply(this.wizard()?.theme ?? DEFAULT_THEME));
 
     effect(() => {
-      const step = this.currentStep();
+      const heading = this.pageHeading();
       const name = this.wizard()?.content.country.name;
-      title.setTitle(step && name ? `${step.title} – ${name}` : FALLBACK_COPY.pageTitle);
+      title.setTitle(heading && name ? `${heading} – ${name}` : FALLBACK_COPY.pageTitle);
     });
 
     // The address shows the resolved step; redirects replace history entries (AC-024).
@@ -230,7 +251,7 @@ export class WizardShell implements StepContext, LeaveAware {
     // When the step changes, focus moves to the new step's heading (AC-019).
     afterRenderEffect(() => {
       const key = this.stepKey();
-      const heading = this.heading();
+      const heading = this.headingElement();
       if (key === null || !heading) {
         return;
       }
@@ -271,17 +292,31 @@ export class WizardShell implements StepContext, LeaveAware {
     this.leave.track(check, destroyRef);
   }
 
+  trackProcessing(check: ProcessingCheck, destroyRef: DestroyRef): void {
+    this.leave.trackProcessing(check, destroyRef);
+  }
+
+  setHeading(text: string | null): void {
+    this.headingOverride.set(text);
+  }
+
   /**
-   * Leaving for the root address or another country's wizard asks first when the current step
-   * has unconfirmed values (AC-034); moves within the same wizard never ask (AC-035).
+   * While the current step processes a payment, any move to another address asks first with the
+   * processing copy (AC-096). Otherwise, leaving for the root address or another country's wizard
+   * asks first when the current step has unconfirmed values (AC-034), and moves within the same
+   * wizard never ask (AC-035, AC-089).
    */
   canLeave(targetUrl: string): boolean | Promise<boolean> {
+    const processing = this.leave.processingCopy();
+    if (processing) {
+      return targetUrl === this.router.url || this.leave.ask(processing);
+    }
     const target = addressSegments(this.router, targetUrl)[0] ?? null;
     const wizard = this.wizard();
     if (target === this.country() || !wizard || !this.leave.hasUnconfirmedValues()) {
       return true;
     }
-    return this.leave.ask(wizard.content.country.copy);
+    return this.leave.ask(unconfirmedLeaveCopy(wizard.content.country.copy));
   }
 
   protected retry(): void {
@@ -296,7 +331,7 @@ export class WizardShell implements StepContext, LeaveAware {
 
   private async load(code: string): Promise<LoadResult> {
     const raw = await this.reader.readWizard(code);
-    const result = toWizardContent(code, raw.country, raw.steps, raw.plans);
+    const result = toWizardContent(code, raw.country, raw.steps, raw.plans, raw.terms);
     if (result.kind !== 'ready') {
       return result;
     }

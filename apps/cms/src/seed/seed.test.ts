@@ -24,6 +24,7 @@ function content(seed: CountrySeed) {
     country: seed.country,
     steps: seed.steps,
     plans: seed.plans.map((plan, index) => ({ ...plan, documentId: `seed-${index}` })),
+    terms: [seed.terms],
   });
 }
 
@@ -47,6 +48,14 @@ function markedFields(steps: WizardStep[]): Record<string, [string, string]> {
         .filter((field) => field.pricingInput !== null)
         .map((field) => [field.pricingInput, [step.slug, field.label]]),
     ),
+  );
+}
+
+function kindFields(steps: WizardStep[]): [string, string][] {
+  return steps.flatMap((step) =>
+    step.fields
+      .filter((field) => field.kind === 'identityDocumentNumber')
+      .map((field): [string, string] => [step.slug, field.label]),
   );
 }
 
@@ -220,5 +229,54 @@ describe('seed content', () => {
       birthDate: ['tus-datos', 'Fecha de nacimiento'],
       vehicleYear: ['tu-vehiculo', 'Año del vehículo'],
     });
+  });
+
+  it('AC-094 seeds the summary copy of Colombia in Spanish with the agreed texts', () => {
+    const copy = content(COLOMBIA).country.summaryCopy;
+
+    expect(copy).toMatchObject({
+      payLabel: 'Pagar',
+      processingLabel: 'Procesando tu pago…',
+      acceptTermsLabel: 'Acepto los términos y condiciones',
+      viewTermsLabel: 'Ver términos y condiciones',
+      editLabel: 'Editar',
+      changePlanLabel: 'Cambiar plan',
+      quoteNumberLabel: 'Número de cotización',
+      newQuoteLabel: 'Nueva cotización',
+      processingLeaveTitle: '¿Quieres salir mientras procesamos tu pago?',
+    });
+  });
+
+  it('AC-095 seeds the summary copy of Chile in Spanish, different from Colombia where the texts differ', () => {
+    const chile = content(CHILE).country.summaryCopy;
+    const colombia = content(COLOMBIA).country.summaryCopy;
+
+    expect(Object.values(chile).every((text) => text.trim() !== '')).toBe(true);
+    expect(chile.payLabel).toBe('Pagar');
+    expect(chile.amountPaidLabel).not.toBe(colombia.amountPaidLabel);
+    expect(chile.termsTitle).not.toBe(colombia.termsTitle);
+  });
+
+  it('AC-094 AC-095 seeds one fictitious terms entry per country, of at least two paragraphs, different by country', () => {
+    const colombia = content(COLOMBIA).terms.text;
+    const chile = content(CHILE).terms.text;
+
+    for (const text of [colombia, chile]) {
+      expect(
+        text.split(/\n[ \t]*\n/).filter((block) => block.trim() !== '').length,
+      ).toBeGreaterThanOrEqual(2);
+      expect(text).toMatch(/ficticia/);
+    }
+    expect(chile).not.toBe(colombia);
+  });
+
+  it('AC-094 marks only "Número de documento" of Colombia as the identity document number', () => {
+    expect(kindFields(content(COLOMBIA).steps)).toEqual([
+      ['tus-datos-y-tu-vehiculo', 'Número de documento'],
+    ]);
+  });
+
+  it('AC-095 marks only "RUT" of "Tus datos" in Chile as the identity document number', () => {
+    expect(kindFields(content(CHILE).steps)).toEqual([['tus-datos', 'RUT']]);
   });
 });

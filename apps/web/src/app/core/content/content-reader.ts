@@ -6,6 +6,8 @@ export interface RawWizardContent {
   readonly steps: unknown;
   /** The country's published, active plans (AC-036, AC-059). */
   readonly plans: unknown;
+  /** The country's published terms and conditions (AC-077). */
+  readonly terms: unknown;
   /** Base address media URLs from Strapi are relative to. */
   readonly mediaBaseUrl: string;
 }

@@ -1,11 +1,21 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BrnAlertDialogDescription, BrnAlertDialogTitle } from '@spartan-ng/brain/alert-dialog';
 import { injectBrnDialogContext } from '@spartan-ng/brain/dialog';
-import type { WizardCopy } from '@car-insurance/shared';
 import { Button } from '../../../../shared/ui/button';
 
+/**
+ * The texts of a leave dialog, from the country's content: the wizard's copy for unconfirmed
+ * values (AC-034) or the summary copy while a payment is processed (AC-096).
+ */
+export interface LeaveDialogCopy {
+  readonly title: string;
+  readonly message: string;
+  readonly stayLabel: string;
+  readonly leaveLabel: string;
+}
+
 export interface LeaveDialogContext {
-  readonly copy: WizardCopy;
+  readonly copy: LeaveDialogCopy;
   readonly close: (leave?: boolean) => void;
 }
 
@@ -13,7 +23,7 @@ export interface LeaveDialogContext {
 export const LEAVE_DIALOG_INITIAL_FOCUS = '[data-leave-stay]';
 
 /**
- * The application's leave dialog (AC-034): title, message, leave and stay actions with the
+ * The application's leave dialog (AC-034, AC-096): title, message, leave and stay actions with the
  * country's copy from Strapi. On phones the stay action sits on top; the DOM order is leave, stay.
  */
 @Component({
@@ -28,15 +38,15 @@ export const LEAVE_DIALOG_INITIAL_FOCUS = '[data-leave-stay]';
       brnAlertDialogTitle
       class="mb-2 text-[22px] leading-snug font-bold text-balance text-primary-strong"
     >
-      {{ context.copy.leaveTitle }}
+      {{ context.copy.title }}
     </h2>
-    <p brnAlertDialogDescription class="mb-6 text-pretty">{{ context.copy.leaveMessage }}</p>
+    <p brnAlertDialogDescription class="mb-6 text-pretty">{{ context.copy.message }}</p>
     <div class="flex flex-col-reverse gap-3 min-[480px]:flex-row min-[480px]:justify-end">
       <button type="button" appButton="secondary" (click)="context.close(true)">
-        {{ context.copy.leaveConfirmLabel }}
+        {{ context.copy.leaveLabel }}
       </button>
       <button type="button" appButton="cta" data-leave-stay (click)="context.close(false)">
-        {{ context.copy.leaveStayLabel }}
+        {{ context.copy.stayLabel }}
       </button>
     </div>
   `,

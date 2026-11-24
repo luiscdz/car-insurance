@@ -41,4 +41,27 @@ describe('ProgressIndicator', () => {
 
     expect(screen.getByRole('navigation', { name: 'Etapa 1 / 3' })).toBeTruthy();
   });
+
+  it('AC-083 marks every step complete when all are, keeping the current step', async () => {
+    await render(ProgressIndicator, {
+      inputs: {
+        steps: chileSteps.map((step) => ({ ...step, complete: true })),
+        current: 3,
+        labelTemplate: 'Paso {current} de {total}',
+      },
+    });
+
+    const items = screen.getAllByRole('listitem');
+    const numbers = items.map((item) => item.querySelector('span')?.classList);
+    expect(numbers.every((c) => c?.contains('bg-background') && c.contains('text-primary'))).toBe(
+      true,
+    );
+    expect(numbers.some((c) => c?.contains('text-primary-foreground'))).toBe(false);
+    expect(items.map((item) => item.getAttribute('aria-current'))).toEqual([
+      null,
+      null,
+      null,
+      'step',
+    ]);
+  });
 });

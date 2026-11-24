@@ -1,0 +1,34 @@
+{
+  "collectionName": "components_country_summary_copies",
+  "info": {
+    "displayName": "Summary copy",
+    "description": "Texts of the summary and payment step: sections, terms, pay, the leave dialog while a payment is processed, the payment error and the confirmation."
+  },
+  "options": {},
+  "attributes": {
+    "planHeading": { "type": "string", "required": true },
+    "finalPriceLabel": { "type": "string", "required": true },
+    "editLabel": { "type": "string", "required": true },
+    "changePlanLabel": { "type": "string", "required": true },
+    "yesLabel": { "type": "string", "required": true },
+    "noLabel": { "type": "string", "required": true },
+    "acceptTermsLabel": { "type": "string", "required": true },
+    "viewTermsLabel": { "type": "string", "required": true },
+    "termsTitle": { "type": "string", "required": true },
+    "termsCloseLabel": { "type": "string", "required": true },
+    "acceptTermsMessage": { "type": "text", "required": true },
+    "payLabel": { "type": "string", "required": true },
+    "processingLabel": { "type": "string", "required": true },
+    "processingLeaveTitle": { "type": "string", "required": true },
+    "processingLeaveMessage": { "type": "text", "required": true },
+    "processingLeaveStayLabel": { "type": "string", "required": true },
+    "processingLeaveConfirmLabel": { "type": "string", "required": true },
+    "paymentErrorMessage": { "type": "text", "required": true },
+    "confirmationTitle": { "type": "string", "required": true },
+    "confirmationMessage": { "type": "text", "required": true },
+    "quoteNumberLabel": { "type": "string", "required": true },
+    "planLabel": { "type": "string", "required": true },
+    "amountPaidLabel": { "type": "string", "required": true },
+    "newQuoteLabel": { "type": "string", "required": true }
+  }
+}

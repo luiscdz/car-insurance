@@ -1,0 +1,34 @@
+{
+  "acceptance_ids": [
+    "AC-061",
+    "AC-063",
+    "AC-091",
+    "AC-092",
+    "AC-093"
+  ],
+  "actor": "luis-cardozo",
+  "candidate_digest": "b7a9cbb19a1de8974a22461a972da70908ff4ddce3d55c6d1c1260fbf572d4c5",
+  "change_id": "CHG-003",
+  "checks": [
+    "AC-061: plan step used with keyboard only in Colombia and Chile: every plan reachable, choose, change the choice, retry after a price error, back and continue, in visual order, focus always visible, no keyboard trap.",
+    "AC-063: with the reduced-motion preference, no movement when choosing or changing a plan, while the final price is obtained or arrives, or when a message appears; waiting indicator visible without movement.",
+    "AC-091: summary step used with keyboard only in Colombia and Chile: every edit action and change plan reachable, terms accepted, terms dialog opened, scrolled and closed, pay, pay again after an error, new quote from the confirmation; logical tab order, focus always visible, no keyboard trap other than the open terms dialog.",
+    "AC-092: summary, terms dialog, payment error and confirmation at 375 and 1280 px in Colombia and Chile: no horizontal scrolling, long texts wrap, terms text scrolls inside the dialog with title and close action visible.",
+    "AC-093: with the reduced-motion preference, no movement when the terms dialog opens or closes, while a payment is processed, or when the confirmation appears; processing indicator visible without movement."
+  ],
+  "component": "app",
+  "context": "Owner manual verification in desktop Chrome on the local Compose stack (http://localhost:4200), Colombia and Chile: all declared manual checks passed",
+  "digest": "e9bf542aacc46a85e7dcabcfccc997f33c1fba7fdc515f8deb75368e82568aed",
+  "executed_by_roclec": false,
+  "finding_parents": {},
+  "findings": [],
+  "id": "EVD-01M860VH26NZ4JZF1QJ0XMAPP1",
+  "kind": "manual",
+  "limitations": [
+    "Observed by the owner in desktop Chrome only (viewport sizes and reduced motion emulated in the browser); no other browsers, real mobile devices or screen readers were exercised."
+  ],
+  "model_schema": 2,
+  "outcome": "pass",
+  "run_id": "RUN-01M86072VGD503MD3V0GAH1YRJ",
+  "supersedes": []
+}

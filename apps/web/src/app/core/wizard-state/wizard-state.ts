@@ -1,6 +1,7 @@
 import { DOCUMENT, Injectable, InjectionToken, inject, signal } from '@angular/core';
 import {
   type FieldValue,
+  type StoredConfirmation,
   type WizardContent,
   type WizardData,
   wizardDataSchema,
@@ -10,7 +11,9 @@ import {
   reconcile,
   sameValues,
   withChosenPlan,
+  withConfirmation,
   withFinalPrice,
+  withoutConfirmation,
   withoutFinalPrice,
 } from './wizard-data';
 
@@ -60,7 +63,8 @@ export class WizardStateStore {
 
   /**
    * Stores the confirmed values of a step and marks it complete (AC-019). Values that differ from
-   * the stored ones discard the chosen plan's final price, which was obtained with them (AC-054).
+   * the stored ones discard the chosen plan's final price, which was obtained with them (AC-054),
+   * and the confirmation of a payment, because the quote changed (AC-086).
    */
   confirmStep(code: string, slug: string, values: Readonly<Record<string, FieldValue>>): void {
     const current = this.data(code);
@@ -70,10 +74,13 @@ export class WizardStateStore {
       steps: { ...current.steps, [slug]: { values: { ...values }, complete: true } },
     };
     const unchanged = stored !== undefined && sameValues(stored, values);
-    this.save(code, unchanged ? confirmed : withoutFinalPrice(confirmed));
+    this.save(code, unchanged ? confirmed : withoutConfirmation(withoutFinalPrice(confirmed)));
   }
 
-  /** Stores the chosen plan at once, without a final price (AC-048); the same plan changes nothing. */
+  /**
+   * Stores the chosen plan at once, without a final price (AC-048); the same plan changes nothing.
+   * Another plan discards the confirmation of the paid one (AC-086).
+   */
   choosePlan(code: string, id: string): void {
     const current = this.data(code);
     if (current.plan?.id !== id) {
@@ -96,6 +103,25 @@ export class WizardStateStore {
     if (priced !== current) {
       this.save(code, priced);
     }
+  }
+
+  /**
+   * Stores the confirmation of an approved payment only while its plan is still the chosen one
+   * (AC-085), so it stays for the life of the tab and the quote is never paid twice.
+   */
+  storeConfirmation(code: string, confirmation: StoredConfirmation): void {
+    const current = this.data(code);
+    if (current.plan?.id === confirmation.planId) {
+      this.save(code, withConfirmation(current, confirmation));
+    }
+  }
+
+  /**
+   * Discards the country's wizard data in this tab, confirmation included, to start a new quote
+   * (AC-087). The other countries' data is unchanged.
+   */
+  startNewQuote(code: string): void {
+    this.save(code, EMPTY_WIZARD_DATA);
   }
 
   private read(code: string): WizardData {

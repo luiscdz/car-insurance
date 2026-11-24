@@ -12,6 +12,9 @@ const CONTENT_CHANGES = /content-changes\.spec\.ts/;
 /** AC-036, AC-039 and AC-058 change published plans, so they run alone after AC-007. */
 const PLAN_CHANGES = /plan-changes\.spec\.ts/;
 
+/** AC-074 changes published terms, so it runs alone after the plan changes. */
+const TERMS_CHANGES = /terms-changes\.spec\.ts/;
+
 export default defineConfig({
   testDir: './tests',
   globalSetup: './tests/support/global-setup.ts',
@@ -26,12 +29,12 @@ export default defineConfig({
   projects: [
     {
       name: 'mobile',
-      testIgnore: [CONTENT_CHANGES, PLAN_CHANGES],
+      testIgnore: [CONTENT_CHANGES, PLAN_CHANGES, TERMS_CHANGES],
       use: { ...devices['Desktop Chrome'], viewport: { width: 375, height: 812 } },
     },
     {
       name: 'desktop',
-      testIgnore: [CONTENT_CHANGES, PLAN_CHANGES],
+      testIgnore: [CONTENT_CHANGES, PLAN_CHANGES, TERMS_CHANGES],
       use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
     },
     {
@@ -45,6 +48,13 @@ export default defineConfig({
       name: 'plan-changes',
       testMatch: PLAN_CHANGES,
       dependencies: ['content-changes'],
+      fullyParallel: false,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
+    },
+    {
+      name: 'terms-changes',
+      testMatch: TERMS_CHANGES,
+      dependencies: ['plan-changes'],
       fullyParallel: false,
       use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
     },

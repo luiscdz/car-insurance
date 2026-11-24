@@ -8,15 +8,17 @@ import {
   withRouterConfig,
 } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
-import { fireEvent, screen, waitFor } from '@testing-library/angular';
+import { fireEvent, screen, waitFor, within } from '@testing-library/angular';
 import {
   envelope,
   FakeContentReader,
+  FakePayment,
   FakePriceQuote,
   MemoryStorage,
   rawChile,
   rawChilePlans,
   rawChileSteps,
+  rawChileTerms,
   rawPlan,
   TODAY,
 } from '../../../../testing/content-fixtures';
@@ -24,11 +26,13 @@ import { routes } from '../../../app.routes';
 import { CLOCK } from '../../../core/clock';
 import { CONTENT_READER } from '../../../core/content/content-reader';
 import { FALLBACK_COPY } from '../../../core/content/fallback-copy';
+import { PAYMENT } from '../../../core/payment/payment';
 import { PRICE_QUOTE } from '../../../core/quote/price-quote';
 import { WIZARD_STORAGE } from '../../../core/wizard-state/wizard-state';
 
 let reader: FakeContentReader;
 let quote: FakePriceQuote;
+let payment: FakePayment;
 let storage: MemoryStorage;
 let harness: RouterTestingHarness;
 
@@ -66,6 +70,7 @@ describe('WizardShell', () => {
   beforeEach(() => {
     reader = new FakeContentReader();
     quote = new FakePriceQuote();
+    payment = new FakePayment();
     storage = new MemoryStorage();
     TestBed.configureTestingModule({
       providers: [
@@ -76,6 +81,7 @@ describe('WizardShell', () => {
         ),
         { provide: CONTENT_READER, useValue: reader },
         { provide: PRICE_QUOTE, useValue: quote },
+        { provide: PAYMENT, useValue: payment },
         { provide: WIZARD_STORAGE, useValue: storage },
         { provide: CLOCK, useValue: () => TODAY },
       ],
@@ -130,6 +136,7 @@ describe('WizardShell', () => {
     reader.wizards.set('cl', {
       country: envelope([rawChile({ theme: { primaryColor: 'rojo', accentColor: '#000000' } })]),
       steps: envelope(rawChileSteps()),
+      terms: envelope(rawChileTerms()),
     });
     const root = TestBed.inject(DOCUMENT).documentElement;
     root.style.setProperty('--primary', '#999999');
@@ -190,6 +197,7 @@ describe('WizardShell', () => {
     reader.wizards.set('cl', {
       country: envelope([rawChile()]),
       steps: envelope(rawChileSteps().filter((step) => step['type'] !== 'summary')),
+      terms: envelope(rawChileTerms()),
     });
     await open('/cl');
 
@@ -382,6 +390,7 @@ describe('WizardShell', () => {
       country: envelope([rawChile()]),
       steps: envelope(rawChileSteps()),
       plans: envelope([...rawChilePlans(), rawPlan({ documentId: 'x', currency: 'COP' })]),
+      terms: envelope(rawChileTerms()),
     });
     await open('/cl/elige-tu-plan');
 
@@ -462,5 +471,150 @@ describe('WizardShell', () => {
 
     await expect(router().navigateByUrl('/')).resolves.toBe(true);
     expect(screen.queryByRole('alertdialog')).toBeNull();
+  });
+
+  it.each([
+    ['no terms', envelope([])],
+    ['two terms entries', envelope([...rawChileTerms(), { id: 9, text: 'Otra.' }])],
+    ['blank terms', envelope([{ id: 9, text: ' \n\n ' }])],
+  ])('AC-077 a country with %s shows the not available message and no step', async (_, terms) => {
+    reader.wizards.set('cl', {
+      country: envelope([rawChile()]),
+      steps: envelope(rawChileSteps()),
+      plans: envelope(rawChilePlans()),
+      terms,
+    });
+    await open('/cl');
+
+    expect((await screen.findByRole('alert')).textContent).toContain(FALLBACK_COPY.notAvailableNow);
+    expect(screen.queryByRole('heading')).toBeNull();
+  });
+
+  const chileQuoted = () =>
+    JSON.stringify({ steps: chileFormsDone, plan: { id: 'cl-full', finalPrice: 624000 } });
+
+  async function payAndWait(): Promise<void> {
+    fireEvent.click(await screen.findByRole('checkbox', { name: /Acepto/ }));
+    await render();
+    fireEvent.click(screen.getByRole('button', { name: 'Pagar ahora' }));
+    await render();
+  }
+
+  it('AC-088 the summary address with complete data shows the summary with the terms unaccepted', async () => {
+    storage.setItem('wizard:cl', chileQuoted());
+    await open('/cl/resumen-y-pago');
+
+    expect(await screen.findByRole('heading', { level: 1, name: 'Resumen y pago' })).toBeTruthy();
+    expect(router().url).toBe('/cl/resumen-y-pago');
+    expect((screen.getByRole('checkbox') as HTMLInputElement).checked).toBe(false);
+    expect(screen.queryByRole('alert')).toBeNull();
+  });
+
+  it('AC-089 without a payment being processed, moves away from the summary never ask', async () => {
+    storage.setItem('wizard:cl', chileQuoted());
+    await open('/cl/resumen-y-pago');
+    fireEvent.click(await screen.findByRole('checkbox', { name: /Acepto/ }));
+    await render();
+
+    await expect(router().navigateByUrl('/cl/elige-tu-plan')).resolves.toBe(true);
+    await render();
+    await expect(router().navigateByUrl('/co')).resolves.toBe(true);
+    expect(screen.queryByRole('alertdialog')).toBeNull();
+  });
+
+  it('AC-096 while a payment is processed, another step asks once with the processing copy; stay keeps it processing', async () => {
+    storage.setItem('wizard:cl', chileQuoted());
+    await open('/cl/resumen-y-pago');
+    await payAndWait();
+
+    const navigation = router().navigateByUrl('/cl/elige-tu-plan');
+    const dialog = await screen.findByRole('alertdialog', {
+      name: '¿Salir mientras procesamos el pago?',
+    });
+    expect(screen.getAllByRole('alertdialog')).toHaveLength(1);
+    within(dialog).getByRole('button', { name: 'Seguir esperando' }).click();
+
+    await expect(navigation).resolves.toBe(false);
+    expect(router().url).toBe('/cl/resumen-y-pago');
+    expect(payment.last().signal?.aborted).toBe(false);
+    payment.last().resolve({ kind: 'approved', quoteNumber: 'CL-20261123-A9F03Z' });
+    await render();
+    expect(await screen.findByText('CL-20261123-A9F03Z')).toBeTruthy();
+  });
+
+  it('AC-083 AC-096 an approval while the leave dialog is open, then stay: focus moves to the confirmation title', async () => {
+    storage.setItem('wizard:cl', chileQuoted());
+    await open('/cl/resumen-y-pago');
+    await payAndWait();
+
+    const navigation = router().navigateByUrl('/cl/elige-tu-plan');
+    const dialog = await screen.findByRole('alertdialog', {
+      name: '¿Salir mientras procesamos el pago?',
+    });
+    payment.last().resolve({ kind: 'approved', quoteNumber: 'CL-20261123-A9F03Z' });
+    await render();
+    expect(await screen.findByText('CL-20261123-A9F03Z')).toBeTruthy();
+    expect(dialog.contains(document.activeElement)).toBe(true);
+
+    within(dialog).getByRole('button', { name: 'Seguir esperando' }).click();
+
+    await expect(navigation).resolves.toBe(false);
+    const heading = await screen.findByRole('heading', {
+      level: 1,
+      name: '¡Listo! Tu pago fue aprobado',
+    });
+    await waitFor(() => expect(document.activeElement).toBe(heading));
+  });
+
+  it.each(['/', '/co', '/cl/tus-datos'])(
+    'AC-096 while a payment is processed, going to %s asks; leave proceeds and the answer is ignored',
+    async (target) => {
+      storage.setItem('wizard:cl', chileQuoted());
+      await open('/cl/resumen-y-pago');
+      await payAndWait();
+      const pending = payment.last();
+
+      const navigation = router().navigateByUrl(target);
+      (await screen.findByRole('button', { name: 'Abandonar' })).click();
+
+      await expect(navigation).resolves.toBe(true);
+      await render();
+      expect(pending.signal?.aborted).toBe(true);
+      pending.resolve({ kind: 'approved', quoteNumber: 'CL-20261123-A9F03Z' });
+      await render();
+      expect(JSON.parse(storage.getItem('wizard:cl') ?? '{}').confirmation).toBeUndefined();
+    },
+  );
+
+  it('AC-083 AC-085 the confirmation titles the page, marks every step complete, never asks and is shown again', async () => {
+    storage.setItem('wizard:cl', chileQuoted());
+    await open('/cl/resumen-y-pago');
+    await payAndWait();
+
+    payment.last().resolve({ kind: 'approved', quoteNumber: 'CL-20261123-A9F03Z' });
+    await settle();
+
+    const heading = await screen.findByRole('heading', {
+      level: 1,
+      name: '¡Listo! Tu pago fue aprobado',
+    });
+    await waitFor(() => expect(document.activeElement).toBe(heading));
+    expect(TestBed.inject(Title).getTitle()).toBe('¡Listo! Tu pago fue aprobado – Chile');
+    const progress = screen.getByRole('navigation', { name: 'Etapa 4 / 4' });
+    expect(progress.querySelector('[aria-current="step"]')?.textContent).toContain(
+      'Resumen y pago',
+    );
+    const numbers = [...progress.querySelectorAll('li > span')];
+    expect(numbers.every((number) => number.classList.contains('bg-background'))).toBe(true);
+    await expect(router().navigateByUrl('/')).resolves.toBe(true);
+    expect(screen.queryByRole('alertdialog')).toBeNull();
+
+    await harness.navigateByUrl('/cl/resumen-y-pago');
+    await settle();
+    expect(await screen.findByText('CL-20261123-A9F03Z')).toBeTruthy();
+    expect(JSON.parse(storage.getItem('wizard:cl') ?? '{}').confirmation.quoteNumber).toBe(
+      'CL-20261123-A9F03Z',
+    );
+    expect(screen.queryByRole('button', { name: 'Pagar ahora' })).toBeNull();
   });
 });

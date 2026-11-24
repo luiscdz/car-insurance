@@ -23,6 +23,7 @@ const COUNTRY_PARAMS = {
   'populate[theme][populate][logo][fields][1]': 'alternativeText',
   'populate[copy]': 'true',
   'populate[planCopy]': 'true',
+  'populate[summaryCopy]': 'true',
 };
 
 const STEP_PARAMS = {
@@ -45,6 +46,12 @@ const PLAN_PARAMS = {
   'populate[benefits]': 'true',
 };
 
+/** Published terms of the country: only their text (AC-074, AC-077). */
+const TERMS_PARAMS = {
+  'fields[0]': 'text',
+  'pagination[pageSize]': PAGE_SIZE,
+};
+
 /**
  * Reads the wizard content through Strapi's read-only public role; no token is sent (P4). Only
  * published entries are returned by the content API, and responses are never cached (AC-007).
@@ -60,13 +67,14 @@ export class StrapiContentReader implements ContentReader {
 
   async readWizard(code: string): Promise<RawWizardContent> {
     const byCountry = { 'filters[country][code][$eq]': code };
-    const [country, steps, plans, mediaBaseUrl] = await Promise.all([
+    const [country, steps, plans, terms, mediaBaseUrl] = await Promise.all([
       this.get('/api/countries', { ...COUNTRY_PARAMS, 'filters[code][$eq]': code }),
       this.get('/api/wizard-steps', { ...STEP_PARAMS, ...byCountry }),
       this.get('/api/plans', { ...PLAN_PARAMS, ...byCountry }),
+      this.get('/api/terms', { ...TERMS_PARAMS, ...byCountry }),
       this.config.cmsUrl(),
     ]);
-    return { country, steps, plans, mediaBaseUrl };
+    return { country, steps, plans, terms, mediaBaseUrl };
   }
 
   private async get(path: string, params: Record<string, string>): Promise<unknown> {

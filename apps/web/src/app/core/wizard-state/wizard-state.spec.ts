@@ -35,6 +35,7 @@ describe('WizardStateStore', () => {
     store.load('co', colombiaContent(), TODAY);
     store.confirmStep('co', 'tus-datos-y-tu-vehiculo', {
       'tipo-documento': 'cc',
+      'numero-documento': '1234567890',
       placa: 'ABC123',
       'uso-particular': true,
     });
@@ -43,7 +44,12 @@ describe('WizardStateStore', () => {
     const data = reloaded.load('co', colombiaContent(), TODAY);
 
     expect(data.steps['tus-datos-y-tu-vehiculo']).toEqual({
-      values: { 'tipo-documento': 'cc', placa: 'ABC123', 'uso-particular': true },
+      values: {
+        'tipo-documento': 'cc',
+        'numero-documento': '1234567890',
+        placa: 'ABC123',
+        'uso-particular': true,
+      },
       complete: true,
     });
   });
@@ -166,5 +172,89 @@ describe('WizardStateStore', () => {
     store.confirmStep('cl', 'tus-datos', { ...chileValues });
 
     expect(store.data('cl').plan).toEqual({ id: 'cl-full', finalPrice: 624000 });
+  });
+
+  describe('confirmation', () => {
+    const confirmation = {
+      planId: 'cl-full',
+      planName: 'Plan Full',
+      amount: 624000,
+      quoteNumber: 'CL-20261123-A9F03Z',
+    };
+
+    function paid(): void {
+      store.load('cl', chileContent(), TODAY);
+      store.confirmStep('cl', 'tus-datos', chileValues);
+      store.choosePlan('cl', 'cl-full');
+      store.storeFinalPrice('cl', 'cl-full', 624000);
+      store.storeConfirmation('cl', confirmation);
+    }
+
+    it('AC-085 stores the confirmation in the country wizard data and keeps it after a reload', () => {
+      paid();
+
+      expect(store.data('cl').confirmation).toEqual(confirmation);
+      expect(JSON.parse(storage.getItem('wizard:cl') ?? '').confirmation).toEqual(confirmation);
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        providers: [{ provide: WIZARD_STORAGE, useValue: storage }],
+      });
+      const reloaded = TestBed.inject(WizardStateStore);
+      reloaded.load('cl', chileContent(), TODAY);
+      expect(reloaded.data('cl').confirmation).toEqual(confirmation);
+      reloaded.load('co', colombiaContent(), TODAY);
+      expect(reloaded.data('co').confirmation).toBeUndefined();
+    });
+
+    it('AC-085 does not store a confirmation for a plan that is no longer chosen', () => {
+      store.load('cl', chileContent(), TODAY);
+      store.choosePlan('cl', 'cl-esencial');
+
+      store.storeConfirmation('cl', confirmation);
+
+      expect(store.data('cl').confirmation).toBeUndefined();
+    });
+
+    it('AC-086 confirming changed values discards the confirmation', () => {
+      paid();
+
+      store.confirmStep('cl', 'tus-datos', { ...chileValues, 'fecha-nacimiento': '2004-01-01' });
+
+      expect(store.data('cl').confirmation).toBeUndefined();
+      expect(store.data('cl').plan).toEqual({ id: 'cl-full', finalPrice: null });
+    });
+
+    it('AC-086 choosing another plan discards the confirmation', () => {
+      paid();
+
+      store.choosePlan('cl', 'cl-esencial');
+
+      expect(store.data('cl').confirmation).toBeUndefined();
+    });
+
+    it('AC-086 unchanged values, the paid plan again and a new final price keep the confirmation', () => {
+      paid();
+
+      store.confirmStep('cl', 'tus-datos', { ...chileValues });
+      store.choosePlan('cl', 'cl-full');
+      store.discardFinalPrice('cl');
+      store.storeFinalPrice('cl', 'cl-full', 624000);
+
+      expect(store.data('cl').confirmation).toEqual(confirmation);
+    });
+
+    it('AC-087 a new quote discards only the data of that country', () => {
+      paid();
+      store.load('co', colombiaContent(), TODAY);
+      store.confirmStep('co', 'tus-datos-y-tu-vehiculo', { placa: 'ABC123' });
+
+      store.startNewQuote('cl');
+
+      expect(store.data('cl')).toEqual({ steps: {} });
+      expect(JSON.parse(storage.getItem('wizard:cl') ?? '')).toEqual({ steps: {} });
+      expect(store.data('co').steps['tus-datos-y-tu-vehiculo']?.values).toEqual({
+        placa: 'ABC123',
+      });
+    });
   });
 });

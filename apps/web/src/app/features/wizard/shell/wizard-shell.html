@@ -53,7 +53,7 @@
             tabindex="-1"
             class="mb-6 text-2xl leading-tight font-bold text-balance text-primary-strong focus:outline-none md:text-[2rem]"
           >
-            {{ currentStep()?.title }}
+            {{ pageHeading() }}
           </h1>
           @for (rendered of renderedSteps(); track rendered.key) {
             <ng-container *ngComponentOutlet="rendered.component; inputs: rendered.inputs" />

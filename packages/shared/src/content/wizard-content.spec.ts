@@ -3,9 +3,11 @@ import {
   chile,
   chilePlans,
   chileSteps,
+  chileTerms,
   colombia,
   colombiaPlans,
   colombiaSteps,
+  colombiaTerms,
   fieldFixture,
   planFixture,
 } from '../test-fixtures.js';
@@ -20,6 +22,7 @@ describe('wizard content schema', () => {
     expect(steps.map((step) => step.type)).toEqual(['form', 'plans', 'summary']);
     expect(steps[0]?.fields.map((field) => field.name)).toEqual([
       'tipo-documento',
+      'numero-documento',
       'placa',
       'fecha-nacimiento',
       'anio',
@@ -31,6 +34,7 @@ describe('wizard content schema', () => {
       country: chile(),
       steps: chileSteps(),
       plans: chilePlans(),
+      terms: chileTerms(),
     });
 
     expect(content.steps.map((step) => step.slug)).toEqual([
@@ -140,8 +144,12 @@ describe('wizard content schema', () => {
     country.copy = { ...country.copy, progressLabel: '' };
 
     expect(
-      wizardContentSchema.safeParse({ country, steps: colombiaSteps(), plans: colombiaPlans() })
-        .success,
+      wizardContentSchema.safeParse({
+        country,
+        steps: colombiaSteps(),
+        plans: colombiaPlans(),
+        terms: colombiaTerms(),
+      }).success,
     ).toBe(false);
   });
 
@@ -150,11 +158,13 @@ describe('wizard content schema', () => {
       country: colombia(),
       steps: colombiaSteps(),
       plans: colombiaPlans(),
+      terms: colombiaTerms(),
     });
     const chileContent = wizardContentSchema.parse({
       country: chile(),
       steps: chileSteps(),
       plans: chilePlans(),
+      terms: chileTerms(),
     });
 
     expect(colombiaContent.plans.map((plan) => plan.documentId)).toEqual([
@@ -167,7 +177,12 @@ describe('wizard content schema', () => {
 
   it('AC-058 accepts a country without plans', () => {
     expect(
-      wizardContentSchema.safeParse({ country: chile(), steps: chileSteps(), plans: [] }).success,
+      wizardContentSchema.safeParse({
+        country: chile(),
+        steps: chileSteps(),
+        plans: [],
+        terms: chileTerms(),
+      }).success,
     ).toBe(true);
   });
 
@@ -175,13 +190,19 @@ describe('wizard content schema', () => {
     const plans = [...chilePlans(), planFixture({ documentId: 'otro', currency: 'COP' })];
 
     expect(
-      wizardContentSchema.safeParse({ country: chile(), steps: chileSteps(), plans }).success,
+      wizardContentSchema.safeParse({
+        country: chile(),
+        steps: chileSteps(),
+        plans,
+        terms: chileTerms(),
+      }).success,
     ).toBe(false);
     expect(
       wizardContentSchema.safeParse({
         country: colombia(),
         steps: colombiaSteps(),
         plans: chilePlans(),
+        terms: colombiaTerms(),
       }).success,
     ).toBe(false);
   });
@@ -190,11 +211,19 @@ describe('wizard content schema', () => {
     const invalid = [...colombiaPlans(), planFixture({ documentId: 'x', basePrice: 0 })];
 
     expect(
-      wizardContentSchema.safeParse({ country: colombia(), steps: colombiaSteps() }).success,
+      wizardContentSchema.safeParse({
+        country: colombia(),
+        steps: colombiaSteps(),
+        terms: colombiaTerms(),
+      }).success,
     ).toBe(false);
     expect(
-      wizardContentSchema.safeParse({ country: colombia(), steps: colombiaSteps(), plans: invalid })
-        .success,
+      wizardContentSchema.safeParse({
+        country: colombia(),
+        steps: colombiaSteps(),
+        plans: invalid,
+        terms: colombiaTerms(),
+      }).success,
     ).toBe(false);
   });
 
@@ -217,7 +246,12 @@ describe('wizard content schema', () => {
     );
 
     expect(
-      wizardContentSchema.safeParse({ country: chile(), steps, plans: chilePlans() }).success,
+      wizardContentSchema.safeParse({
+        country: chile(),
+        steps,
+        plans: chilePlans(),
+        terms: chileTerms(),
+      }).success,
     ).toBe(false);
   });
 
@@ -228,7 +262,111 @@ describe('wizard content schema', () => {
     }));
 
     expect(
-      wizardContentSchema.safeParse({ country: chile(), steps, plans: chilePlans() }).success,
+      wizardContentSchema.safeParse({
+        country: chile(),
+        steps,
+        plans: chilePlans(),
+        terms: chileTerms(),
+      }).success,
     ).toBe(true);
+  });
+  it('AC-069 accepts exactly one identity document number field in each country', () => {
+    const colombiaContent = wizardContentSchema.parse({
+      country: colombia(),
+      steps: colombiaSteps(),
+      plans: colombiaPlans(),
+      terms: colombiaTerms(),
+    });
+    const chileContent = wizardContentSchema.parse({
+      country: chile(),
+      steps: chileSteps(),
+      plans: chilePlans(),
+      terms: chileTerms(),
+    });
+    const kinds = (content: typeof chileContent) =>
+      content.steps.flatMap((step) =>
+        step.fields.filter((field) => field.kind !== null).map((field) => field.name),
+      );
+
+    expect(kinds(colombiaContent)).toEqual(['numero-documento']);
+    expect(kinds(chileContent)).toEqual(['rut']);
+  });
+
+  it.each([
+    [
+      'no identity document number field',
+      (steps: ReturnType<typeof chileSteps>) =>
+        steps.map((step) => ({
+          ...step,
+          fields: (step.fields ?? []).map((field) => ({ ...field, kind: null })),
+        })),
+    ],
+    [
+      'two identity document number fields',
+      (steps: ReturnType<typeof chileSteps>) =>
+        steps.map((step) =>
+          step.slug === 'tu-vehiculo'
+            ? {
+                ...step,
+                fields: (step.fields ?? []).map((field) =>
+                  field.name === 'patente'
+                    ? { ...field, kind: 'identityDocumentNumber' as const }
+                    : field,
+                ),
+              }
+            : step,
+        ),
+    ],
+  ])('AC-069 AC-017 rejects the content of Chile with %s', (_, change) => {
+    expect(
+      wizardContentSchema.safeParse({
+        country: chile(),
+        steps: change(chileSteps()),
+        plans: chilePlans(),
+        terms: chileTerms(),
+      }).success,
+    ).toBe(false);
+  });
+
+  it('AC-069 AC-017 rejects the content of Colombia without its identity document number field', () => {
+    const steps = colombiaSteps().map((step) => ({
+      ...step,
+      fields: (step.fields ?? []).filter((field) => field.name !== 'numero-documento'),
+    }));
+
+    expect(
+      wizardContentSchema.safeParse({
+        country: colombia(),
+        steps,
+        plans: colombiaPlans(),
+        terms: colombiaTerms(),
+      }).success,
+    ).toBe(false);
+  });
+
+  it.each([
+    ['no terms', []],
+    ['two terms entries', [{ text: 'Uno.' }, { text: 'Dos.' }]],
+    ['blank terms', [{ text: ' \n\n  ' }]],
+    ['terms without text', [{}]],
+  ])('AC-077 AC-017 rejects the content of a country with %s', (_, terms) => {
+    for (const [country, steps, plans] of [
+      [colombia(), colombiaSteps(), colombiaPlans()],
+      [chile(), chileSteps(), chilePlans()],
+    ] as const) {
+      expect(wizardContentSchema.safeParse({ country, steps, plans, terms }).success).toBe(false);
+      expect(wizardContentSchema.safeParse({ country, steps, plans }).success).toBe(false);
+    }
+  });
+
+  it('AC-077 keeps the single terms entry of each country', () => {
+    const content = wizardContentSchema.parse({
+      country: colombia(),
+      steps: colombiaSteps(),
+      plans: colombiaPlans(),
+      terms: colombiaTerms(),
+    });
+
+    expect(content.terms).toEqual(colombiaTerms()[0]);
   });
 });

@@ -1,5 +1,9 @@
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import {
+  HttpTestingController,
+  type TestRequest,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { AppConfig } from '../config/app-config';
 import { StrapiContentReader } from './strapi-content-reader';
@@ -37,7 +41,7 @@ describe('StrapiContentReader', () => {
     await expect(result).resolves.toEqual({ data: [] });
   });
 
-  it('AC-004 AC-026 AC-059 requests the country, its steps and its plans filtered by the country code', async () => {
+  it('AC-004 AC-026 AC-059 AC-077 requests the country, its steps, its plans and its terms filtered by the country code', async () => {
     const read = reader.readWizard('cl');
     await nextTask();
     const requests = http.match(() => true);
@@ -45,6 +49,7 @@ describe('StrapiContentReader', () => {
     expect(requests.map((r) => r.request.url).sort()).toEqual([
       'http://cms.test/api/countries',
       'http://cms.test/api/plans',
+      'http://cms.test/api/terms',
       'http://cms.test/api/wizard-steps',
     ]);
     for (const request of requests) {
@@ -70,6 +75,12 @@ describe('StrapiContentReader', () => {
     expect(plans?.request.params.get('populate[benefits]')).toBe('true');
     const country = requests.find((r) => r.request.url.endsWith('/countries'));
     expect(country?.request.params.get('populate[planCopy]')).toBe('true');
+    expect(country?.request.params.get('populate[summaryCopy]')).toBe('true');
+    const terms = requests.find((r) => r.request.url.endsWith('/terms'));
+    expect(terms?.request.params.get('filters[country][code][$eq]')).toBe('cl');
+    expect(terms?.request.params.get('fields[0]')).toBe('text');
+    expect(terms?.request.params.get('pagination[pageSize]')).toBe('100');
+    expect(terms?.request.params.keys().some((key) => key.includes('status'))).toBe(false);
 
     for (const request of requests) {
       request.flush({ data: [request.request.url] });
@@ -78,6 +89,7 @@ describe('StrapiContentReader', () => {
       country: { data: ['http://cms.test/api/countries'] },
       steps: { data: ['http://cms.test/api/wizard-steps'] },
       plans: { data: ['http://cms.test/api/plans'] },
+      terms: { data: ['http://cms.test/api/terms'] },
       mediaBaseUrl: 'http://cms.test',
     });
   });
@@ -100,6 +112,26 @@ describe('StrapiContentReader', () => {
     const read = reader.readCountries();
     await nextTask();
     http.expectOne(() => true).flush('down', { status: 503, statusText: 'Unavailable' });
+
+    await expect(read).rejects.toBeTruthy();
+  });
+
+  it.each<[string, (request: TestRequest) => void]>([
+    [
+      'an HTTP error',
+      (r: TestRequest) => r.flush('down', { status: 500, statusText: 'Server Error' }),
+    ],
+    ['a network failure', (r: TestRequest) => r.error(new ProgressEvent('error'))],
+  ])('AC-077 the wizard read fails when the terms request fails with %s', async (_, fail) => {
+    const read = reader.readWizard('co');
+    await nextTask();
+    for (const request of http.match(() => true)) {
+      if (request.request.url.endsWith('/terms')) {
+        fail(request);
+      } else {
+        request.flush({ data: [] });
+      }
+    }
 
     await expect(read).rejects.toBeTruthy();
   });

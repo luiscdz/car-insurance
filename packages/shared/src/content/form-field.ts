@@ -27,6 +27,19 @@ export const PRICING_INPUT_FIELD_TYPES: Readonly<Record<PricingInput, FieldType>
   vehicleYear: 'number',
 };
 
+/**
+ * Kinds that name what a field holds (AC-069): the policyholder's identity document number, which
+ * the summary always masks. Like the pricing marks they are configuration; no code names a field.
+ */
+export const FIELD_KINDS = ['identityDocumentNumber'] as const;
+export const fieldKindSchema = z.enum(FIELD_KINDS);
+export type FieldKind = z.output<typeof fieldKindSchema>;
+
+/** The only field type each kind may be placed on (AC-069). */
+export const FIELD_KIND_FIELD_TYPES: Readonly<Record<FieldKind, FieldType>> = {
+  identityDocumentNumber: 'text',
+};
+
 export const fieldOptionSchema = z.object({
   value: nonBlankTextSchema,
   label: nonBlankTextSchema,
@@ -94,6 +107,7 @@ export const formFieldSchema = z
     options: z.array(fieldOptionSchema).nullish(),
     validation: fieldValidationSchema.nullish(),
     pricingInput: pricingInputSchema.nullish(),
+    kind: fieldKindSchema.nullish(),
     createdAt: createdAtSchema,
   })
   .superRefine((field, ctx) => {
@@ -110,6 +124,12 @@ export const formFieldSchema = z
     ) {
       ctx.addIssue({ code: 'custom', message: 'A pricing mark is not allowed on this field type' });
     }
+    if (field.kind != null && FIELD_KIND_FIELD_TYPES[field.kind] !== field.type) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'This field kind is not allowed on this field type',
+      });
+    }
   })
   .transform((field) => ({
     ...field,
@@ -117,6 +137,7 @@ export const formFieldSchema = z
     options: sortByOrder(field.options ?? []),
     validation: field.validation ?? NO_VALIDATION,
     pricingInput: field.pricingInput ?? null,
+    kind: field.kind ?? null,
   }));
 
 export type FieldType = z.output<typeof fieldTypeSchema>;

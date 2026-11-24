@@ -1,0 +1,140 @@
+{
+  "acceptance_ids": [
+    "AC-067",
+    "AC-068",
+    "AC-069",
+    "AC-070",
+    "AC-071",
+    "AC-072",
+    "AC-073",
+    "AC-074",
+    "AC-075",
+    "AC-076",
+    "AC-077",
+    "AC-078",
+    "AC-079",
+    "AC-080",
+    "AC-081",
+    "AC-082",
+    "AC-083",
+    "AC-084",
+    "AC-085",
+    "AC-086",
+    "AC-087",
+    "AC-088",
+    "AC-089",
+    "AC-090",
+    "AC-094",
+    "AC-095",
+    "AC-096",
+    "AC-097"
+  ],
+  "actor": "roclec-reviewer subagent (Claude Opus 5.5)",
+  "candidate_digest": "b7a9cbb19a1de8974a22461a972da70908ff4ddce3d55c6d1c1260fbf572d4c5",
+  "change_id": "CHG-003",
+  "checks": [
+    "Confirmed RUN-01M86072VGD503MD3V0GAH1YRJ: CHG-003, app, head 2fe6653, base eb09a1f, not dirty, proposal_digest 7accb35a... (approval current), inputs_digest b7a9cbb1..., supersedes RUN-01M85ZCQJTPW5EMYTYTTSFBP70, producer the implementer subagent. All 260 input files match the working tree (branch head 045fc7d differs from 2fe6653 only in .roclec run and receipt records). The verification profile is identical to the previous run",
+    "Compared the input files of both runs: exactly 5 changed (summary.ts, summary.spec.ts, wizard-shell.spec.ts, apps/cms/src/seed/countries.ts, e2e/tests/support/wizard.ts), matching git diff a42fd57..2fe6653; 3d964a0..a42fd57 changed only .roclec records",
+    "Recomputed the SHA-256 of the 16 logs of the new run; all match. All 8 checks passed with return code 0; web-unit 321 tests (two new), cms-unit 84, e2e 271 passed with no failures, retries or flaky tests, including the AC-073/AC-074/AC-094/AC-095 terms paragraph tests for co and cl on mobile and desktop and the terms-changes project",
+    "Re-ran apps/web (321 passed, 98.55 % lines) and apps/cms (84 passed) unit tests myself; no e2e or docker run",
+    "Read the F-1 fix: when the confirmation appears while a dialog is open, a MutationObserver waits until no aria-modal element remains, then on the next task moves focus to the step heading only if focus is on the body or a detached element; the observer is disconnected on destroy. Leave proceeds unchanged (component destroyed), the rejection path is untouched (pay remains), the normal path still focuses the heading directly. The new wizard-shell test uses the real Spartan leave dialog: approval while the dialog is open keeps focus in the dialog, stay resolves the navigation false and focus lands on the confirmation h1; the new summary test covers the same with a fake dialog",
+    "Read the F-2 fix: both seeded terms now say entered data stays in the browser and only the country, the plan and, for the price, the ages computed in the browser are sent, which matches AC-046 and AC-079. AC-094/AC-095 still hold (one published entry each, at least two paragraphs, different, fictitious); the e2e SEEDED_TERMS last paragraph for Chile was updated and passes; Colombia's last paragraph is unchanged",
+    "Re-applied ADR-001 compliance verification and the country-content skill Verification (6076186f..., approved, no drift) to the changed files: no country branch, no new request, no permission or schema change. No violation"
+  ],
+  "component": "app",
+  "context": "claude-code:session-09861b42-41c1-46b0-bb41-09d2a2bbc32b/roclec-reviewer-rereview-2fe6653 (subagent context that wrote neither CHG-003 nor the F-1/F-2 fixes; it is the same reviewer context that recorded EVD-01M8601XTDJ2HKWVGJEN2410M2 and shares the host session id with the coordinator and the implementer, so independence is at subagent-context level only)",
+  "digest": "c57d92c1c3efc3e4166469ae90d7a7f2e6bd577a21d19dc82ddad095fa8571f0",
+  "executed_by_roclec": false,
+  "finding_parents": {
+    "EVD-01M8601XTDJ2HKWVGJEN2410M2#F-1": [
+      "EVD-01M8601XTDJ2HKWVGJEN2410M2"
+    ],
+    "EVD-01M8601XTDJ2HKWVGJEN2410M2#F-2": [
+      "EVD-01M8601XTDJ2HKWVGJEN2410M2"
+    ],
+    "EVD-01M8601XTDJ2HKWVGJEN2410M2#F-3": [
+      "EVD-01M8601XTDJ2HKWVGJEN2410M2"
+    ],
+    "EVD-01M8601XTDJ2HKWVGJEN2410M2#F-4": [
+      "EVD-01M8601XTDJ2HKWVGJEN2410M2"
+    ],
+    "EVD-01M8601XTDJ2HKWVGJEN2410M2#F-5": [
+      "EVD-01M8601XTDJ2HKWVGJEN2410M2"
+    ],
+    "EVD-01M8601XTDJ2HKWVGJEN2410M2#F-6": [
+      "EVD-01M8601XTDJ2HKWVGJEN2410M2"
+    ]
+  },
+  "findings": [
+    {
+      "acceptance_ids": [
+        "AC-094",
+        "AC-095"
+      ],
+      "condition": "Someone compares the approved prototype's fictitious terms with the seed",
+      "description": "Does not block integration. Optional: when the prototype is next revised, align the two sentences with the seed through the normal prototype checkpoint rather than editing the approved revision in place",
+      "id": "F-1",
+      "impact": "The prototype still has the old, inaccurate sentence (lines 515 and 526) that F-2 corrected in the seed. The product is not affected: the prototype is outside the component inputs, is an interaction and visual reference only, the plan states the AC wins, and terms are business content in Strapi (P2)",
+      "location": {
+        "line": 515,
+        "path": "docs/prototypes/us-03/index.html"
+      },
+      "severity": "info"
+    }
+  ],
+  "id": "EVD-01M860HZ1EHMGGDF0TY5RFZ15B",
+  "kind": "independent-review",
+  "limitations": [
+    "Independence is declared, not proven: same host session 09861b42-41c1-46b0-bb41-09d2a2bbc32b as the coordinator and the implementer, and the same reviewer context as the prior review; Roclec compares only declared contexts",
+    "AC-091, AC-093 and the manual part of AC-092, plus CAP-002 AC-061 and AC-063, remain unobserved; they are outside acceptance_ids and need the owner's recorded observation before integration",
+    "The F-1 fix is verified in the jsdom unit environment with the real Spartan dialog, not in a real browser or with a screen reader; no e2e covers approve-during-dialog then stay",
+    "The e2e suite was not re-run by this reviewer; its result comes from the Roclec-executed run log. The run used Node v26.12.1 while .nvmrc pins 26.13.1",
+    "Roclec checks scope, freshness and declared contexts, not the semantic sufficiency of this review"
+  ],
+  "model_schema": 2,
+  "outcome": "ready",
+  "policy_id": "682534f0fcab334af1341181da525fe37393b6435dae1a27640fe3d6acbcd53d",
+  "resolutions": [
+    {
+      "candidate_digest": "b7a9cbb19a1de8974a22461a972da70908ff4ddce3d55c6d1c1260fbf572d4c5",
+      "finding": "EVD-01M8601XTDJ2HKWVGJEN2410M2#F-1",
+      "note": "18965eb: summary.ts showConfirmation now waits for every dialog to close and moves focus to the confirmation heading when focus was lost to the body or a detached element. New tests in wizard-shell.spec.ts (real leave dialog, approve during dialog, stay, focus on the h1) and summary.spec.ts pass in the run and in my local re-run",
+      "status": "fixed"
+    },
+    {
+      "candidate_digest": "b7a9cbb19a1de8974a22461a972da70908ff4ddce3d55c6d1c1260fbf572d4c5",
+      "finding": "EVD-01M8601XTDJ2HKWVGJEN2410M2#F-2",
+      "note": "2fe6653: the Colombia and Chile seeded terms now state that only the country, the plan and the browser-computed ages are sent, consistent with AC-046 and AC-079; e2e expectations updated and passing. The prototype still has the old wording, recorded as info F-1 of this review",
+      "status": "fixed"
+    },
+    {
+      "candidate_digest": "b7a9cbb19a1de8974a22461a972da70908ff4ddce3d55c6d1c1260fbf572d4c5",
+      "finding": "EVD-01M8601XTDJ2HKWVGJEN2410M2#F-3",
+      "note": "Unchanged, informational: the initial bundle is still 758.56 kB raw (163.59 kB transfer) against the 500 kB warning budget, which predates this change. A FUT candidate, not a blocker; the owner may decide it",
+      "status": "still-open"
+    },
+    {
+      "candidate_digest": "b7a9cbb19a1de8974a22461a972da70908ff4ddce3d55c6d1c1260fbf572d4c5",
+      "finding": "EVD-01M8601XTDJ2HKWVGJEN2410M2#F-4",
+      "note": "Unchanged, informational and accepted by this reviewer: content-fixtures.ts and form-step.spec.ts are identical to the previous candidate. No action needed beyond the owner's decision to accept",
+      "status": "still-open"
+    },
+    {
+      "candidate_digest": "b7a9cbb19a1de8974a22461a972da70908ff4ddce3d55c6d1c1260fbf572d4c5",
+      "finding": "EVD-01M8601XTDJ2HKWVGJEN2410M2#F-5",
+      "note": "Unchanged, informational and accepted: app.routes.ts is identical; runGuardsAndResolvers 'always' (D10) still behaves as reviewed. No action needed beyond the owner's decision to accept",
+      "status": "still-open"
+    },
+    {
+      "candidate_digest": "b7a9cbb19a1de8974a22461a972da70908ff4ddce3d55c6d1c1260fbf572d4c5",
+      "finding": "EVD-01M8601XTDJ2HKWVGJEN2410M2#F-6",
+      "note": "Unchanged, informational and accepted: the terms-only failure stays covered by the reader unit test and the content-states e2e for both countries. No action needed beyond the owner's decision to accept",
+      "status": "still-open"
+    }
+  ],
+  "role": "reviewer",
+  "run_id": "RUN-01M86072VGD503MD3V0GAH1YRJ",
+  "supersedes": [
+    "EVD-01M8601XTDJ2HKWVGJEN2410M2"
+  ]
+}

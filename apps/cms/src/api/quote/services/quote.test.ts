@@ -104,3 +104,47 @@ describe('price quote service', () => {
     expect(calls).toEqual([]);
   });
 });
+
+describe('simulated payment service', () => {
+  const now = () => new Date(Date.UTC(2026, 10, 23, 12, 0, 0));
+
+  it('AC-080 AC-084 approves a published, active plan of the country with a new quote number', async () => {
+    const { strapi, queries } = fakeStrapi();
+    const service = quoteService({ strapi }, now);
+
+    const colombia = await service.pay({ country: 'co', plan: 'co-basico' });
+    const chile = await service.pay({ country: 'cl', plan: 'cl-esencial' });
+
+    expect(colombia).toEqual({ status: 'approved', quoteNumber: expect.any(String) });
+    expect(colombia.status === 'approved' && colombia.quoteNumber).toMatch(
+      /^CO-20261123-[A-Z0-9]{6}$/,
+    );
+    expect(chile.status === 'approved' && chile.quoteNumber).toMatch(/^CL-20261123-[A-Z0-9]{6}$/);
+    expect(queries[0]).toEqual({
+      status: 'published',
+      filters: { documentId: 'co-basico', active: true, country: { code: 'co' } },
+      fields: ['basePrice'],
+    });
+  });
+
+  it.each([
+    ['an inactive plan', { country: 'co', plan: 'co-antiguo' }],
+    ['an unpublished plan', { country: 'co', plan: 'co-borrador' }],
+    ['an unknown plan', { country: 'co', plan: 'no-existe' }],
+    ['a plan of another country', { country: 'co', plan: 'cl-esencial' }],
+    ['a plan of another country, for Chile', { country: 'cl', plan: 'co-basico' }],
+  ])('AC-080 rejects %s without a quote number', async (_, request) => {
+    const service = quoteService(fakeStrapi(), now);
+
+    await expect(service.pay(request)).resolves.toEqual({ status: 'rejected' });
+  });
+
+  it('AC-079 stores nothing and logs no input', async () => {
+    const { strapi, calls } = fakeStrapi();
+
+    await quoteService({ strapi }).pay({ country: 'co', plan: 'co-basico' });
+    await quoteService({ strapi }).pay({ country: 'cl', plan: 'no-existe' });
+
+    expect(calls).toEqual([]);
+  });
+});

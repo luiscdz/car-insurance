@@ -3,8 +3,11 @@ import { describe, expect, it, vi } from 'vitest';
 import type { QuoteService } from '../services/quote';
 import quoteController, { type QuoteContext } from './quote';
 
-function setup(price: QuoteService['price']) {
-  const service: QuoteService = { price: vi.fn(price) };
+function setup(
+  price: QuoteService['price'],
+  pay: QuoteService['pay'] = async () => ({ status: 'rejected' }),
+) {
+  const service: QuoteService = { price: vi.fn(price), pay: vi.fn(pay) };
   const log = vi.fn();
   const strapi = {
     service: (uid: string) => (uid === 'api::quote.quote' ? service : undefined),
@@ -64,5 +67,55 @@ describe('price quote controller', () => {
       data: null,
       error: { status: 404, name: 'NotFoundError', message: 'Plan not available' },
     });
+  });
+});
+
+describe('simulated payment controller', () => {
+  it('AC-080 answers an approval with its quote number', async () => {
+    const { controller, service } = setup(
+      async () => 1,
+      async () => ({ status: 'approved', quoteNumber: 'CO-20261123-7KQ2MX' }),
+    );
+    const ctx = context({ country: 'co', plan: 'co-basico' });
+
+    await controller.pay(ctx);
+
+    expect(ctx.status).toBe(200);
+    expect(ctx.body).toEqual({ data: { status: 'approved', quoteNumber: 'CO-20261123-7KQ2MX' } });
+    expect(service.pay).toHaveBeenCalledWith({ country: 'co', plan: 'co-basico' });
+  });
+
+  it('AC-080 answers a rejection with no quote number and no technical detail', async () => {
+    const { controller } = setup(async () => 1);
+    const ctx = context({ country: 'cl', plan: 'co-basico' });
+
+    await controller.pay(ctx);
+
+    expect(ctx.status).toBe(200);
+    expect(ctx.body).toEqual({ data: { status: 'rejected' } });
+  });
+
+  it.each([
+    ['no body', undefined],
+    ['no plan', { country: 'co' }],
+    ['an upper-case country code', { country: 'CO', plan: 'x' }],
+    ['an entered document number', { country: 'co', plan: 'x', numeroDocumento: '1234567890' }],
+    ['an entered RUT', { country: 'cl', plan: 'x', rut: '12.345.678-5' }],
+  ])('AC-079 AC-080 answers a generic error without echoing the input for %s', async (_, body) => {
+    const { controller, service, log } = setup(async () => 1);
+    const ctx = context(body);
+
+    await controller.pay(ctx);
+
+    expect(ctx.status).toBe(400);
+    expect(JSON.stringify(ctx.body)).not.toMatch(
+      /1234567890|12\.345|numeroDocumento|rut|quoteNumber/,
+    );
+    expect(ctx.body).toEqual({
+      data: null,
+      error: { status: 400, name: 'ValidationError', message: 'Invalid payment request' },
+    });
+    expect(service.pay).not.toHaveBeenCalled();
+    expect(log).not.toHaveBeenCalled();
   });
 });
