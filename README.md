@@ -62,3 +62,14 @@ Agent sessions are stored as Roclec evidence and versioned twice: the unedited o
 ## Data
 
 The application and its seed data use only fictitious data, and no credentials are stored in this repository. The unedited session logs include the author's own name and email address.
+
+
+## Strategy and justification
+
+In Strapi, each country is represented by a Country entry with its own wizard steps, fields, plans, and terms. The CMS defines the order of the steps and, for each form, which fields appear, which are required, and how they are validated. Angular identifies the country from the URL (/co/ or /cl/), fetches the published content for that market, and builds the quoting wizard using the same components and the same build.
+
+I chose this strategy because the business team can publish changes for each country directly from Strapi without redeploying Angular. The configuration also lets each country define a different wizard structure. To demonstrate this, Colombia collects policyholder and vehicle details on a single screen, while Chile splits them across two screens.
+
+## Questions
+
+

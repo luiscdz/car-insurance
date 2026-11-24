@@ -82,30 +82,3 @@ User story → spec (`.roclec/changes/CHG-NNN/`, origin `US-NN`) → ADRs cited 
 ## Session logs
 
 Agent sessions are imported into Roclec as evidence and versioned twice: the unedited original in `.roclec/runtime/sessions/EVD-*/` and a copy in `.roclec/evidence/EVD-*.session` with secrets and email addresses redacted as configured in [`.roclec/project.toml`](.roclec/project.toml) (`secret_env`, `redact_patterns`).
-
-## Questions
-
-### At which points did we decide not to use AI, and why?
-
-- **Approving a spec** (step 3) is not an AI step: only a person decides which behavior is accepted.
-- **Every checkpoint decision** (references and ADRs, prototypes, plans, integration) is made by the owner, who evaluates each criterion; agents prepare the material and never record the decision or its evaluation.
-- **Publishing** (commits on request, push, tags, deploys) is done only when the owner asks.
-
-### What would we do differently with a team of five developers?
-
-- Split the work by component and contract: agree shared types, Zod schemas and the Strapi API in `packages/shared` first, then let front-end and CMS work run in parallel.
-- Give every plan named owners, the paths each may change, dependencies and the integration order.
-- Add deciders: a product owner approves specs and prototypes, a technical lead accepts ADRs and approves plans, and a peer approves before integration.
-- Make agent session evidence mandatory again in define, implement and review, so each person's AI work stays auditable.
-- Add the release handoff checkpoint, so QA accepts the increment explicitly.
-
-### Which part of the flow did not work as expected, and how did we adjust it?
-
-- **Generic seeded criteria.** The seeded approval criteria were too vague to reject anything with a clear reason. We rewrote them into twelve specific criteria, one decision point at a time.
-- **No human gate on the plan.** The seeded flow let the agent go from an approved spec straight to code. We added the pre-implement checkpoint.
-- **Mixed sources.** Early drafts justified product rules with the test's evaluation rules instead of the product context. We set the rule that references cite only the business context, the user stories and engineering reasons.
-- **Order of references.** The stack was agreed before ADR-001 and the architecture refined it, so it had to be agreed again twice. Later references now state what they change in earlier ones.
-- **Mandatory session evidence and privacy.** Requiring a session import at every stage blocked work, and transcripts included the owner's email. Sessions became optional and email addresses are redacted.
-- **Own skills not versioned.** The agent skills folder was ignored by Git, so our own skills would not reach a clone. Only installed skills are ignored now.
-
-The retrospective continues in [docs/flow-retro.md](docs/flow-retro.md).
