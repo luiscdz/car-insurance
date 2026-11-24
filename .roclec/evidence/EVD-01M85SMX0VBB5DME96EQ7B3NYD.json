@@ -1,0 +1,30 @@
+{
+  "acceptance_ids": [
+    "AC-061",
+    "AC-062",
+    "AC-063"
+  ],
+  "actor": "luis-cardozo",
+  "candidate_digest": "c121ed80d7131a9b14573b11f6d8cd0f2a2175b5dd03126a55b8935ac1288ed5",
+  "change_id": "CHG-002",
+  "checks": [
+    "AC-061: plan step used with keyboard only in Colombia and Chile: every plan reachable, choose, change the choice, retry after a price error, back and continue, in visual order, focus always visible, no keyboard trap.",
+    "AC-062: plan step at 375 and 1280 px in Colombia and Chile: cards stacked in one column at 375 px and side by side at 1280 px, no horizontal scrolling.",
+    "AC-063: with the reduced-motion preference, no movement when choosing or changing a plan, while the final price is obtained or arrives, or when a message appears; waiting indicator visible without movement."
+  ],
+  "component": "app",
+  "context": "Owner manual verification in desktop Chrome on the local Compose stack (http://localhost:4200), Colombia and Chile: all declared manual checks passed",
+  "digest": "48c6ecd984ba45b0234b620f14096f8ea500573ecd40fcb88436c3cb96b846a0",
+  "executed_by_roclec": false,
+  "finding_parents": {},
+  "findings": [],
+  "id": "EVD-01M85SMX0VBB5DME96EQ7B3NYD",
+  "kind": "manual",
+  "limitations": [
+    "Observed by the owner in desktop Chrome only (viewport sizes and reduced motion emulated in the browser); no other browsers, real mobile devices or screen readers were exercised."
+  ],
+  "model_schema": 2,
+  "outcome": "pass",
+  "run_id": "RUN-01M85S3AKRGXXGGE5AQY719TXP",
+  "supersedes": []
+}

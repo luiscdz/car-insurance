@@ -1,0 +1,169 @@
+{
+  "acceptance_ids": [
+    "AC-036",
+    "AC-037",
+    "AC-038",
+    "AC-039",
+    "AC-040",
+    "AC-041",
+    "AC-042",
+    "AC-043",
+    "AC-044",
+    "AC-045",
+    "AC-046",
+    "AC-047",
+    "AC-048",
+    "AC-049",
+    "AC-050",
+    "AC-051",
+    "AC-052",
+    "AC-053",
+    "AC-054",
+    "AC-055",
+    "AC-056",
+    "AC-057",
+    "AC-058",
+    "AC-059",
+    "AC-060",
+    "AC-064",
+    "AC-065",
+    "AC-066"
+  ],
+  "actor": "roclec-reviewer subagent (Claude Opus 5.5)",
+  "candidate_digest": "d9866cc461e32343c3c39ea4c811df26b5cfa44ab1a59fe275d43807a4ae66f7",
+  "change_id": "CHG-002",
+  "checks": [
+    "Confirmed that all 224 candidate input files in the working tree match the SHA-256 values in the RUN-01M85R6D8S73WE32Z0MQPKQ3E4 manifest (inputs_digest d9866cc4..., head dfbcdd9, base 18a0443, proposal_digest 3347fc8a...). Every input is tracked in commit dfbcdd9. The run's dirty flag comes only from operational .roclec files; .roclec/project.toml is categorised operational",
+    "Read the run manifest and the eight captured logs: format, lint, shared-unit (111 tests, 100 % lines), web-unit (209 tests), cms-unit (58 tests), web-build, cms-build and e2e (186 Playwright tests in the mobile, desktop, content-changes and plan-changes projects, all passed)",
+    "Re-ran apps/web test:ci (27 files, 209 tests, 98.26 % lines) and apps/cms test:ci (7 files, 58 tests). Both passed and left the working tree unchanged",
+    "Read proposal.md (owner answers Q1 to Q13), AC-036 to AC-066, plan.md and tasks.md for CHG-002, the constitution, architecture, engineering, verification, ADR-001 and the us-02 prototype's choice control",
+    "Read the whole diff 18a0443..dfbcdd9: CMS plan schema and components, plan routes (find and findOne only), the quote route, controller, service and price rule, public-permissions bootstrap, seed, shared Zod schemas (plan, plan copy, pricing marks, quote request and response, wizard data), web content reader, wizard-data and wizard-state store, pricing-inputs, StrapiPriceQuote, format-price, shell changes, PlanList and PlanCard, and all new unit and e2e specs",
+    "Checked the price rule by hand against the AC-043 examples (for example 333333 x 110 % gives 366666 and 12345 x 110 % gives 13580). Checked the bracket boundaries, V = -1, unavailable inputs and halves rounded up",
+    "Security review of POST /api/quote/price. The strict request schema rejects any extra key, and 400 and 404 answers carry fixed text that never echoes input. The service reads only the published, active plan of the country, takes basePrice from Strapi and writes and logs nothing. Strapi's request logger writes the URL, not the body. The public role is exactly find and findOne on country, wizard-step, form-field and plan plus api::quote.quote.price, enforced idempotently in the bootstrap and unit-tested, and the architecture reference lists the custom endpoints",
+    "Scanned the built web bundle (apps/web/dist/web/browser) and config.json. There is no token, admin or content-manager reference. The only API paths are /api/countries, /api/wizard-steps, /api/plans and /api/quote/price",
+    "Applied the ADR-001 compliance verification. Grepping non-test sources found no condition on a country code, currency, locale or field name. Every content request, plans included, filters by the country code. Steps and plans come from Strapi. Prices use Intl with the currency and locale from the Country entry. The seed has different step configurations for co and cl, and tests exercise both countries",
+    "Applied the country-content skill Verification checklist (skill sha256 6076186f...). The plan schema.json is committed with a manyToOne Country relation and draftAndPublish. Generated types are regenerated, and content-model.test.ts checks schema/Zod key conformance. Public permissions are applied in the bootstrap. The seed covers both countries. Requests filter by country. Tests cite AC IDs and cover both countries",
+    "Checked the coordinator's uncommitted acceptance_ids mapping in .roclec/project.toml check by check against the AC IDs cited in each workspace's test titles. Every AC mapped to shared-unit, web-unit, cms-unit and e2e is cited by at least one test that the check runs. AC-061 and AC-063 are correctly unmapped as manual checks",
+    "Compared the web-build initial bundle with the earlier CHG-001 runs RUN-01M85D08S50EPR14VW56AAY9NN and RUN-01M85E31K8Y0MSRPVH0HA3XZAJ (747.63 kB, already above the 500 kB warning)",
+    "Reviewed the two changes beyond the plan: the axe fixture's wait for finite animations (e2e/tests/fixtures.ts) and the computed aria-label of the choice button (plan-card.ts)"
+  ],
+  "component": "app",
+  "context": "claude-code:session-61e82198-b7a1-412c-8977-373a46f2df2c/reviewer (roclec-reviewer subagent in its own context window, did not take part in implementation; shares host session id with producer, so independence is at subagent-context level only)",
+  "digest": "cc4b031b94ef9eec655d3020854ecda864d205ffb083bdcdc76699f7c8acf79e",
+  "executed_by_roclec": false,
+  "finding_parents": {},
+  "findings": [
+    {
+      "acceptance_ids": [
+        "AC-060"
+      ],
+      "condition": "The no-plans state of AC-058 is scanned with axe only for Chile. AC-060's verification asks for the automated scan for Colombia and Chile in each listed state, the no-plans message included.",
+      "description": "Verification gap against the AC text, not a defect in the product. Recommendation: deactivate Colombia's plans in plan-changes.spec.ts as well and run expectNoAxeViolations, or have the owner accept the one-country mapping.",
+      "id": "F-1",
+      "impact": "A WCAG violation that appears only in Colombia's no-plans state would go undetected. The risk is low because the code path is the same and both countries share the theme. The approved plan (plan.md AC-060 row, T013) mapped only the Chile scan.",
+      "location": {
+        "line": 142,
+        "path": "e2e/tests/plan-changes.spec.ts"
+      },
+      "severity": "minor"
+    },
+    {
+      "acceptance_ids": [],
+      "condition": "The production initial bundle is 753.38 kB raw (162.49 kB transfer), against a warning budget of 500 kB and an error budget of 1 MB.",
+      "description": "Not a regression of this change. Recommendation: capture it as a FUT, for example lazy-loading Zod-heavy paths or raising the budget with a reason, so the warning does not become noise.",
+      "id": "F-2",
+      "impact": "This warning predates the change: the CHG-001 runs already measured 747.63 kB, and this change adds about 5.75 kB. The build passes, and the size is well below the error budget.",
+      "location": {
+        "line": 40,
+        "path": "apps/web/angular.json"
+      },
+      "severity": "info"
+    },
+    {
+      "acceptance_ids": [
+        "AC-048",
+        "AC-060"
+      ],
+      "condition": "The choice button's accessible name is a computed aria-label, '{chooseLabel|chosenLabel}: {plan name}'. The approved prototype instead appended a visually hidden ': {name}' span.",
+      "description": "Accepted as a reasonable deviation. Optional: use the prototype's sr-only suffix so translation tools handle it the same as visible text.",
+      "id": "F-3",
+      "impact": "The resulting accessible name is the same as the prototype's. It starts with the visible text (WCAG 2.5.3 Label in Name), includes the plan name (AC-060) and keeps aria-pressed for the chosen state (AC-048). Plan D11 asks only for an accessible name that includes the plan name, so this is a choice of technique, not a change of behaviour. Minor caveats: some browser auto-translation tools skip aria-label, and the ': ' separator is fixed in code.",
+      "location": {
+        "line": 237,
+        "path": "apps/web/src/app/features/wizard/steps/plan-list/components/plan-card.ts"
+      },
+      "severity": "info"
+    },
+    {
+      "acceptance_ids": [
+        "AC-060"
+      ],
+      "condition": "Before every axe scan, including the CHG-001 scans, the shared fixture now waits for all finite Web Animations (for example the transition-colors of a button that just changed state) and skips infinite ones such as the spinner.",
+      "description": "Accepted as a sound change to the test harness. No action needed.",
+      "id": "F-4",
+      "impact": "Axe now measures contrast at rest instead of mid-transition, which removes false positives without hiding real steady-state violations. A finite but very long animation would hold the test until its timeout and fail it, so a problem would not pass silently.",
+      "location": {
+        "line": 15,
+        "path": "e2e/tests/fixtures.ts"
+      },
+      "severity": "info"
+    },
+    {
+      "acceptance_ids": [
+        "AC-066"
+      ],
+      "condition": "The public find and findOne on plans return every published plan, inactive ones included, when called without the active filter (the e2e support reads them that way).",
+      "description": "Recommendation for the content guidance: plans that must stay confidential should be kept as drafts, not just inactive. An alternative is a later decision to force active=true on the public plan controller, which needs an architecture update.",
+      "id": "F-5",
+      "impact": "A plan the business team publishes but marks inactive, for example an upcoming plan with its price, is publicly readable through the API although the wizard never shows it. This matches AC-066 and the architecture reference (find and findOne on read types), so it is not a defect.",
+      "location": {
+        "line": 5,
+        "path": "apps/cms/src/api/plan/routes/plan.ts"
+      },
+      "severity": "info"
+    },
+    {
+      "acceptance_ids": [
+        "AC-045",
+        "AC-046"
+      ],
+      "condition": "priceQuoteRequestSchema accepts any whole number for the ages, negative or very large values included, and plan identifiers of any length up to Strapi's JSON body limit.",
+      "description": "Recorded as reviewed attack surface. Optional hardening: bound the ages (for example -1 to 150) and the plan id length in the shared schema.",
+      "id": "F-6",
+      "impact": "Nothing leaks: the endpoint is stateless, stores and logs nothing, answers only a bracket-based simulated price for a public plan, and returns fixed error texts. Out-of-range ages only fall into the extreme brackets.",
+      "location": {
+        "line": 6,
+        "path": "packages/shared/src/quote.ts"
+      },
+      "severity": "info"
+    },
+    {
+      "acceptance_ids": [],
+      "condition": "The coordinator's uncommitted edit removes the CAP-001 AC IDs (AC-001 to AC-035) from the acceptance_ids of the shared-unit, web-unit, cms-unit and e2e checks so that the change-scoped run is accepted.",
+      "description": "Process note for the coordinator: before release verification, check how Roclec expects one profile to map ACs of several capabilities, and restore the CAP-001 IDs if that run needs them. No change to the candidate is needed.",
+      "id": "F-7",
+      "impact": "The remaining mapping is honest: every AC mapped to a check is cited by a test that check runs. However, final release verification for v0.1.0 covers the combined CAP-001 and CAP-002 contracts and may need the CAP-001 IDs mapped again. The edit also needs to be committed with the operational records.",
+      "location": {
+        "line": 47,
+        "path": ".roclec/project.toml"
+      },
+      "severity": "info"
+    }
+  ],
+  "id": "EVD-01M85RS3K5ZFE9HS008V1RV19T",
+  "kind": "independent-review",
+  "limitations": [
+    "Independence is declared, not proven: this reviewer is a subagent that shares host session 61e82198-b7a1-412c-8977-373a46f2df2c with the coordinator that produced the run. Roclec compares only the declared contexts",
+    "AC-061 (keyboard-only use), AC-063 (reduced motion) and the manual part of AC-062 (375 and 1280 px) were not observed. They are left out of acceptance_ids and need the owner's manual observation before integration. From the code they look plausible: the controls are native buttons and links in visual DOM order, focus-visible outlines are present, continue uses aria-disabled and stays focusable, there is no keyboard trap, the spinner uses motion-safe:animate-spin and a global prefers-reduced-motion rule disables animations and transitions",
+    "The e2e suite was not re-run by this reviewer; its result comes from the Roclec-executed run log. No screen reader or real-device testing was done",
+    "The run used Node v26.12.1 while .nvmrc pins 26.13.1",
+    "Roclec checks scope, freshness and declared contexts, not the semantic sufficiency of this review"
+  ],
+  "model_schema": 2,
+  "outcome": "ready",
+  "policy_id": "d3c78378b89290879b546e4c0adaa442bee7d4376dbd07ace7d00faa7be3a0f7",
+  "resolutions": [],
+  "role": "reviewer",
+  "run_id": "RUN-01M85R6D8S73WE32Z0MQPKQ3E4",
+  "supersedes": []
+}

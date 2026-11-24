@@ -1,0 +1,154 @@
+{
+  "acceptance_ids": [
+    "AC-036",
+    "AC-037",
+    "AC-038",
+    "AC-039",
+    "AC-040",
+    "AC-041",
+    "AC-042",
+    "AC-043",
+    "AC-044",
+    "AC-045",
+    "AC-046",
+    "AC-047",
+    "AC-048",
+    "AC-049",
+    "AC-050",
+    "AC-051",
+    "AC-052",
+    "AC-053",
+    "AC-054",
+    "AC-055",
+    "AC-056",
+    "AC-057",
+    "AC-058",
+    "AC-059",
+    "AC-060",
+    "AC-064",
+    "AC-065",
+    "AC-066"
+  ],
+  "actor": "roclec-reviewer subagent (Claude Opus 5.5)",
+  "candidate_digest": "c121ed80d7131a9b14573b11f6d8cd0f2a2175b5dd03126a55b8935ac1288ed5",
+  "change_id": "CHG-002",
+  "checks": [
+    "Confirmed that the 224 candidate input files of RUN-01M85S3AKRGXXGGE5AQY719TXP (inputs_digest c121ed80..., head 5aba7b4, base 18a0443, proposal_digest 3347fc8a...) match both the working tree and commit 5aba7b4 byte for byte. Compared with the inputs of RUN-01M85R6D8S73WE32Z0MQPKQ3E4, only e2e/tests/plan-changes.spec.ts changed, which agrees with git diff dfbcdd9..5aba7b4. .roclec/project.toml is categorised operational, and its uncommitted mapping diff is the same edit reviewed before",
+    "Recomputed the SHA-256 of all 16 log files under .roclec/runtime/logs/RUN-01M85S3AKRGXXGGE5AQY719TXP/. Each matches the manifest. All 8 checks passed with return code 0: format, lint (the e2e workspace included), shared-unit, web-unit, cms-unit, web-build, cms-build, and e2e (docker compose down -v, then up --build, then 187 Playwright tests passed with no failures, flaky tests or retries)",
+    "Verified in 007.stdout that the new specs ran in the plan-changes project: test 186 'AC-058 AC-060 co: without active plans shows the no-plans message, only the back action and no summary' (872 ms) and test 187, the same for cl (911 ms). Both passed after AC-036 co/cl and AC-039 Colombia",
+    "Read the whole of e2e/tests/plan-changes.spec.ts and the StrapiAdmin helpers. The no-plans test now loops over co and cl. At test time it reads every published plan of the country through the public API without an active filter. That list includes the 'Plan Nuevo' created by AC-039 and the 'Plan Inactivo co/cl' plans created by AC-036, so no published plan stays active. The test asserts the alert text, no article, no button in main, the back link, a clean axe scan, the redirect from /{code}/resumen-y-pago to /{code}/elige-tu-plan, and the back navigation to step 2. It then calls restore(code)",
+    "Checked that the seed stays intact. restore(code) resets basePrice, order, recommended and active on the seeded plans captured in beforeAll. Test-created plans, including 'Plan Nuevo', which this test leaves inactive, are in the created set, and afterAll deletes them. afterAll also restores both countries, so a failure partway through, which skips the rest of the serial group, still restores the seed. plan-changes is the last project in playwright.config.ts, so no later project reads the changed content. Because the co plans of the other country are active during the co scan (and the cl plans during the cl scan), the test also exercises 'the plans of the other country are never offered instead'",
+    "Read-only check of the Compose stack still running after the run (cms container started at 2026-11-24T03:21:00Z). The public API returns exactly the 3 seeded co plans and the 3 seeded cl plans with their seeded basePrice, order, recommended and active values. The status=draft view lists only those 6 documents, so no Plan Nuevo, Plan Inactivo or Plan Borrador is left behind",
+    "Read AC-058 and AC-060. AC-060's verification asks for the automated scan for Colombia and Chile in each listed state, the AC-058 no-plans message included. The other states are scanned for both countries in plan-accessibility.spec.ts; the no-plans state is now scanned for both in plan-changes.spec.ts",
+    "Applied the country-content skill Verification (skill pinned sha256 6076186f..., drift false, state approved in inspect --change) to the delta. It adds no code branch on a country: the loop is test parametrisation over the two country codes, and the copy and step expectations come from per-country seed constants. Tests now cover both countries for AC-058 and AC-060 and cite the AC IDs. The other Verification points (schema.json with Country relation and draftAndPublish, shared types and Zod with tests, find/findOne-only public permissions in the bootstrap, seed for both countries, requests filtered by country) concern files unchanged since the previous review, whose results still hold",
+    "Applied the ADR-001 compliance verification to the delta. The test file is not application code. It adds no country condition and reads plans by country code. No application source changed",
+    "Re-checked the web-build log. The initial bundle is still 753.38 kB, with the same budget warning as in the previous run",
+    "Type-checked the e2e workspace with tsc --noEmit -p e2e: no errors"
+  ],
+  "component": "app",
+  "context": "claude-code:session-61e82198-b7a1-412c-8977-373a46f2df2c/reviewer-rereview-5aba7b4 (roclec-reviewer subagent in a new context window that neither implemented the change nor wrote the F-1 fix; it shares the host session id with the producer, so independence is at subagent-context level only)",
+  "digest": "97909c14734bb98f99657555f7a2bbb03d73314939ea206c9f653b135c267a9a",
+  "executed_by_roclec": false,
+  "finding_parents": {
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-1": [
+      "EVD-01M85RS3K5ZFE9HS008V1RV19T"
+    ],
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-2": [
+      "EVD-01M85RS3K5ZFE9HS008V1RV19T"
+    ],
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-3": [
+      "EVD-01M85RS3K5ZFE9HS008V1RV19T"
+    ],
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-4": [
+      "EVD-01M85RS3K5ZFE9HS008V1RV19T"
+    ],
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-5": [
+      "EVD-01M85RS3K5ZFE9HS008V1RV19T"
+    ],
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-6": [
+      "EVD-01M85RS3K5ZFE9HS008V1RV19T"
+    ],
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-7": [
+      "EVD-01M85RS3K5ZFE9HS008V1RV19T"
+    ]
+  },
+  "findings": [
+    {
+      "acceptance_ids": [
+        "AC-058",
+        "AC-060"
+      ],
+      "condition": "Task T013 in tasks.md still says 'all Chile plans deactivated', but plan-changes.spec.ts now deactivates the published plans of both co and cl and scans both. The AC-060 row of plan.md (line 163) is not country-specific and stays accurate.",
+      "description": "Optional: when the plan documents are next touched, update T013 to say 'all plans of each country (co and cl) deactivated'. No action is needed for this candidate.",
+      "id": "F-1",
+      "impact": "Only the description of the work item is out of date. Coverage now exceeds the task description, and nothing in the product or the checks is affected.",
+      "location": {
+        "line": 46,
+        "path": "docs/plans/CHG-002/tasks.md"
+      },
+      "severity": "info"
+    }
+  ],
+  "id": "EVD-01M85SFFY5FXSQBHAEYZJ9RWEJ",
+  "kind": "independent-review",
+  "limitations": [
+    "Independence is declared, not proven. This reviewer is a subagent that shares host session 61e82198-b7a1-412c-8977-373a46f2df2c with the coordinator that produced the run and wrote the fix. Roclec compares only the declared contexts. No agent-session EVD was imported for this review (session_evidence is optional for the review stage)",
+    "AC-061 (keyboard-only use), AC-063 (reduced motion) and the manual part of AC-062 (375 and 1280 px) were not observed. They are left out of acceptance_ids and await the owner's manual observation before integration",
+    "The e2e suite was not re-run by this reviewer; its result comes from the Roclec-executed run log. The Compose stack inspected for the seed state is assumed to be the one that run started: the container start time matches, but nothing proves that no other process ran against it since",
+    "The no-plans axe scan runs only in the plan-changes project at 1280 x 800. AC-060 does not require several viewports, and the other states are scanned at both the mobile and desktop widths",
+    "The run used Node v26.12.1 while .nvmrc pins 26.13.1",
+    "Roclec checks scope, freshness and declared contexts, not the semantic sufficiency of this review"
+  ],
+  "model_schema": 2,
+  "outcome": "ready",
+  "policy_id": "d3c78378b89290879b546e4c0adaa442bee7d4376dbd07ace7d00faa7be3a0f7",
+  "resolutions": [
+    {
+      "candidate_digest": "c121ed80d7131a9b14573b11f6d8cd0f2a2175b5dd03126a55b8935ac1288ed5",
+      "finding": "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-1",
+      "note": "plan-changes.spec.ts lines 142-168 now run the AC-058/AC-060 no-plans test for co and cl, with expectNoAxeViolations in each. The run log shows tests 186 (co) and 187 (cl) passing. The test deactivates every published plan read at test time, AC-039's Plan Nuevo included, and the seed is restored afterwards (restore(code) plus afterAll delete and restore). The stack's API after the run shows only the seeded plans with their seeded values.",
+      "status": "fixed"
+    },
+    {
+      "candidate_digest": "c121ed80d7131a9b14573b11f6d8cd0f2a2175b5dd03126a55b8935ac1288ed5",
+      "finding": "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-2",
+      "note": "Unchanged. The web-build log of this run still reports an initial bundle of 753.38 kB against the 500 kB warning budget. This predates the change and is a FUT candidate, not a blocker.",
+      "status": "still-open"
+    },
+    {
+      "candidate_digest": "c121ed80d7131a9b14573b11f6d8cd0f2a2175b5dd03126a55b8935ac1288ed5",
+      "finding": "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-3",
+      "note": "Unchanged: plan-card.ts is identical to the previous candidate. It is an accepted deviation of technique; the owner may decide it as accepted.",
+      "status": "still-open"
+    },
+    {
+      "candidate_digest": "c121ed80d7131a9b14573b11f6d8cd0f2a2175b5dd03126a55b8935ac1288ed5",
+      "finding": "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-4",
+      "note": "Unchanged: e2e/tests/fixtures.ts is identical. This is an informational note on a sound harness change; no action is needed beyond an owner decision to accept it.",
+      "status": "still-open"
+    },
+    {
+      "candidate_digest": "c121ed80d7131a9b14573b11f6d8cd0f2a2175b5dd03126a55b8935ac1288ed5",
+      "finding": "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-5",
+      "note": "Unchanged. Published but inactive plans are still publicly readable through find and findOne. The new test relies on this when it reads every published plan. This matches AC-066 and the architecture reference, and is guidance for the content team, not a defect.",
+      "status": "still-open"
+    },
+    {
+      "candidate_digest": "c121ed80d7131a9b14573b11f6d8cd0f2a2175b5dd03126a55b8935ac1288ed5",
+      "finding": "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-6",
+      "note": "Unchanged: packages/shared/src/quote.ts is identical. The ages and the plan id length remain unbounded. Optional hardening, no leak.",
+      "status": "still-open"
+    },
+    {
+      "candidate_digest": "c121ed80d7131a9b14573b11f6d8cd0f2a2175b5dd03126a55b8935ac1288ed5",
+      "finding": "EVD-01M85RS3K5ZFE9HS008V1RV19T#F-7",
+      "note": "Unchanged. The .roclec/project.toml edit is still uncommitted, with the same diff, removing the CAP-001 AC IDs from the check mappings. The coordinator should commit it with the operational records and revisit the mapping before final release verification of v0.1.0.",
+      "status": "still-open"
+    }
+  ],
+  "role": "reviewer",
+  "run_id": "RUN-01M85S3AKRGXXGGE5AQY719TXP",
+  "supersedes": [
+    "EVD-01M85RS3K5ZFE9HS008V1RV19T"
+  ]
+}
