@@ -1,0 +1,25 @@
+{
+  "acceptance_ids": [
+    "AC-028",
+    "AC-030"
+  ],
+  "actor": "luis-cardozo",
+  "candidate_digest": "9d238b0f67d4f15a27c72dd64be6df572105459c86a955122a8e96b048076bb9",
+  "change_id": "CHG-001",
+  "checks": [],
+  "component": "app",
+  "context": "Owner manual observation on the local Compose stack (http://localhost:4200), Colombia and Chile",
+  "digest": "7ae4f5c8e4d6855fa9e9bb495e8607d1cebb4bd6e033e6eb78cd475554027cbb",
+  "executed_by_roclec": false,
+  "finding_parents": {},
+  "findings": [],
+  "id": "EVD-01M85DKC3CEVK2F7BTQKXZ7ECG",
+  "kind": "manual",
+  "limitations": [
+    "Observed in the owner's desktop browser only; other browsers and assistive technologies were not exercised."
+  ],
+  "model_schema": 2,
+  "outcome": "pass",
+  "run_id": "RUN-01M85D08S50EPR14VW56AAY9NN",
+  "supersedes": []
+}

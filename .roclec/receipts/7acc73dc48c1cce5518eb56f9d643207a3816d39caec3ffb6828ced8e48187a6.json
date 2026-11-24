@@ -1,0 +1,25 @@
+{
+  "kind": "release-plan",
+  "model_schema": 2,
+  "operation_id": "7acc73dc48c1cce5518eb56f9d643207a3816d39caec3ffb6828ced8e48187a6",
+  "payload": {
+    "component": "app",
+    "record": {
+      "base_tag": null,
+      "changes": [
+        {
+          "change_id": "CHG-001",
+          "intent_revision": "3c6df305a8fa0075571146e6906deca182c864031e8eb64e24605b7bd6064192"
+        }
+      ],
+      "component": "app",
+      "kind": "release",
+      "model_schema": 2,
+      "version": "v0.1.0"
+    },
+    "version": "v0.1.0"
+  },
+  "writes": {
+    ".roclec/releases/app/v0.1.0/release.json": "96c068b7b0e4056fb8f07314b316e227f013a400fbeba5796cfbe227cebfcb3f"
+  }
+}

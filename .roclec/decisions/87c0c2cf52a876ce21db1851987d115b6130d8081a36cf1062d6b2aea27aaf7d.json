@@ -1,0 +1,63 @@
+{
+  "actor": "luis-cardozo",
+  "addresses": {
+    "corrections": [
+      {
+        "id": "R-1",
+        "reason": "AC-022 keeps the rule and points to the confirmation; new AC-033 (native confirmation on reload or close), AC-034 (application dialog when leaving to the root or another country) and AC-035 (going back does not ask); REQ-005, AC-008, AC-027, AC-028 and AC-030 extended. Details the owner did not state are raised as open questions N1 to N5.",
+        "status": "addressed"
+      },
+      {
+        "id": "R-2",
+        "reason": "AC-001 makes the root heading and page title front-end fallback copy in Spanish; AC-015 adds a visible loader with an announced Spanish fallback label and a reduced-motion variant; AC-008 and REQ-004 list the fallback copy.",
+        "status": "addressed"
+      },
+      {
+        "id": "R-3",
+        "reason": "The proposal records the answers to Q1, Q2, Q3, Q5, Q7, Q8 and Q9 as owner answers accepting the proposed resolutions (Q1: format only, no check-character validation); no earlier question remains open.",
+        "status": "addressed"
+      }
+    ],
+    "rejection": "3a7a0af250436b204f9705e775ac1c3875a945bea6f5ec78d96bc5f3e55ec9da"
+  },
+  "criteria": [
+    {
+      "id": "CR-004",
+      "status": "met"
+    },
+    {
+      "id": "CR-005",
+      "status": "met"
+    },
+    {
+      "id": "CR-006",
+      "status": "met"
+    },
+    {
+      "id": "CR-007",
+      "status": "met"
+    },
+    {
+      "id": "CR-008",
+      "status": "met"
+    }
+  ],
+  "entity": "CHG-001",
+  "flow": "3ae780aad6b1fc33890a0dff47645cf0515ef6319f7c53e9c0a04f98cf4a49fc",
+  "id": "87c0c2cf52a876ce21db1851987d115b6130d8081a36cf1062d6b2aea27aaf7d",
+  "kind": "change-approve",
+  "model_schema": 2,
+  "previous": "3a7a0af250436b204f9705e775ac1c3875a945bea6f5ec78d96bc5f3e55ec9da",
+  "proposal_digest": "3c6df305a8fa0075571146e6906deca182c864031e8eb64e24605b7bd6064192",
+  "reason": "Owner approves the revision addressing R-1 to R-3 and accepts the proposed resolutions of N1 to N5.",
+  "skills": [
+    {
+      "id": "country-content",
+      "sha256": "6076186fc9d8a667a83862233be6ea9042afab7338a6a38104cac1f15da88d4c"
+    },
+    {
+      "id": "story-spec",
+      "sha256": "e9a6fa88cf5747adbef0843ecec49081c786c90b3dcc28d874eccb702c4be997"
+    }
+  ]
+}

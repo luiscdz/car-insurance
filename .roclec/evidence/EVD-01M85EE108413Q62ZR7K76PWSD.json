@@ -1,0 +1,158 @@
+{
+  "acceptance_ids": [
+    "AC-001",
+    "AC-002",
+    "AC-003",
+    "AC-004",
+    "AC-005",
+    "AC-006",
+    "AC-007",
+    "AC-008",
+    "AC-009",
+    "AC-010",
+    "AC-011",
+    "AC-012",
+    "AC-013",
+    "AC-014",
+    "AC-015",
+    "AC-016",
+    "AC-017",
+    "AC-018",
+    "AC-019",
+    "AC-020",
+    "AC-021",
+    "AC-022",
+    "AC-023",
+    "AC-024",
+    "AC-025",
+    "AC-026",
+    "AC-027",
+    "AC-028",
+    "AC-029",
+    "AC-030",
+    "AC-031",
+    "AC-032",
+    "AC-033",
+    "AC-034",
+    "AC-035"
+  ],
+  "actor": "roclec-reviewer",
+  "candidate_digest": "83e56b91eed229ce541665562b9e9255b22d562beb3022e6cfecad0e8931c4a1",
+  "change_id": "CHG-001",
+  "checks": [
+    "Confirmed that every candidate input file in the working tree matches the RUN-01M85E31K8Y0MSRPVH0HA3XZAJ manifest (inputs_digest 83e56b91...). Compared with the previous run, exactly 9 inputs changed: public-permissions.ts and its test, cms index.ts, form-step.ts and its spec, wizard-shell.spec.ts, content-changes.spec.ts, support/strapi-admin.ts and the new public-access.spec.ts",
+    "Read the new run's results: all 8 checks pass (web-unit 122 tests, cms-unit 17 tests, e2e 112 tests including public-access and four AC-007 content-changes tests). The web-build budget warning is unchanged",
+    "F-1: read restrictPublicRole and disableSelfRegistration and their unit tests. Checked in the Strapi users-permissions sources that syncPermissions recreates the defaults only when the permission table is empty, so the app bootstrap's removal persists. Read-only probes of the running stack: GET /api/auth/email-confirmation and GET /api/connect/github now answer 403, while /api/countries and /api/form-fields answer 200",
+    "F-3: read the afterNextRender focus change. Checked in the Angular core sources that registering afterNextRender schedules a tick, so focus still moves when no state changes on a repeated activation. Read the new focusin unit test, which asserts aria-invalid and aria-describedby at the moment of focus",
+    "F-4: read the rewritten content-changes.spec.ts (4 serial tests). It covers adding a field, a draft that never shows, changed order, label, help text, error message, required flag, options and validation pattern, a deleted field and an unpublished field",
+    "F-10: read the new wizard-shell unit test. Leaving through the dialog keeps the completed Chile step 'tus-datos' and discards the unconfirmed values of 'tu-vehiculo'",
+    "Listed .roclec/evidence. The owner's manual observation EVD-01M85EAN04EB71R1P5EWBSPG8M (outcome pass, bound to RUN-01M85E31K8Y0MSRPVH0HA3XZAJ and this candidate digest, superseding EVD-01M85DKC3CEVK2F7BTQKXZ7ECG) covers AC-003, AC-028, AC-029 and AC-030. The owner decision EVD-01M85DT7B05FK2TSG3DVF7FPQP accepted F-5"
+  ],
+  "component": "app",
+  "context": "claude-code:session-3fcd5842-fc64-40ee-adec-a1c9842ce96b/reviewer (roclec-reviewer subagent in its own context window, did not take part in implementation; it shares the host session id with the producer coordinator, so independence is at subagent-context level only)",
+  "digest": "4bda06e4cecb63fe105570b652e4fee01e7ebd12bb3a6fb43d8193e402ef14d6",
+  "executed_by_roclec": false,
+  "finding_parents": {
+    "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-1": [
+      "EVD-01M85DQ5W72GZ0CCYT1FE162P7"
+    ],
+    "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-10": [
+      "EVD-01M85DQ5W72GZ0CCYT1FE162P7"
+    ],
+    "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-2": [
+      "EVD-01M85DQ5W72GZ0CCYT1FE162P7"
+    ],
+    "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-3": [
+      "EVD-01M85DQ5W72GZ0CCYT1FE162P7"
+    ],
+    "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-4": [
+      "EVD-01M85DQ5W72GZ0CCYT1FE162P7"
+    ],
+    "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-6": [
+      "EVD-01M85DQ5W72GZ0CCYT1FE162P7"
+    ],
+    "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-7": [
+      "EVD-01M85DQ5W72GZ0CCYT1FE162P7"
+    ],
+    "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-8": [
+      "EVD-01M85DQ5W72GZ0CCYT1FE162P7"
+    ],
+    "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-9": [
+      "EVD-01M85DQ5W72GZ0CCYT1FE162P7"
+    ]
+  },
+  "findings": [],
+  "id": "EVD-01M85EE108413Q62ZR7K76PWSD",
+  "kind": "independent-review",
+  "limitations": [
+    "Independence is declared, not proven: this reviewer shares the host session with the coordinator that produced the run. Roclec compares only the declared context strings.",
+    "No test suite was re-run on this candidate. Results come from the run logs; the working tree matches the run inputs.",
+    "The F-3 fix is verified at DOM level (focusin with aria-invalid and aria-describedby already set) and by the owner's keyboard observation. Neither this review nor the owner used a screen reader, so the spoken announcement of AC-011 is still unobserved.",
+    "The manual observations for AC-003, AC-028, AC-029 and AC-030 are the owner's (one browser, no assistive technology). This reviewer did not repeat them.",
+    "Only the files changed since the previous review were re-read in depth. The rest of the candidate is byte-identical to the one reviewed in EVD-01M85DQ5W72GZ0CCYT1FE162P7, and the limits recorded there (no non-Chromium browsers, no prototype comparison, no Strapi docs MCP, createdAt tie-break after republish) still apply."
+  ],
+  "model_schema": 2,
+  "outcome": "ready",
+  "policy_id": "7a5f7387abcd3eafbf5b626d24c391890f74d6305d5d88685455f23cd69f3bb5",
+  "resolutions": [
+    {
+      "candidate_digest": "83e56b91eed229ce541665562b9e9255b22d562beb3022e6cfecad0e8931c4a1",
+      "finding": "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-1",
+      "note": "The bootstrap now removes every Public-role permission outside the six find/findOne actions and sets allow_register=false, idempotently. Unit tests cover the plugin defaults, idempotence and the settings. The e2e public-access spec asserts 403/404/405 for register, login, forgot-password, email-confirmation, users, create and delete. On the running stack the auth routes answer 403 and the content reads 200. The plugin's syncPermissions recreates defaults only when the table is empty, so the removal persists across restarts.",
+      "status": "fixed"
+    },
+    {
+      "candidate_digest": "83e56b91eed229ce541665562b9e9255b22d562beb3022e6cfecad0e8931c4a1",
+      "finding": "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-2",
+      "note": "The owner recorded manual observation EVD-01M85EAN04EB71R1P5EWBSPG8M (pass) on this run and candidate: AC-003, the colors and logo placeholder of each country's seeded theme at 375 and 1280 px; AC-029, the layout at 375 and 1280 px with and without errors, nothing cut off, no horizontal scroll. It does not explicitly mention measuring AA contrast; the owner accepted the seeded SURA tokens.",
+      "status": "fixed"
+    },
+    {
+      "candidate_digest": "83e56b91eed229ce541665562b9e9255b22d562beb3022e6cfecad0e8931c4a1",
+      "finding": "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-3",
+      "note": "form-step.ts now moves focus in afterNextRender after markAllTouched. The new unit test records focusin and asserts aria-invalid=true and the error id in aria-describedby at the moment of focus. The e2e AC-009, AC-011 and AC-013 focus assertions still pass. The screen-reader announcement itself remains unobserved (see limitations); a manual observation for AC-011 with assistive technology is advisable.",
+      "status": "fixed"
+    },
+    {
+      "candidate_digest": "83e56b91eed229ce541665562b9e9255b22d562beb3022e6cfecad0e8931c4a1",
+      "finding": "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-4",
+      "note": "content-changes.spec.ts now covers every AC-007 case against real Strapi: an added published field in position, a draft never shown, changed order, label, help text, error message (shown after an advance attempt), required flag and options, a changed validation pattern, a deleted field and an unpublished field. The 4 serial tests pass in the run. They depend on each other's order, which is acceptable for a serial project.",
+      "status": "fixed"
+    },
+    {
+      "candidate_digest": "83e56b91eed229ce541665562b9e9255b22d562beb3022e6cfecad0e8931c4a1",
+      "finding": "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-6",
+      "note": "Unchanged (info): a valid theme without a logo keeps its colors and shows the placeholder, consistent with the design reference. The owner may accept it.",
+      "status": "still-open"
+    },
+    {
+      "candidate_digest": "83e56b91eed229ce541665562b9e9255b22d562beb3022e6cfecad0e8931c4a1",
+      "finding": "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-7",
+      "note": "Unchanged (info): the skill and stack-reference wording (FormField relates to Country through the step; Zod-inferred types instead of exposing the generated types) still awaits a foundation update or an owner decision.",
+      "status": "still-open"
+    },
+    {
+      "candidate_digest": "83e56b91eed229ce541665562b9e9255b22d562beb3022e6cfecad0e8931c4a1",
+      "finding": "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-8",
+      "note": "Unchanged (info): e2e still registers a throwaway administrator on a fresh stack and the e2e check runs down -v; still not documented.",
+      "status": "still-open"
+    },
+    {
+      "candidate_digest": "83e56b91eed229ce541665562b9e9255b22d562beb3022e6cfecad0e8931c4a1",
+      "finding": "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-9",
+      "note": "Unchanged (info): the web-build log still warns that the initial bundle is 747.63 kB against the 500 kB budget.",
+      "status": "still-open"
+    },
+    {
+      "candidate_digest": "83e56b91eed229ce541665562b9e9255b22d562beb3022e6cfecad0e8931c4a1",
+      "finding": "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-10",
+      "note": "A new wizard-shell unit test completes Chile 'tus-datos', types in 'tu-vehiculo', leaves through the dialog, and asserts that the completed step stays stored and the unconfirmed values are gone.",
+      "status": "fixed"
+    }
+  ],
+  "role": "reviewer",
+  "run_id": "RUN-01M85E31K8Y0MSRPVH0HA3XZAJ",
+  "supersedes": [
+    "EVD-01M85DQ5W72GZ0CCYT1FE162P7"
+  ]
+}

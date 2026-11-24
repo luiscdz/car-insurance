@@ -1,4 +1,220 @@
 {
-  "identities": {},
+  "identities": {
+    "AC-001": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-001"
+    },
+    "AC-002": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-001"
+    },
+    "AC-003": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-001"
+    },
+    "AC-004": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-002"
+    },
+    "AC-005": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-002"
+    },
+    "AC-006": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-002"
+    },
+    "AC-007": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-002"
+    },
+    "AC-008": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-002"
+    },
+    "AC-009": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-003"
+    },
+    "AC-010": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-003"
+    },
+    "AC-011": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-003"
+    },
+    "AC-012": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-003"
+    },
+    "AC-013": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-003"
+    },
+    "AC-014": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-003"
+    },
+    "AC-015": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-004"
+    },
+    "AC-016": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-004"
+    },
+    "AC-017": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-004"
+    },
+    "AC-018": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-004"
+    },
+    "AC-019": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-005"
+    },
+    "AC-020": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-005"
+    },
+    "AC-021": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-005"
+    },
+    "AC-022": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-005"
+    },
+    "AC-023": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-005"
+    },
+    "AC-024": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-005"
+    },
+    "AC-025": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-005"
+    },
+    "AC-026": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-005"
+    },
+    "AC-027": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-006"
+    },
+    "AC-028": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-006"
+    },
+    "AC-029": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-006"
+    },
+    "AC-030": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-006"
+    },
+    "AC-031": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-007"
+    },
+    "AC-032": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-007"
+    },
+    "AC-033": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-005"
+    },
+    "AC-034": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-005"
+    },
+    "AC-035": {
+      "introduced_by": "CHG-001",
+      "kind": "AC",
+      "owner": "REQ-005"
+    },
+    "CAP-001": {
+      "introduced_by": "CHG-001",
+      "kind": "CAP",
+      "owner": "CAP-001"
+    },
+    "REQ-001": {
+      "introduced_by": "CHG-001",
+      "kind": "REQ",
+      "owner": "CAP-001"
+    },
+    "REQ-002": {
+      "introduced_by": "CHG-001",
+      "kind": "REQ",
+      "owner": "CAP-001"
+    },
+    "REQ-003": {
+      "introduced_by": "CHG-001",
+      "kind": "REQ",
+      "owner": "CAP-001"
+    },
+    "REQ-004": {
+      "introduced_by": "CHG-001",
+      "kind": "REQ",
+      "owner": "CAP-001"
+    },
+    "REQ-005": {
+      "introduced_by": "CHG-001",
+      "kind": "REQ",
+      "owner": "CAP-001"
+    },
+    "REQ-006": {
+      "introduced_by": "CHG-001",
+      "kind": "REQ",
+      "owner": "CAP-001"
+    },
+    "REQ-007": {
+      "introduced_by": "CHG-001",
+      "kind": "REQ",
+      "owner": "CAP-001"
+    }
+  },
   "model_schema": 2
 }

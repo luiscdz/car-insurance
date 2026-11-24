@@ -1,0 +1,97 @@
+{
+  "actor": "luis-cardozo",
+  "consequence": "revise",
+  "corrections": [
+    {
+      "description": "Q4: keep the rule that values not confirmed with continue are not stored, but ask before they are lost. When the current step has typed values not yet confirmed and the person reloads or closes the tab, the browser's native leave confirmation is shown. When the person leaves the wizard to the root or to another country, the application shows its own confirmation dialog. Going back to the previous step does not ask.",
+      "id": "R-1"
+    },
+    {
+      "description": "Q6: copy shown before country content exists (root heading, loading label) is front-end fallback copy in Spanish, and the loading state shows a visible loader in addition to the announced text.",
+      "id": "R-2"
+    },
+    {
+      "description": "Record the owner's answers to Q1, Q2, Q3, Q5, Q7, Q8 and Q9 as accepted with the proposed resolution (Q1: no check-character validation, format only), so no gap remains as an open question.",
+      "id": "R-3"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "CR-004",
+      "status": "met"
+    },
+    {
+      "id": "CR-005",
+      "status": "met"
+    },
+    {
+      "id": "CR-006",
+      "status": "met"
+    },
+    {
+      "id": "CR-007",
+      "status": "not-met"
+    },
+    {
+      "id": "CR-008",
+      "status": "met"
+    }
+  ],
+  "entity": "CHG-001",
+  "files": {
+    "change.json": "95f0cd4da11347adb7cde76b174613968486630eef620624e7811edbc8f64c6d",
+    "proposal.md": "bfc6c176b8eb462b36eec5c63b26106105ec902c83d4e18275e1f2894a7defc6",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-001.md": "15aace0e918be11e3cf2a34f3a9e57b5dd421242fa073242b7b210726e2a29a3",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-002.md": "7cf8b7a49c107f7bbb4b8574f4b1e5d7407fcb2aa3d91168b313a3f9ae65eb41",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-003.md": "8d003ced2553e23fcab5c77ad5157aafc0e75f67e9f27154fcd6df3715350ce9",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-004.md": "c9a4ee1bd58490422f7a8929e3de5ad5b52fbfd867315877151261b1dfdcc4d2",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-005.md": "4716ce31ff03b57192eea78c728dfaf5770ae64fa641eb1f32a04b9687814893",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-006.md": "d99cce8d95947839402206b4ce181b745e2822b7f3e44400edc1f268ad36130f",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-007.md": "c2ea9024b93d6f06bb6c29d3652660384736b75db6e8a9d497da0ec22811e93e",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-008.md": "09bc81e356000bcacd9004ec7b2e8c661a051f20b0bc298dba96dd96ac23eddd",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-009.md": "d96d84bf996f4d535525906d5092690b6526402bf23fd907af0826089dc38747",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-010.md": "7868de3f6036bc06818b055fe19fb19e256884642b347404c9c13f88647c403b",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-011.md": "fa66c13576442ca4cefc2346980fc2bf61ce9c556f90841b2f8d4ae3a030e09c",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-012.md": "7e488843922c9b1abeed35655370b44393c3cccf0c0605394433be4459ce6da8",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-013.md": "823dce70f84a41793961fa9d7f952f8f1592396da07fa99d54df41eb331a47e4",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-014.md": "0e4836144333c9095542a92ffe8a64196bf4d428903d9c027b0146eae8095353",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-015.md": "6d3dc2ee8c1b9b9a5bcd4ab85291704ed4d56196a3b1f368ba5b95dbae025763",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-016.md": "804e8ecaada33a0c62cd102fec3a13d2df28e22a5cbf3b590dc0233acb44239c",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-017.md": "8cc0ba4d8f0bca6c354d24070a7f3244ccb5402917973d70c08cc050cc8828d8",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-018.md": "c005d64a14718e3e6ad9c01bfeb6b97ea1533d4de8aed55b9968306f876e42f3",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-019.md": "126b927ffd74f22eb1d2302cdc085c318475545891c36a40f875831a767fdb54",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-020.md": "8d7f95ffb3bb2a0aa3e855370944c67002de4d7dff69b60844aea0833d7b7184",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-021.md": "396efac69bd90db7aca1e7060b803977eeb9525356107092f184e5de2db990bd",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-022.md": "392d1ea058f9cc82ccc35ca7f684a72e685ea1d66df90b0b07e10736cbe6bc4e",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-023.md": "c4447422a72ea551aa2ba3e8c59cc0256e89869e5ecbd39874b6779fa8b72f06",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-024.md": "ce1131f0eefe74bad8b4fe36168dad26e99040ba614bd8ea814884e20fa1575f",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-025.md": "15b73a559b47ce37dcae2d96bd777e7d3e71d2759072a7815e81c7050269bf03",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-026.md": "f63189fc1c8669f48605e58cf67f5234d77bda350c5619d34def16701faf9961",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-027.md": "b37fcf1ccd5bb7c069aa8e5487af7cc6c1b33c792051c1a96d1f670c4aa27386",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-028.md": "d671a46924cf366869e835bf9716a4740f67f2ad1deee31f59d952efef19283a",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-029.md": "deb9f18bbf76d0494317535f7338444622e15e2e80a3aaa7eeb72ed8f4d8f9b6",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-030.md": "c9b38f1ebad491a128f7bc33e938b39991872dbf40153af3f28f06645ce8cfc7",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-031.md": "0f403b1f91e303ad8cc302576aadb1341928afb212999d85008ee04a27b9940e",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/acceptance/AC-032.md": "ff0697494907861cedb6a6d8d40b0eaa600b767ed2b59386945cf4f2bd36787c",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/contract.json": "eeec39110a9fefd97569d9e6e103ce55cc4d04e5e7fe882309085ebe7928b7c0",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/requirements/REQ-001.md": "a04ec2781fd481ebecdc60ae26d1ec6bd264651a2084e6be0b811a9fe7568237",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/requirements/REQ-002.md": "38c0d3ea54d8d213f50fa70e6ac40ac92ec86cac8cfdd2082e894711acc272a6",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/requirements/REQ-003.md": "2e9254d665aee47022066d2a2764fa74a6e582a4aade1ce164aebe0205be9467",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/requirements/REQ-004.md": "1bd04eb0b8cb9a77345064b5fe80dffe9bb480627bf5d2b290a48ebbe1faa30f",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/requirements/REQ-005.md": "dad5337e051b3432e0e3536687aa418dd73536a997ff0e61b9c52fe5d1c013c7",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/requirements/REQ-006.md": "4de5bca995b6308900e99d8e1489a159bd1efdc13b92828bf7273d8c9d78c3ce",
+    "proposed/CAP-001/77c9592490007bd6751cac5491a50e3e2c69fecd85c57c4e2f45f4880b9acb2a/requirements/REQ-007.md": "ec4fe3ecb1d3b1c36cb9693907bbfef9ee0ee8f3c92b6bda53f81d2a5209a53f",
+    "sources/US-01.md": "dee556eb43d019b0ef4c8780517ac1a39ceb6720c818cf9cc76acad8d0548872"
+  },
+  "flow": "3ae780aad6b1fc33890a0dff47645cf0515ef6319f7c53e9c0a04f98cf4a49fc",
+  "id": "3a7a0af250436b204f9705e775ac1c3875a945bea6f5ec78d96bc5f3e55ec9da",
+  "kind": "rejection",
+  "model_schema": 2,
+  "previous": null,
+  "reason": "Owner answered Q1-Q9: Q4 and Q6 need changes; the other answers confirm the proposed resolutions.",
+  "subject": {
+    "digest": "7745cf87b531ab42d66d0d830e6c1c18c6e9dc6bfb5463478e33614517d5f90b",
+    "entity": "CHG-001",
+    "type": "change"
+  }
+}

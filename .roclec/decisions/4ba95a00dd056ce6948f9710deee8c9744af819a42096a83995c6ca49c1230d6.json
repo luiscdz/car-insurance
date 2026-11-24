@@ -1,0 +1,26 @@
+{
+  "actor": "luis-cardozo",
+  "criteria": [
+    {
+      "id": "CR-009",
+      "status": "met"
+    },
+    {
+      "id": "CR-010",
+      "status": "met"
+    }
+  ],
+  "entity": "docs/prototypes/us-01/index.html",
+  "flow": "3ae780aad6b1fc33890a0dff47645cf0515ef6319f7c53e9c0a04f98cf4a49fc",
+  "id": "4ba95a00dd056ce6948f9710deee8c9744af819a42096a83995c6ca49c1230d6",
+  "kind": "checkpoint",
+  "model_schema": 2,
+  "outcome": "approved",
+  "previous": null,
+  "reason": "Owner approves the refined US-01 prototype (CHG-001) showing Colombia and Chile content.",
+  "subject": {
+    "digest": "5b7026e77914d263aa19b7dcc8858ce3328bc4593a16af0585785dfc5aef40f2",
+    "entity": "docs/prototypes/us-01/index.html",
+    "type": "prototype"
+  }
+}

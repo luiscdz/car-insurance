@@ -1,0 +1,21 @@
+{
+  "actor": "luis-cardozo",
+  "change_id": "CHG-001",
+  "component": "app",
+  "digest": "2fe49d5a2c5860e67e8c4c8d1d4c2230d24aa64f2cb7f663c30116030b3a856a",
+  "executed_by_roclec": false,
+  "finding_parents": {
+    "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-5": [
+      "EVD-01M85DQ5W72GZ0CCYT1FE162P7"
+    ]
+  },
+  "findings": [
+    "EVD-01M85DQ5W72GZ0CCYT1FE162P7#F-5"
+  ],
+  "id": "EVD-01M85DT7B05FK2TSG3DVF7FPQP",
+  "kind": "finding-decision",
+  "model_schema": 2,
+  "reason": "Owner acknowledges deviation 9: the address bar shows the target while the leave dialog is open after browser back; stay and Escape restore the address, values and focus, which satisfies AC-034.",
+  "status": "accepted",
+  "supersedes": []
+}

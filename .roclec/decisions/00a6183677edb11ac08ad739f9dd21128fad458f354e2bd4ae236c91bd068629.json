@@ -1,0 +1,24 @@
+{
+  "actor": "luis-cardozo",
+  "component": "app",
+  "criteria": [
+    {
+      "id": "CR-011",
+      "status": "met"
+    }
+  ],
+  "entity": "CHG-001",
+  "flow": "3ae780aad6b1fc33890a0dff47645cf0515ef6319f7c53e9c0a04f98cf4a49fc",
+  "hook": "pre-implement",
+  "id": "00a6183677edb11ac08ad739f9dd21128fad458f354e2bd4ae236c91bd068629",
+  "kind": "checkpoint",
+  "model_schema": 2,
+  "outcome": "approved",
+  "previous": null,
+  "reason": "Owner approves the CHG-001 plan and tasks (docs/plans/CHG-001) with answers Q1-Q9 applied.",
+  "subject": {
+    "digest": "3c6df305a8fa0075571146e6906deca182c864031e8eb64e24605b7bd6064192",
+    "entity": "CHG-001",
+    "type": "stage"
+  }
+}
