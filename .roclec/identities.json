@@ -475,6 +475,16 @@
       "kind": "AC",
       "owner": "REQ-020"
     },
+    "AC-096": {
+      "introduced_by": "CHG-003",
+      "kind": "AC",
+      "owner": "REQ-018"
+    },
+    "AC-097": {
+      "introduced_by": "CHG-003",
+      "kind": "AC",
+      "owner": "REQ-009"
+    },
     "CAP-001": {
       "introduced_by": "CHG-001",
       "kind": "CAP",

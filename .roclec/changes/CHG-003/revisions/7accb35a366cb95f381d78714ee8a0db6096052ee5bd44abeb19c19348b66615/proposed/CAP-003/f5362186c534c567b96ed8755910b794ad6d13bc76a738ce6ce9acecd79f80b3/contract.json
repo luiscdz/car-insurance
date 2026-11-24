@@ -1,0 +1,372 @@
+{
+  "acceptance": [
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-067",
+      "scenario": "acceptance/AC-067.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-068",
+      "scenario": "acceptance/AC-068.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-069",
+      "scenario": "acceptance/AC-069.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-070",
+      "scenario": "acceptance/AC-070.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-071",
+      "scenario": "acceptance/AC-071.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-072",
+      "scenario": "acceptance/AC-072.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-073",
+      "scenario": "acceptance/AC-073.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-074",
+      "scenario": "acceptance/AC-074.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-075",
+      "scenario": "acceptance/AC-075.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-076",
+      "scenario": "acceptance/AC-076.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-077",
+      "scenario": "acceptance/AC-077.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-078",
+      "scenario": "acceptance/AC-078.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-079",
+      "scenario": "acceptance/AC-079.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-080",
+      "scenario": "acceptance/AC-080.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-081",
+      "scenario": "acceptance/AC-081.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-082",
+      "scenario": "acceptance/AC-082.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-083",
+      "scenario": "acceptance/AC-083.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-084",
+      "scenario": "acceptance/AC-084.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-085",
+      "scenario": "acceptance/AC-085.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-086",
+      "scenario": "acceptance/AC-086.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-087",
+      "scenario": "acceptance/AC-087.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-088",
+      "scenario": "acceptance/AC-088.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-089",
+      "scenario": "acceptance/AC-089.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-090",
+      "scenario": "acceptance/AC-090.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-091",
+      "scenario": "acceptance/AC-091.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-092",
+      "scenario": "acceptance/AC-092.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-093",
+      "scenario": "acceptance/AC-093.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-094",
+      "scenario": "acceptance/AC-094.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-095",
+      "scenario": "acceptance/AC-095.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-096",
+      "scenario": "acceptance/AC-096.md"
+    }
+  ],
+  "capability_id": "CAP-003",
+  "files": {
+    "acceptance/AC-067.md": "46de803fc9d22f849397df70ff817289f1dad6af6aad3a78cb685e443f029cf3",
+    "acceptance/AC-068.md": "9fa8005f3e04e08a1432addcb2f0383fdcf834bdf5881240ff214cd53cac76a3",
+    "acceptance/AC-069.md": "ee0345e93619d364686a061a5987199c0bbed1413ce4b3ab5e42a4af5dccce69",
+    "acceptance/AC-070.md": "fb70ce3f6c5a436418d61d4168db946cfa3628e179a6251ebec25b2518031f2f",
+    "acceptance/AC-071.md": "deb87b833248eb99b84b068fc8eb3c4afd62176025703e89efd3679a113f2ff8",
+    "acceptance/AC-072.md": "2fedc659f2686086f8fd41ff0e03da37410d46abef65f18815a8a53fe4f46e81",
+    "acceptance/AC-073.md": "033312b63f66a6f6b770569fec114df5d2147e989643b41bb080f316be1a9617",
+    "acceptance/AC-074.md": "e29e3db2adb68fabba38378499933f4e14a7f0eea437a1411bfada57e2809f1c",
+    "acceptance/AC-075.md": "334e6a519e17a34765fd9adc0b262ae1fd2a5c44975179a9e37ff54ee22c107d",
+    "acceptance/AC-076.md": "a5479d2c819166b97d7827a5519c5022ed2bfefb4a6b0cd4943470cc8d69059a",
+    "acceptance/AC-077.md": "b597606e8d0a957e3a54a1bdd0e4d4415fea683a10fd85609ab3debb9aad47f1",
+    "acceptance/AC-078.md": "6c2b85a1e147c4df2713ea284e1d1cf568567aa485984035849be9dfeeba58cc",
+    "acceptance/AC-079.md": "e8beefac0d87b6f76b459f300cf6338e69442c940d083391250bbf32476c8fa8",
+    "acceptance/AC-080.md": "f998bede65c58e37933dfd2d15cfc5f4c8fc6d1c3927419d8bc80a8c41e65d51",
+    "acceptance/AC-081.md": "a67ab13ecc387b1d9fd2229ec065af2d627dfa496b8a69e994f42ed3ebae201b",
+    "acceptance/AC-082.md": "5585500cc4b2e10e38fffb5b9b2ae3ce4712900a7fa2d1a028e1760b44239119",
+    "acceptance/AC-083.md": "25714ab1dc37603bfe36d1795a358b2300749eae7f53f638325d518f52c69e3c",
+    "acceptance/AC-084.md": "3e2b9de3b8fd77d3fbea34a75615ea136598d969fe6d8ac88cbfe2cf03e8a11e",
+    "acceptance/AC-085.md": "dc1dd6a803decb5fc7e0342a5538a404f552021eb7158222090943c947614de4",
+    "acceptance/AC-086.md": "d9a516b30b84aec406c94cff630fb50e5e7126057d5bd2d83c77d6bf772fdac1",
+    "acceptance/AC-087.md": "75f1caff34c2df2767b00f4f34c5d26449170518bb7cdaf57eac1b906b964a1e",
+    "acceptance/AC-088.md": "8bc0f56202a045e9858848d7ac8ae9133e003ea060a246c1ca1c2461ef840df2",
+    "acceptance/AC-089.md": "92bc5f3db7c038668ebfac714b04895703b3cda1819e6f62450b1fb1cc13e2c3",
+    "acceptance/AC-090.md": "8b1b6c3f4f4e56d5176e3449fdd41128641a78fc97200e9fd36a0ce17c9bc687",
+    "acceptance/AC-091.md": "3ce774cb00c1b3b994c321169e219414d572686c29eb9fb3ace48f917e8668c5",
+    "acceptance/AC-092.md": "d1f74256920111d93c58ce3ea81adba53293a9bffd9e08cccb19ca2757d19320",
+    "acceptance/AC-093.md": "8c4268ca02cc9d62c5ca9893e7109a08e43afe4aea7b07312a117d7d63538739",
+    "acceptance/AC-094.md": "9b33487cb53d359a65fc33191f8ede93731438cd568a8de9cb8d7e2683563890",
+    "acceptance/AC-095.md": "5ef0f34f201f83fb3b2393b7c3a3af1a44e228eab3b64422c9c3928c54be034e",
+    "acceptance/AC-096.md": "e05194d80aa14579f6691391086cbffbf637908b3a8d2485824d1473fe8d6846",
+    "requirements/REQ-014.md": "cf76109fa5bbd19ba8207e89da55d4be43de8e547d04479bf88709c3deb2dfcb",
+    "requirements/REQ-015.md": "9e2e1b7aa47741b60ba2c6a0d8437f0415ba640deeb396ff654731c00a72348f",
+    "requirements/REQ-016.md": "5a0e539158c39df8242058cfad60ed252a555a03c280f98bcd2f367d8862503e",
+    "requirements/REQ-017.md": "65cdf5a20eca7c4b331d9f15d3ce8e61eb7d93948e1e48489f6acca3b8b19a99",
+    "requirements/REQ-018.md": "8f44defa732b9ea9835b99365b880f72d9da5fa9fe15da6acc59b430de293214",
+    "requirements/REQ-019.md": "5037b65ed25ca5a36f9dc87812e5c3eb32c5c70883629c231599d2591e710fe6",
+    "requirements/REQ-020.md": "976b1d17da84eb77e74b4c2983f9eaa4745cb2a82baa868c650ffbedf0ba57f6"
+  },
+  "model_schema": 2,
+  "references": [
+    {
+      "id": "ADR-001",
+      "sha256": "bd3697711bb77da644c103469cc41cfd63e2ab94964da397bd5c894804449e93"
+    },
+    {
+      "id": "architecture",
+      "sha256": "53e3b75fac47d734ac4e4eb5283036108a87b3d036c3f91462afbe5f3598ea76"
+    },
+    {
+      "id": "context",
+      "sha256": "d36b8a76f5656f5499291fac24b46d3b998d90fb16ca00da390f06facd3a6f03"
+    },
+    {
+      "id": "design",
+      "sha256": "c81ff9f48a6fe7b03f3e2c18a513fc8aa37a90a3f4c095dfb4876663ff2a870a"
+    },
+    {
+      "id": "principles",
+      "sha256": "ce473af13ddb50cebb38a7ca86990363ff7b7bce5b2367ff072daaeb023edf57"
+    }
+  ],
+  "requirements": [
+    {
+      "acceptance_ids": [
+        "AC-067",
+        "AC-068",
+        "AC-069",
+        "AC-070",
+        "AC-071",
+        "AC-072",
+        "AC-073"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-014",
+      "statement": "requirements/REQ-014.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-074",
+        "AC-075",
+        "AC-076",
+        "AC-077"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-015",
+      "statement": "requirements/REQ-015.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-078",
+        "AC-079",
+        "AC-080",
+        "AC-081",
+        "AC-082"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-016",
+      "statement": "requirements/REQ-016.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-083",
+        "AC-084",
+        "AC-085",
+        "AC-086",
+        "AC-087"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-017",
+      "statement": "requirements/REQ-017.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-088",
+        "AC-089",
+        "AC-096"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-018",
+      "statement": "requirements/REQ-018.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-090",
+        "AC-091",
+        "AC-092",
+        "AC-093"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-019",
+      "statement": "requirements/REQ-019.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-094",
+        "AC-095"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-020",
+      "statement": "requirements/REQ-020.md"
+    }
+  ]
+}

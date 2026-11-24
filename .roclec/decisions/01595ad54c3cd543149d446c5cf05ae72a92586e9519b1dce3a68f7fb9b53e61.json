@@ -1,0 +1,86 @@
+{
+  "actor": "luis-cardozo",
+  "consequence": "revise",
+  "corrections": [
+    {
+      "description": "Record the owner's answers to Q1 to Q16 as owner answers: Q1 changed to a fixed mask on the identity document field without a configurable Strapi mark; Q13 changed to asking before leaving while a payment is processing; Q15 and Q16 applied now that CHG-002 is integrated; the rest accepted as proposed. Record the owner's acceptance of the proposed resolutions of N1, N2 and N3, so no gap remains as an open question.",
+      "id": "R-1"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "CR-004",
+      "status": "met"
+    },
+    {
+      "id": "CR-005",
+      "status": "met"
+    },
+    {
+      "id": "CR-006",
+      "status": "met"
+    },
+    {
+      "id": "CR-007",
+      "status": "not-met"
+    },
+    {
+      "id": "CR-008",
+      "status": "met"
+    }
+  ],
+  "entity": "CHG-003",
+  "files": {
+    "change.json": "f69592bec20490f3e6e068d3cd3cd228e8a804e408803370a1c2b9fad9d3e002",
+    "proposal.md": "2dfd580479e296ca3d21bfe21140cd0d33cd00db9ca26468753d2d865e499fe2",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-067.md": "46de803fc9d22f849397df70ff817289f1dad6af6aad3a78cb685e443f029cf3",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-068.md": "9fa8005f3e04e08a1432addcb2f0383fdcf834bdf5881240ff214cd53cac76a3",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-069.md": "bdcb2e84e29e597a3e998a3fad77bd5595f2430f0a0a030f15c02a727664f70d",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-070.md": "fb70ce3f6c5a436418d61d4168db946cfa3628e179a6251ebec25b2518031f2f",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-071.md": "deb87b833248eb99b84b068fc8eb3c4afd62176025703e89efd3679a113f2ff8",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-072.md": "2fedc659f2686086f8fd41ff0e03da37410d46abef65f18815a8a53fe4f46e81",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-073.md": "7dc694cc4d895d010c6d627b8a0d3ee11745bf3be8fed001bc38928792c1faa8",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-074.md": "e29e3db2adb68fabba38378499933f4e14a7f0eea437a1411bfada57e2809f1c",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-075.md": "334e6a519e17a34765fd9adc0b262ae1fd2a5c44975179a9e37ff54ee22c107d",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-076.md": "a5479d2c819166b97d7827a5519c5022ed2bfefb4a6b0cd4943470cc8d69059a",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-077.md": "b597606e8d0a957e3a54a1bdd0e4d4415fea683a10fd85609ab3debb9aad47f1",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-078.md": "347537adbe0e2f94f8d6ab9528941006c73b64ffd122b20f4d651d67541da1f7",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-079.md": "e8beefac0d87b6f76b459f300cf6338e69442c940d083391250bbf32476c8fa8",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-080.md": "f998bede65c58e37933dfd2d15cfc5f4c8fc6d1c3927419d8bc80a8c41e65d51",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-081.md": "a67ab13ecc387b1d9fd2229ec065af2d627dfa496b8a69e994f42ed3ebae201b",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-082.md": "6055c668307dd32b2b11e73ca05dcaeacf65f05df2b36fe39e9ca8ecf44498ee",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-083.md": "25714ab1dc37603bfe36d1795a358b2300749eae7f53f638325d518f52c69e3c",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-084.md": "3e2b9de3b8fd77d3fbea34a75615ea136598d969fe6d8ac88cbfe2cf03e8a11e",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-085.md": "dc1dd6a803decb5fc7e0342a5538a404f552021eb7158222090943c947614de4",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-086.md": "d9a516b30b84aec406c94cff630fb50e5e7126057d5bd2d83c77d6bf772fdac1",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-087.md": "75f1caff34c2df2767b00f4f34c5d26449170518bb7cdaf57eac1b906b964a1e",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-088.md": "8bc0f56202a045e9858848d7ac8ae9133e003ea060a246c1ca1c2461ef840df2",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-089.md": "fbc6257b2b49dd5e19e2e26c5a68bec223e6af7aa834e967a873a9c3f38dd54e",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-090.md": "e5aa3eb42e25ccad4b2154eedfeb4b368c317db3c7e2b59d49df4df523de242d",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-091.md": "b93342ac2659b004a68073724105310a4f8d01e3b8e217734c015f28c826622e",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-092.md": "3063627dd868f1a4b7f7e5b094e38ca1a8d7fad5acba601a45be9fad89d7a5c2",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-093.md": "93b4e5c59f8487dc34849a85a20da491ee559d7c7baaeeb82f3c58e318549d3d",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-094.md": "8effd8da56178e5550cc0d33ab6546174762bb318d535f1708c7fbeb84e63012",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/acceptance/AC-095.md": "abb9b025b0eff5e40467bcde216b35f7ae990088ed19ae2c77baa4bf9b27d49c",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/contract.json": "2d1cd55ecd4f47a638eea46c6649ded20d44bca8e79ba8388bb5f119513dfb12",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/requirements/REQ-014.md": "85eb7660c4cbef3215fc59daaa81002f333dd992c443bd61d6cc485b6088e9af",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/requirements/REQ-015.md": "9e2e1b7aa47741b60ba2c6a0d8437f0415ba640deeb396ff654731c00a72348f",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/requirements/REQ-016.md": "5a0e539158c39df8242058cfad60ed252a555a03c280f98bcd2f367d8862503e",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/requirements/REQ-017.md": "65cdf5a20eca7c4b331d9f15d3ce8e61eb7d93948e1e48489f6acca3b8b19a99",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/requirements/REQ-018.md": "4ede9d90e785cae845e0e14174ecdad5bbc936adc2d26c26dce5e3e40dd9371b",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/requirements/REQ-019.md": "5037b65ed25ca5a36f9dc87812e5c3eb32c5c70883629c231599d2591e710fe6",
+    "proposed/CAP-003/e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef/requirements/REQ-020.md": "92dbc90edd685faa505e4c0fa587b05acf29ff32cfe2a15404e3bf0eb4f1475f",
+    "sources/US-03.md": "2196c5b5c657ca4efd1c62294664c055891f53085443763d9b3468dc6b2d24fa"
+  },
+  "flow": "3ae780aad6b1fc33890a0dff47645cf0515ef6319f7c53e9c0a04f98cf4a49fc",
+  "id": "01595ad54c3cd543149d446c5cf05ae72a92586e9519b1dce3a68f7fb9b53e61",
+  "kind": "rejection",
+  "model_schema": 2,
+  "previous": null,
+  "reason": "Owner answered Q1-Q16 (Q1 and Q13 changed) and accepted N1-N3; the proposal must record them as owner answers instead of open questions.",
+  "subject": {
+    "digest": "de9947c75d18e0bdeceef17851ce7290914eaa4a2da8b4d00dd96d7fd0719b85",
+    "entity": "CHG-003",
+    "type": "change"
+  }
+}

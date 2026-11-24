@@ -2,8 +2,18 @@
   "id": "CHG-003",
   "kind": "evolution",
   "model_schema": 2,
-  "proposal_digest": "de9947c75d18e0bdeceef17851ce7290914eaa4a2da8b4d00dd96d7fd0719b85",
+  "proposal_digest": "7accb35a366cb95f381d78714ee8a0db6096052ee5bd44abeb19c19348b66615",
   "semantic": {
+    "addresses": {
+      "corrections": [
+        {
+          "id": "R-1",
+          "reason": "The proposal records the answers to Q1 to Q16 and the acceptance of N1 to N3 under 'Owner answers', with the alternatives kept as options considered; no question remains open. Q1: the identity document number is identified by a fixed field kind and always masked with the fixed rule, with no Strapi masking option (AC-069, AC-090, AC-094, AC-095). Q13: leaving while a payment is processed asks first with the leave confirmations of AC-033 and AC-034, using its own copy (new AC-096; AC-073, AC-078, AC-089, AC-090 to AC-093). Q15: CAP-002 is a base at its integrated revision and REQ-009 is revised to retire AC-066, so AC-082 is the only statement of the public role; because a revised requirement needs a new acceptance criterion, REQ-009 gains AC-097 (the final price is requested without a token). Q16: dependencies on CAP-001 and CAP-002, both integrated.",
+          "status": "addressed"
+        }
+      ],
+      "rejection": "01595ad54c3cd543149d446c5cf05ae72a92586e9519b1dce3a68f7fb9b53e61"
+    },
     "architecture_decisions": {
       "adrs": [
         {
@@ -13,6 +23,11 @@
       ]
     },
     "bases": [
+      {
+        "capability_id": "CAP-002",
+        "component": "app",
+        "revision": "c8a973e708d69f46246a2ca995ddbfd53b1843b7b0c7925b1d2cfae054b35a36"
+      },
       {
         "capability_id": "CAP-003",
         "component": "app",
@@ -151,7 +166,7 @@
         },
         {
           "id": "AC-089",
-          "reason": "The story does not cover reloading or leaving the summary, nor leaving while a payment is processed; the gap checklist requires stating reload and navigation, and CHG-001's leave confirmation (AC-033, AC-034) needs a statement for this step, as AC-057 gives for the plan step."
+          "reason": "The story does not cover reloading or leaving the summary; the gap checklist requires stating reload and navigation, and CHG-001's leave confirmation (AC-033, AC-034) needs a statement for this step when no payment is processed, as AC-057 gives for the plan step."
         },
         {
           "id": "AC-090",
@@ -168,10 +183,29 @@
         {
           "id": "AC-093",
           "reason": "The story has no motion criteria; the design reference requires respecting the reduced-motion preference."
+        },
+        {
+          "id": "AC-096",
+          "reason": "The story does not cover leaving while a payment is processed; the owner answered Q13 that leaving then asks first, reusing the leave confirmations of AC-033 and AC-034, so the behavior, its copy and the browsers without the native confirmation must be stated."
+        },
+        {
+          "id": "AC-097",
+          "reason": "Retiring AC-066 (owner answer Q15) revises REQ-009, which needs a new acceptance criterion; AC-097 keeps the price-quote part of AC-066 (no token in the browser, P4), while AC-082 stays the only list of the public role's actions."
         }
       ]
     },
     "deltas": [
+      {
+        "add_acceptance_ids": [
+          "AC-097"
+        ],
+        "capability_id": "CAP-002",
+        "op": "revise",
+        "requirement_id": "REQ-009",
+        "retire_acceptance_ids": [
+          "AC-066"
+        ]
+      },
       {
         "capability_id": "CAP-003",
         "op": "add",
@@ -221,7 +255,7 @@
       }
     ],
     "files": {
-      "proposal.md": "2dfd580479e296ca3d21bfe21140cd0d33cd00db9ca26468753d2d865e499fe2",
+      "proposal.md": "6bc5a49a0acba44c61537d98e3a3e8f751ecbd38702fd1ff0b4587305309d6cb",
       "sources/US-03.md": "2196c5b5c657ca4efd1c62294664c055891f53085443763d9b3468dc6b2d24fa"
     },
     "intention": "proposal.md",
@@ -247,11 +281,18 @@
     ],
     "proposed": [
       {
+        "capability_id": "CAP-002",
+        "components": [
+          "app"
+        ],
+        "revision": "f29abb81f63df4683cf63f9bdb62da57d2b93b092b57e0fa2ccada61e64aeb42"
+      },
+      {
         "capability_id": "CAP-003",
         "components": [
           "app"
         ],
-        "revision": "e7723346cf9b733611f7ba2fbcea9e0da28893451d38ffd6cfc9910fa2edb6ef"
+        "revision": "f5362186c534c567b96ed8755910b794ad6d13bc76a738ce6ce9acecd79f80b3"
       }
     ],
     "references": [
