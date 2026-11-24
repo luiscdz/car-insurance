@@ -1,0 +1,19 @@
+{
+  "kind": "views",
+  "model_schema": 2,
+  "operation_id": "52f213c4d40b0ab67eecbe5b3319aa22a53e003ed4744ba9904875b51918d017",
+  "payload": {
+    "flow_view": "docs/flow.md",
+    "generation": "00684851a9b150d7856b9d6ec0ca0a326977940f0c221aff04ab8b311d736cd0",
+    "sources": {
+      "app": {
+        "CAP-001": "d9a109a9933d4153ee9a5295d15a679e3561ced3e0104bcbf99c35f5fe2120fb",
+        "CAP-002": "c8a973e708d69f46246a2ca995ddbfd53b1843b7b0c7925b1d2cfae054b35a36"
+      }
+    }
+  },
+  "writes": {
+    "docs/flow.md": "6ab79f8a3343406b5aea082048c942d30da4fadd6e4e7d7e7f7563e695c2dacb",
+    "specs/capabilities/CAP-002.md": "0e7ce4a45fc0941ece10256106459f61c41e2563c7d514a8ff1096ce092241b7"
+  }
+}

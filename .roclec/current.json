@@ -1,7 +1,8 @@
 {
   "components": {
     "app": {
-      "CAP-001": "d9a109a9933d4153ee9a5295d15a679e3561ced3e0104bcbf99c35f5fe2120fb"
+      "CAP-001": "d9a109a9933d4153ee9a5295d15a679e3561ced3e0104bcbf99c35f5fe2120fb",
+      "CAP-002": "c8a973e708d69f46246a2ca995ddbfd53b1843b7b0c7925b1d2cfae054b35a36"
     }
   },
   "model_schema": 2

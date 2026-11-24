@@ -1,4 +1,4 @@
-<!-- roclec-managed-view sha256=0b45add765d4cf936e6f56b768ec2ed92c08c09315fc5fdf7c6b6b1bef5cdd70 -->
+<!-- roclec-managed-view sha256=b89ca246dd2124851a697541d3454203fb7db0d93441a4e7622b01deb6c52c0b -->
 # Project flow
 
 Generated from `.roclec/flow.toml` by `roclec views --write`. Do not edit by hand.
@@ -96,18 +96,19 @@ None recorded.
 
 | Stage | Rejections | Open |
 | --- | --- | --- |
-| approve | 1 | 0 |
+| approve | 2 | 0 |
 
 | Stage | Subject | Entity | Consequence | State | Decision |
 | --- | --- | --- | --- | --- | --- |
 | approve | change | CHG-001 | revise | closed | `3a7a0af250436b204f9705e775ac1c3875a945bea6f5ec78d96bc5f3e55ec9da` |
+| approve | change | CHG-002 | revise | closed | `9c0e45cfaecd5ce02196c07252d3a0c720dda48ee57d14629ca8933913f47fb2` |
 
 ### Findings by severity and status
 
 | Severity | open | still-open | fixed | accepted | deferred | invalid |
 | --- | --- | --- | --- | --- | --- | --- |
-| info | 0 | 4 | 1 | 1 | 0 | 0 |
-| minor | 0 | 0 | 2 | 0 | 0 | 0 |
+| info | 0 | 4 | 1 | 8 | 0 | 0 |
+| minor | 0 | 0 | 3 | 0 | 0 | 0 |
 | major | 0 | 0 | 2 | 0 | 0 | 0 |
 | blocker | 0 | 0 | 0 | 0 | 0 | 0 |
 
