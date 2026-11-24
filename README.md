@@ -78,7 +78,6 @@ I added a fourth step to Chile’s configuration to demonstrate that Strapi can 
 
 The quote tool queries Strapi without sending a token. The public role allows it to read quote content and calculate a simulated price, while editing is restricted to Strapi’s authenticated admin panel.
 
-## Questions
-
-- Why SDD tool?
+# Why SDD tool?
+I chose Roclec Spec Kit, a framework I developed to make spec-driven development (SDD) rigorous and traceable. To design its workflow, I adapted practices from GitHub Spec Kit for clarifying requirements and planning tasks, and drew on Kiro’s approach to tailoring the workflow to different types of changes. I used the car insurance quote tool as a pilot because its user stories require coordinated changes across the Angular frontend, Strapi CMS, and shared schemas. The approved spec guides implementation and links each acceptance criterion to how it will be verified before the change is integrated.
 
