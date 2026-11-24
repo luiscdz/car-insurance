@@ -139,26 +139,30 @@ test('AC-039 Colombia: added, reordered, deactivated and changed plans show afte
   ]);
 });
 
-test('AC-058 AC-060 Chile without active plans shows the no-plans message, only the back action and no summary', async ({
-  page,
-  expectNoAxeViolations,
-}) => {
-  const copy = SEEDED_PLAN_COPY.cl;
-  for (const seed of seeded.get('cl') ?? []) {
-    await admin.publishPlan(seed.documentId, { active: false });
-  }
+for (const code of ['co', 'cl'] as const) {
+  test(`AC-058 AC-060 ${code}: without active plans shows the no-plans message, only the back action and no summary`, async ({
+    page,
+    expectNoAxeViolations,
+  }) => {
+    const copy = SEEDED_PLAN_COPY[code];
+    for (const published of await StrapiAdmin.publishedPlans(code)) {
+      await admin.publishPlan(published.documentId, { active: false });
+    }
 
-  await reachPlans(page, 'cl');
+    await reachPlans(page, code);
 
-  await expect(page.getByRole('alert')).toHaveText(copy.noPlans);
-  await expect(page.getByRole('article')).toHaveCount(0);
-  await expect(page.getByRole('main').getByRole('button')).toHaveCount(0);
-  await expect(backLink(page)).toBeVisible();
-  await expectNoAxeViolations();
+    await expect(page.getByRole('alert')).toHaveText(copy.noPlans);
+    await expect(page.getByRole('article')).toHaveCount(0);
+    await expect(page.getByRole('main').getByRole('button')).toHaveCount(0);
+    await expect(backLink(page)).toBeVisible();
+    await expectNoAxeViolations();
 
-  await page.goto('/cl/resumen-y-pago');
-  await expect(page).toHaveURL(/\/cl\/elige-tu-plan$/);
-  await expect(page.getByRole('alert')).toHaveText(copy.noPlans);
-  await backLink(page).click();
-  await expect(heading(page)).toHaveText(SEEDED_STEPS.cl[1]);
-});
+    await page.goto(`/${code}/resumen-y-pago`);
+    await expect(page).toHaveURL(new RegExp(`/${code}/elige-tu-plan$`));
+    await expect(page.getByRole('alert')).toHaveText(copy.noPlans);
+    await backLink(page).click();
+    await expect(heading(page)).toHaveText(SEEDED_STEPS[code][1]);
+
+    await restore(code);
+  });
+}
