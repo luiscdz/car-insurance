@@ -1,4 +1,4 @@
-<!-- roclec-managed-view sha256=4e4e912ca626d7bfaca8e02d86749649099f9c5488479e8ecfb26f13e3c2d141 -->
+<!-- roclec-managed-view sha256=0b45add765d4cf936e6f56b768ec2ed92c08c09315fc5fdf7c6b6b1bef5cdd70 -->
 # Project flow
 
 Generated from `.roclec/flow.toml` by `roclec views --write`. Do not edit by hand.
@@ -94,11 +94,22 @@ None recorded.
 
 ### Rejections by stage
 
-None recorded.
+| Stage | Rejections | Open |
+| --- | --- | --- |
+| approve | 1 | 0 |
+
+| Stage | Subject | Entity | Consequence | State | Decision |
+| --- | --- | --- | --- | --- | --- |
+| approve | change | CHG-001 | revise | closed | `3a7a0af250436b204f9705e775ac1c3875a945bea6f5ec78d96bc5f3e55ec9da` |
 
 ### Findings by severity and status
 
-None recorded.
+| Severity | open | still-open | fixed | accepted | deferred | invalid |
+| --- | --- | --- | --- | --- | --- | --- |
+| info | 0 | 4 | 1 | 1 | 0 | 0 |
+| minor | 0 | 0 | 2 | 0 | 0 | 0 |
+| major | 0 | 0 | 2 | 0 | 0 | 0 |
+| blocker | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ### Stages with ai = false
 
