@@ -24,20 +24,22 @@ function hasCode(entry: unknown, code: string): boolean {
 
 /**
  * Builds one country's wizard from the raw Strapi responses. The country must match the address
- * code exactly (AC-002) and the whole content, plans included, must pass the shared schemas
- * (AC-017, AC-041, AC-059); steps, fields and plans come back sorted by configured order (AC-004,
- * AC-036).
+ * code exactly (AC-002) and the whole content, plans, summary copy and terms included, must pass
+ * the shared schemas (AC-017, AC-041, AC-059, AC-069, AC-073, AC-077); steps, fields and plans
+ * come back sorted by configured order (AC-004, AC-036).
  */
 export function toWizardContent(
   code: string,
   countryResponse: unknown,
   stepsResponse: unknown,
   plansResponse: unknown,
+  termsResponse: unknown,
 ): WizardContentResult {
   const countries = anyCollectionSchema.safeParse(countryResponse);
   const steps = anyCollectionSchema.safeParse(stepsResponse);
   const plans = anyCollectionSchema.safeParse(plansResponse);
-  if (!countries.success || !steps.success || !plans.success) {
+  const terms = anyCollectionSchema.safeParse(termsResponse);
+  if (!countries.success || !steps.success || !plans.success || !terms.success) {
     return { kind: 'invalid' };
   }
   const country = countries.data.data.find((entry) => hasCode(entry, code));
@@ -48,6 +50,7 @@ export function toWizardContent(
     country,
     steps: steps.data.data,
     plans: plans.data.data,
+    terms: terms.data.data,
   });
   return content.success ? { kind: 'ready', content: content.data } : { kind: 'invalid' };
 }

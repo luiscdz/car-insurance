@@ -1,6 +1,7 @@
 import type {
   FieldValue,
   FormFieldContent,
+  StoredConfirmation,
   StoredPlan,
   WizardContent,
   WizardData,
@@ -49,14 +50,35 @@ export function sameValues(a: Values, b: Values): boolean {
   return keys.length === Object.keys(b).length && keys.every((key) => a[key] === b[key]);
 }
 
-/** Data with a plan, or without any when `plan` is undefined. */
+/**
+ * Data with a plan, or without any when `plan` is undefined. Every other key, the confirmation
+ * included, is kept as it is.
+ */
 function withPlan(data: WizardData, plan: StoredPlan | undefined): WizardData {
-  return plan === undefined ? { steps: data.steps } : { steps: data.steps, plan };
+  const rest: WizardData = { ...data };
+  delete rest.plan;
+  return plan === undefined ? rest : { ...rest, plan };
 }
 
-/** Data whose chosen plan is `id`, with no final price yet (AC-048). */
+/** Data with the confirmation of an approved payment (AC-085). */
+export function withConfirmation(data: WizardData, confirmation: StoredConfirmation): WizardData {
+  return { ...data, confirmation };
+}
+
+/** Data without a confirmation: the quote changed or a new one starts (AC-086). */
+export function withoutConfirmation(data: WizardData): WizardData {
+  const rest: WizardData = { ...data };
+  delete rest.confirmation;
+  return rest;
+}
+
+/**
+ * Data whose chosen plan is `id`, with no final price yet (AC-048). Choosing a plan other than the
+ * paid one discards the confirmation (AC-086).
+ */
 export function withChosenPlan(data: WizardData, id: string): WizardData {
-  return withPlan(data, { id, finalPrice: null });
+  const chosen = withPlan(data, { id, finalPrice: null });
+  return data.confirmation?.planId === id ? chosen : withoutConfirmation(chosen);
 }
 
 /** Data with the final price of the chosen plan, when `id` is still the chosen plan (AC-049). */
@@ -73,7 +95,8 @@ export function withoutFinalPrice(data: WizardData): WizardData {
  * Reconciles stored data with the current configuration (AC-025): values of fields and steps that
  * are no longer published are discarded, and a step stays complete only while its stored values
  * still satisfy the current configuration. A chosen plan is kept only while it is still offered
- * (AC-055), and its final price only while the form values it was obtained with are unchanged.
+ * (AC-055), and its final price only while the form values it was obtained with are unchanged. The
+ * confirmation is kept only while its plan is still the chosen one and no value changed (AC-086).
  */
 export function reconcile(stored: WizardData, content: WizardContent, today: Date): WizardData {
   const steps: WizardData['steps'] = {};
@@ -92,16 +115,26 @@ export function reconcile(stored: WizardData, content: WizardContent, today: Dat
   }
   valuesChanged ||= Object.keys(stored.steps).some((slug) => steps[slug] === undefined);
   const offered = content.plans.some((plan) => plan.documentId === stored.plan?.id);
-  const reconciled = withPlan({ steps }, offered ? stored.plan : undefined);
-  return valuesChanged ? withoutFinalPrice(reconciled) : reconciled;
+  const plan = offered ? stored.plan : undefined;
+  const reconciled = withPlan({ steps }, plan);
+  const confirmation = stored.confirmation;
+  const confirmed =
+    confirmation !== undefined && !valuesChanged && plan?.id === confirmation.planId
+      ? withConfirmation(reconciled, confirmation)
+      : reconciled;
+  return valuesChanged ? withoutFinalPrice(confirmed) : confirmed;
 }
 
 /**
  * Whether a step is complete: a form step once confirmed with valid data (AC-019); the plan step
- * while a plan is chosen and its final price for the current data is stored (AC-056). The summary
- * step is never complete here.
+ * while a plan is chosen and its final price for the current data is stored (AC-056); the summary
+ * step once its payment is confirmed. While a confirmation is stored every step is complete
+ * (AC-083, AC-085): any change of the quote discards the confirmation first (AC-086).
  */
 export function isStepComplete(data: WizardData, step: WizardStep): boolean {
+  if (data.confirmation !== undefined) {
+    return true;
+  }
   switch (step.type) {
     case 'form':
       return data.steps[step.slug]?.complete === true;

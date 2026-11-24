@@ -13,7 +13,7 @@ import type { PriceQuote } from './price-quote';
 const PRICE_QUOTE_PATH = '/api/quote/price';
 
 /**
- * Asks Strapi's price-quote endpoint through the public role, without any token (AC-066). The body
+ * Asks Strapi's price-quote endpoint through the public role, without any token (AC-097). The body
  * is built from the strict shared schema, so it carries only the country, the plan and the derived
  * ages (AC-046); the answer is validated before use (AC-047).
  */

@@ -6,9 +6,9 @@ export interface LeaveAware {
 }
 
 /**
- * Asks before leaving the country's wizard for the root address or another country's wizard
- * (AC-034). Moves between steps of the same wizard never deactivate it, so they never ask
- * (AC-035).
+ * Asks the wizard whether the person may go to the target address. It runs on every navigation
+ * (`runGuardsAndResolvers: 'always'`): the wizard asks before unconfirmed values are lost when
+ * leaving it (AC-034, AC-035) and before any move while a payment is processed (AC-096).
  */
 export const leaveWizardGuard: CanDeactivateFn<LeaveAware> = (component, _route, _state, next) =>
   component.canLeave(next.url);

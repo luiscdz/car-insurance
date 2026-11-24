@@ -3,11 +3,13 @@
 import {
   type FormFieldContent,
   formFieldSchema,
+  type PaymentRequest,
   type PriceQuoteRequest,
   type WizardContent,
   wizardContentSchema,
 } from '@car-insurance/shared';
 import type { ContentReader, RawWizardContent } from '../app/core/content/content-reader';
+import type { Payment, PaymentOutcome } from '../app/core/payment/payment';
 import type { PriceQuote } from '../app/core/quote/price-quote';
 
 type Raw = Record<string, unknown>;
@@ -45,6 +47,36 @@ function planCopy(overrides: Raw = {}): Raw {
   };
 }
 
+function summaryCopy(overrides: Raw = {}): Raw {
+  return {
+    planHeading: 'Tu plan',
+    finalPriceLabel: 'Tu precio anual',
+    editLabel: 'Editar',
+    changePlanLabel: 'Cambiar plan',
+    yesLabel: 'Sí',
+    noLabel: 'No',
+    acceptTermsLabel: 'Acepto los términos y condiciones',
+    viewTermsLabel: 'Ver términos y condiciones',
+    termsTitle: 'Términos y condiciones',
+    termsCloseLabel: 'Cerrar',
+    acceptTermsMessage: 'Acepta los términos y condiciones para poder pagar.',
+    payLabel: 'Pagar',
+    processingLabel: 'Procesando tu pago…',
+    processingLeaveTitle: '¿Quieres salir mientras procesamos tu pago?',
+    processingLeaveMessage: 'Si sales ahora, tu pago no quedará registrado.',
+    processingLeaveStayLabel: 'Esperar el pago',
+    processingLeaveConfirmLabel: 'Salir',
+    paymentErrorMessage: 'No pudimos procesar tu pago. Inténtalo de nuevo.',
+    confirmationTitle: '¡Listo! Recibimos tu pago',
+    confirmationMessage: 'Tu seguro de auto quedó contratado.',
+    quoteNumberLabel: 'Número de cotización',
+    planLabel: 'Plan',
+    amountPaidLabel: 'Valor pagado',
+    newQuoteLabel: 'Nueva cotización',
+    ...overrides,
+  };
+}
+
 export function rawField(overrides: Raw & { name: string }): Raw {
   return {
     label: `Etiqueta ${overrides.name}`,
@@ -72,6 +104,7 @@ export function rawColombia(overrides: Raw = {}): Raw {
     theme: { primaryColor: '#2D6DF6', accentColor: '#00AEC7', logo: null },
     copy: copy(),
     planCopy: planCopy(),
+    summaryCopy: summaryCopy(),
     ...overrides,
   };
 }
@@ -112,6 +145,32 @@ export function rawChile(overrides: Raw = {}): Raw {
       priceErrorMessage: 'El precio no está disponible.',
       retryLabel: 'Volver a intentar',
     }),
+    summaryCopy: summaryCopy({
+      planHeading: 'Plan elegido',
+      finalPriceLabel: 'Tu monto anual',
+      editLabel: 'Modificar',
+      changePlanLabel: 'Elegir otro plan',
+      yesLabel: 'Sí, claro',
+      noLabel: 'No, gracias',
+      acceptTermsLabel: 'Acepto las condiciones del seguro',
+      viewTermsLabel: 'Leer las condiciones',
+      termsTitle: 'Condiciones del seguro',
+      termsCloseLabel: 'Volver al resumen',
+      acceptTermsMessage: 'Debes aceptar las condiciones para pagar.',
+      payLabel: 'Pagar ahora',
+      processingLabel: 'Estamos procesando tu pago…',
+      processingLeaveTitle: '¿Salir mientras procesamos el pago?',
+      processingLeaveMessage: 'El pago no quedará registrado.',
+      processingLeaveStayLabel: 'Seguir esperando',
+      processingLeaveConfirmLabel: 'Abandonar',
+      paymentErrorMessage: 'No fue posible procesar tu pago.',
+      confirmationTitle: '¡Listo! Tu pago fue aprobado',
+      confirmationMessage: 'Tu seguro automotriz quedó contratado.',
+      quoteNumberLabel: 'N.º de cotización',
+      planLabel: 'Plan contratado',
+      amountPaidLabel: 'Monto pagado',
+      newQuoteLabel: 'Cotizar de nuevo',
+    }),
     ...overrides,
   };
 }
@@ -130,6 +189,15 @@ export function colombiaFields(): Raw[] {
         { value: 'ce', label: 'Cédula de extranjería', order: 2 },
         { value: 'cc', label: 'Cédula de ciudadanía', order: 1 },
       ],
+    }),
+    rawField({
+      name: 'numero-documento',
+      label: 'Número de documento',
+      order: 2,
+      placeholder: 'Ej: 1234567890',
+      errorMessage: 'Ingresa un número de documento válido.',
+      validation: { pattern: '^[0-9]{6,10}$' },
+      kind: 'identityDocumentNumber',
     }),
     rawField({
       name: 'placa',
@@ -179,6 +247,7 @@ export function rawChileSteps(): Raw[] {
           order: 1,
           errorMessage: 'Ingresa un RUT válido.',
           validation: { pattern: '^[0-9]{7,8}-[0-9Kk]$' },
+          kind: 'identityDocumentNumber',
         }),
         rawField({
           name: 'fecha-nacimiento',
@@ -343,6 +412,28 @@ export function rawChilePlans(): Raw[] {
   ];
 }
 
+/** Colombia's published terms: paragraphs, an inner line break and markup-like text (AC-074). */
+export function rawColombiaTerms(): Raw[] {
+  return [
+    {
+      id: 1,
+      documentId: 'co-terminos',
+      text: 'Términos ficticios de Colombia.\n\nLínea de atención: 601 000 0000\nHorario: lunes a viernes.\n\nEl texto <b>no</b> interpreta **marcas**.',
+    },
+  ];
+}
+
+/** Chile's published terms, different from Colombia's (AC-074). */
+export function rawChileTerms(): Raw[] {
+  return [
+    {
+      id: 2,
+      documentId: 'cl-terminos',
+      text: 'Condiciones ficticias de Chile.\n\nCanal de atención: 600 000 0000',
+    },
+  ];
+}
+
 export function envelope(data: unknown[]): Raw {
   return {
     data,
@@ -358,11 +449,17 @@ export function colombiaContent(
     country: rawColombia(),
     steps: rawColombiaSteps(fields),
     plans,
+    terms: rawColombiaTerms(),
   });
 }
 
 export function chileContent(plans: Raw[] = rawChilePlans()): WizardContent {
-  return wizardContentSchema.parse({ country: rawChile(), steps: rawChileSteps(), plans });
+  return wizardContentSchema.parse({
+    country: rawChile(),
+    steps: rawChileSteps(),
+    plans,
+    terms: rawChileTerms(),
+  });
 }
 
 export function field(overrides: Raw & { name: string }): FormFieldContent {
@@ -371,13 +468,17 @@ export function field(overrides: Raw & { name: string }): FormFieldContent {
 
 /** A content reader serving fixed responses per country code; `fail` makes every read fail. */
 export class FakeContentReader implements ContentReader {
-  readonly wizards = new Map<string, { country: unknown; steps: unknown; plans?: unknown }>([
+  readonly wizards = new Map<
+    string,
+    { country: unknown; steps: unknown; plans?: unknown; terms?: unknown }
+  >([
     [
       'co',
       {
         country: envelope([rawColombia()]),
         steps: envelope(rawColombiaSteps()),
         plans: envelope(rawColombiaPlans()),
+        terms: envelope(rawColombiaTerms()),
       },
     ],
     [
@@ -386,6 +487,7 @@ export class FakeContentReader implements ContentReader {
         country: envelope([rawChile()]),
         steps: envelope(rawChileSteps()),
         plans: envelope(rawChilePlans()),
+        terms: envelope(rawChileTerms()),
       },
     ],
   ]);
@@ -412,6 +514,7 @@ export class FakeContentReader implements ContentReader {
       country: wizard?.country ?? envelope([]),
       steps: wizard?.steps ?? envelope([]),
       plans: wizard?.plans ?? envelope([]),
+      terms: wizard?.terms ?? envelope([]),
       mediaBaseUrl: MEDIA_BASE_URL,
     };
   }
@@ -449,6 +552,34 @@ export class FakePriceQuote implements PriceQuote {
     const last = this.requests.at(-1);
     if (!last) {
       throw new Error('No price quote was requested');
+    }
+    return last;
+  }
+}
+
+/** A payment request the test answers when and how it wants. */
+export interface PendingPayment {
+  readonly request: PaymentRequest;
+  readonly signal: AbortSignal | undefined;
+  resolve(outcome: PaymentOutcome): void;
+  reject(error: unknown): void;
+}
+
+/** A simulated payment whose answers are controlled by the test (AC-078, AC-081, AC-096). */
+export class FakePayment implements Payment {
+  readonly requests: PendingPayment[] = [];
+
+  pay(request: PaymentRequest, signal?: AbortSignal): Promise<PaymentOutcome> {
+    return new Promise<PaymentOutcome>((resolve, reject) => {
+      this.requests.push({ request, signal, resolve, reject });
+    });
+  }
+
+  /** The latest request; fails the test when none was sent. */
+  last(): PendingPayment {
+    const last = this.requests.at(-1);
+    if (!last) {
+      throw new Error('No payment was requested');
     }
     return last;
   }

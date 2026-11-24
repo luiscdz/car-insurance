@@ -1,5 +1,6 @@
 import { type DestroyRef, InjectionToken, type Signal } from '@angular/core';
 import type { FieldValue, StoredStep, WizardContent, WizardCopy } from '@car-insurance/shared';
+import type { ProcessingCheck } from './leave-confirmation';
 
 /** Element id of the current step's heading, the programmatic name of a step's groups (AC-060). */
 export const STEP_HEADING_ID = 'step-heading';
@@ -23,6 +24,16 @@ export interface StepContext {
   advance(slug: string): void;
   /** Registers how the step tells whether it has unconfirmed values (AC-033, AC-034). */
   trackUnconfirmed(check: () => boolean, destroyRef: DestroyRef): void;
+  /**
+   * Registers how the step tells, while it processes a payment, the copy of the dialog that asks
+   * before leaving; `null` when nothing is processed (AC-096).
+   */
+  trackProcessing(check: ProcessingCheck, destroyRef: DestroyRef): void;
+  /**
+   * Replaces the page heading and title with `text`, or restores the step title with `null`, for
+   * example to title the confirmation (AC-083).
+   */
+  setHeading(text: string | null): void;
 }
 
 export const STEP_CONTEXT = new InjectionToken<StepContext>('STEP_CONTEXT');

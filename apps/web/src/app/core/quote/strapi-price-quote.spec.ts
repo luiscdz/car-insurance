@@ -26,7 +26,7 @@ describe('StrapiPriceQuote', () => {
 
   const nextTask = () => new Promise((resolve) => setTimeout(resolve));
 
-  it('AC-045 AC-046 AC-066 posts only the country, the plan and the derived ages, without any token', async () => {
+  it('AC-045 AC-046 AC-097 posts only the country, the plan and the derived ages, without any token', async () => {
     const result = quote.finalPrice({
       country: 'co',
       plan: 'co-basico',

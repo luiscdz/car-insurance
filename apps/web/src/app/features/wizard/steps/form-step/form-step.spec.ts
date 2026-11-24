@@ -29,11 +29,16 @@ describe('FormStep', () => {
   it('AC-004 shows exactly the fields of the step in configured order', async () => {
     await setup(colombiaStep());
 
-    expect(screen.getAllByRole('combobox').length + screen.getAllByRole('textbox').length).toBe(2);
+    expect(screen.getAllByRole('combobox').length + screen.getAllByRole('textbox').length).toBe(3);
     const labels = [...document.querySelectorAll('label')].map((l) =>
       l.textContent?.replace('*', '').trim(),
     );
-    expect(labels).toEqual(['Tipo de documento', 'Placa', 'El vehículo es de uso particular']);
+    expect(labels).toEqual([
+      'Tipo de documento',
+      'Número de documento',
+      'Placa',
+      'El vehículo es de uso particular',
+    ]);
   });
 
   it('AC-011 the continue action looks disabled, stays focusable and becomes enabled when valid', async () => {
@@ -105,7 +110,9 @@ describe('FormStep', () => {
     fireEvent.click(continueButton());
     await fixture.whenStable();
 
-    expect(document.activeElement).toBe(screen.getByRole('textbox', { name: /Placa/ }));
+    expect(document.activeElement).toBe(
+      screen.getByRole('textbox', { name: /Número de documento/ }),
+    );
   });
 
   it('AC-019 continue with every field valid stores the values of the step', async () => {
@@ -130,6 +137,9 @@ describe('FormStep', () => {
     fireEvent.input(screen.getByRole('combobox', { name: /Tipo de documento/ }), {
       target: { value: 'cc' },
     });
+    fireEvent.input(screen.getByRole('textbox', { name: /Número de documento/ }), {
+      target: { value: '1234567890' },
+    });
     fireEvent.input(screen.getByRole('textbox', { name: /Placa/ }), {
       target: { value: 'ABC123' },
     });
@@ -142,6 +152,7 @@ describe('FormStep', () => {
     expect(context.confirmed).toHaveLength(1);
     expect(context.confirmed[0]?.values).toEqual({
       'tipo-documento': 'cc',
+      'numero-documento': '1234567890',
       placa: 'ABC123',
       'uso-particular': false,
     });

@@ -8,7 +8,9 @@ export interface ProgressStep {
 
 /**
  * Lists every step of the country in configured order with its title and marks the current one
- * (AC-019). The label template comes from Strapi with `{current}` and `{total}` (AC-008).
+ * (AC-019). When every step is complete, as on the confirmation, every step shows the complete
+ * style and the current one keeps `aria-current` (AC-083). The label template comes from Strapi
+ * with `{current}` and `{total}` (AC-008).
  */
 @Component({
   selector: 'app-progress-indicator',
@@ -20,7 +22,7 @@ export interface ProgressStep {
           <li
             class="flex items-center gap-1.5 rounded-full py-1 pr-3 pl-1 text-sm"
             [class]="
-              index === current()
+              index === current() && !allComplete()
                 ? 'bg-surface-info font-bold text-primary-strong'
                 : 'bg-surface-muted text-foreground'
             "
@@ -30,7 +32,7 @@ export interface ProgressStep {
               aria-hidden="true"
               class="inline-grid size-6 place-items-center rounded-full border text-[13px] font-bold tabular-nums"
               [class]="
-                index === current()
+                index === current() && !allComplete()
                   ? 'border-primary bg-primary text-primary-foreground'
                   : step.complete
                     ? 'border-primary bg-background text-primary'
@@ -51,6 +53,10 @@ export class ProgressIndicator {
   /** Index of the current step. */
   readonly current = input.required<number>();
   readonly labelTemplate = input.required<string>();
+
+  protected readonly allComplete = computed(
+    () => this.steps().length > 0 && this.steps().every((step) => step.complete),
+  );
 
   protected readonly label = computed(() =>
     this.labelTemplate()
