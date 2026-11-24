@@ -1,0 +1,53 @@
+{
+  "actor": "luis-cardozo",
+  "addresses": {
+    "corrections": [
+      {
+        "id": "R-1",
+        "reason": "The proposal records the answers to Q1 to Q13 as owner answers accepting the proposed resolutions, under 'Owner answers'; the alternatives remain as options considered; no question remains open. Acceptance criteria are unchanged.",
+        "status": "addressed"
+      }
+    ],
+    "rejection": "9c0e45cfaecd5ce02196c07252d3a0c720dda48ee57d14629ca8933913f47fb2"
+  },
+  "criteria": [
+    {
+      "id": "CR-004",
+      "status": "met"
+    },
+    {
+      "id": "CR-005",
+      "status": "met"
+    },
+    {
+      "id": "CR-006",
+      "status": "met"
+    },
+    {
+      "id": "CR-007",
+      "status": "met"
+    },
+    {
+      "id": "CR-008",
+      "status": "met"
+    }
+  ],
+  "entity": "CHG-002",
+  "flow": "3ae780aad6b1fc33890a0dff47645cf0515ef6319f7c53e9c0a04f98cf4a49fc",
+  "id": "6208dc263073f026b0b14d8f91e9a0d791de7bbe1d9e9c708a4e9039c52ae9db",
+  "kind": "change-approve",
+  "model_schema": 2,
+  "previous": "9c0e45cfaecd5ce02196c07252d3a0c720dda48ee57d14629ca8933913f47fb2",
+  "proposal_digest": "3347fc8a824dd931d7db10694df0cc0296b913ec4e44e51fa40f681287dd9222",
+  "reason": "Owner approves the US-02 plan list proposal with the answers to Q1-Q13 recorded.",
+  "skills": [
+    {
+      "id": "country-content",
+      "sha256": "6076186fc9d8a667a83862233be6ea9042afab7338a6a38104cac1f15da88d4c"
+    },
+    {
+      "id": "story-spec",
+      "sha256": "e9a6fa88cf5747adbef0843ecec49081c786c90b3dcc28d874eccb702c4be997"
+    }
+  ]
+}

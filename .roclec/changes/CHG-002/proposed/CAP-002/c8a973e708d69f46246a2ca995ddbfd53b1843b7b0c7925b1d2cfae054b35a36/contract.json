@@ -1,0 +1,371 @@
+{
+  "acceptance": [
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-036",
+      "scenario": "acceptance/AC-036.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-037",
+      "scenario": "acceptance/AC-037.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-038",
+      "scenario": "acceptance/AC-038.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-039",
+      "scenario": "acceptance/AC-039.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-040",
+      "scenario": "acceptance/AC-040.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-041",
+      "scenario": "acceptance/AC-041.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-042",
+      "scenario": "acceptance/AC-042.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-043",
+      "scenario": "acceptance/AC-043.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-044",
+      "scenario": "acceptance/AC-044.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-045",
+      "scenario": "acceptance/AC-045.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-046",
+      "scenario": "acceptance/AC-046.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-047",
+      "scenario": "acceptance/AC-047.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-048",
+      "scenario": "acceptance/AC-048.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-049",
+      "scenario": "acceptance/AC-049.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-050",
+      "scenario": "acceptance/AC-050.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-051",
+      "scenario": "acceptance/AC-051.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-052",
+      "scenario": "acceptance/AC-052.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-053",
+      "scenario": "acceptance/AC-053.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-054",
+      "scenario": "acceptance/AC-054.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-055",
+      "scenario": "acceptance/AC-055.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-056",
+      "scenario": "acceptance/AC-056.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-057",
+      "scenario": "acceptance/AC-057.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-058",
+      "scenario": "acceptance/AC-058.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-059",
+      "scenario": "acceptance/AC-059.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-060",
+      "scenario": "acceptance/AC-060.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-061",
+      "scenario": "acceptance/AC-061.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-062",
+      "scenario": "acceptance/AC-062.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-063",
+      "scenario": "acceptance/AC-063.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-064",
+      "scenario": "acceptance/AC-064.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-065",
+      "scenario": "acceptance/AC-065.md"
+    },
+    {
+      "components": [
+        "app"
+      ],
+      "id": "AC-066",
+      "scenario": "acceptance/AC-066.md"
+    }
+  ],
+  "capability_id": "CAP-002",
+  "files": {
+    "acceptance/AC-036.md": "80900fa532a3515d45fa30f19f755206f6e00838fbcad23aa2ef28c7dd3b62f4",
+    "acceptance/AC-037.md": "e0ba3b6b62f73f14bab2b01ede76a247e89406de81b5c81f1165a09f1406db8c",
+    "acceptance/AC-038.md": "a773ba3d80e903d19d03980662462831c41d0589c0fd46a7e8d4f37be1d4c831",
+    "acceptance/AC-039.md": "5f97d844f99c0d4b33f82a726eb2d94180a971a506817b8b42867de2bba9d5cd",
+    "acceptance/AC-040.md": "8704944941504b7c8685655a36701ff02a2432262d58d41fa1bdaf810917ed19",
+    "acceptance/AC-041.md": "c53e9e5748c5fcd94ebd2311da890d5877b0c87914741f467dffbd6f545fb4cd",
+    "acceptance/AC-042.md": "bc56622adf2830fcc4b02910bd448df3373227388b1f1692904647e9f091332d",
+    "acceptance/AC-043.md": "94d1fdee81401cdb7ac2d4995c5cb9b8a28ac7ea9f6ab0fa9010605aaa3a8412",
+    "acceptance/AC-044.md": "cee522babcc741f26b21e8621576a9d9690b3677dfb9b525cd4444cbfdefba3d",
+    "acceptance/AC-045.md": "dc9f8835694b86e35198931deff2617d49f4fda5860562dce979d0991655973e",
+    "acceptance/AC-046.md": "dd79c1254c982df6bc5ed74b6373efb36a3a474cd2f0db9fa356e83b9aa6f2ca",
+    "acceptance/AC-047.md": "c1f40ae0bc9e64a276d1d2d7b43da02694f222028a5bc200e0c33552fdd7d98f",
+    "acceptance/AC-048.md": "562412dd75030c7654f5b97302ee81c13b25d30e459de840d2e3cb7f119a75b3",
+    "acceptance/AC-049.md": "84fd40ffdea62f7c9d1d32afdfe951b21a7a60b4cbd0bce24a37100217eeec32",
+    "acceptance/AC-050.md": "0650bd04f3f612ad4f85d258de6b98db70ce15eefeeb3ab703f8f872be859dc1",
+    "acceptance/AC-051.md": "e788f6dc190498002da7fe7a760420486b3ef743f94a1e32c196a5e3a7cf7057",
+    "acceptance/AC-052.md": "1232968f6b541ab9ed6795294f6278f5c6560cdf13f1962b8adfcad7d64fc3a0",
+    "acceptance/AC-053.md": "b9f12fd90f022950af4faa55f8a36e374a6e7888ffef7e476f620570a21d50dc",
+    "acceptance/AC-054.md": "09f7ea5344061e56c78123d47c8643c01b308c1a8babe59ea2adcc2c56b2185d",
+    "acceptance/AC-055.md": "05a22c779c84f76d1e4d104e0e05a6dc4d5196fdeb70e9b9c5ce0261b88ae62b",
+    "acceptance/AC-056.md": "eb33849576f4575d514126fe5dd77ddb13bc86a57805cc1f33681f5be2a10c1a",
+    "acceptance/AC-057.md": "b8517668926d488f82a359b19ecef4c37cc42c14b53ad3e5e1fe5b7820430c39",
+    "acceptance/AC-058.md": "8e5f24cdd97c0db99e85640542d1134790769bed3fac11338be57b02d95873c6",
+    "acceptance/AC-059.md": "2842d0a27aa8dd558a6058c622aee698a825fa71608bcb19bb0304cf98ae9775",
+    "acceptance/AC-060.md": "28a413f2f3a8108eee8ed85cab38a3717336be9d35ad518dde56930c805a91c2",
+    "acceptance/AC-061.md": "c96d152c840a80d1f92f2bef498872d024d30328e271d7805c681f1b5bb53d9f",
+    "acceptance/AC-062.md": "2dc04900e7d9206069eccf9a154476268c1adbbf56af67cbf5a71ffeeac00548",
+    "acceptance/AC-063.md": "ead5ac6945c3c55177822f5b86bb7044c51551a5231d2961acb55e521cb6f94c",
+    "acceptance/AC-064.md": "09373a76213309976c1cb0cb324d37e50935b6d466d3d60a87751be6cdf8d91c",
+    "acceptance/AC-065.md": "fc657f6e309fdbd2ad9e1942bc4c457a237a735f08b6444e36f1992b0dc0c846",
+    "acceptance/AC-066.md": "dd3bc089884dfb01c7388e4133234ef0abaa5c3ad5cb5ea511030a00984ff2d2",
+    "requirements/REQ-008.md": "1b04c6677736a23511cd14c04c26299f34c4bece93ac0cb99871657fd18048c4",
+    "requirements/REQ-009.md": "ab3586d04a65de9dd3624de64b4d1a5ff0ec52763e139964f1b211c08f03c392",
+    "requirements/REQ-010.md": "8080db610a8815d2c15a2e17f4430a90523fedddfeca15627c4ddaec7374c679",
+    "requirements/REQ-011.md": "62ab0360f6bf83fac28458a46dcc4d069aa325b2cd0e6e4a98c839e44d5c3973",
+    "requirements/REQ-012.md": "32a4f9d107d90854afb6f01b705e99349a12410105a622548a2204673062e336",
+    "requirements/REQ-013.md": "66a7e0e62d3db0ebeb91d76ef2014c5c86a06370507609361791008cc7442f0d"
+  },
+  "model_schema": 2,
+  "references": [
+    {
+      "id": "ADR-001",
+      "sha256": "bd3697711bb77da644c103469cc41cfd63e2ab94964da397bd5c894804449e93"
+    },
+    {
+      "id": "architecture",
+      "sha256": "53e3b75fac47d734ac4e4eb5283036108a87b3d036c3f91462afbe5f3598ea76"
+    },
+    {
+      "id": "context",
+      "sha256": "d36b8a76f5656f5499291fac24b46d3b998d90fb16ca00da390f06facd3a6f03"
+    },
+    {
+      "id": "design",
+      "sha256": "c81ff9f48a6fe7b03f3e2c18a513fc8aa37a90a3f4c095dfb4876663ff2a870a"
+    },
+    {
+      "id": "principles",
+      "sha256": "ce473af13ddb50cebb38a7ca86990363ff7b7bce5b2367ff072daaeb023edf57"
+    }
+  ],
+  "requirements": [
+    {
+      "acceptance_ids": [
+        "AC-036",
+        "AC-037",
+        "AC-038",
+        "AC-039",
+        "AC-040",
+        "AC-041"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-008",
+      "statement": "requirements/REQ-008.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-042",
+        "AC-043",
+        "AC-044",
+        "AC-045",
+        "AC-046",
+        "AC-047",
+        "AC-066"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-009",
+      "statement": "requirements/REQ-009.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-048",
+        "AC-049",
+        "AC-050",
+        "AC-051",
+        "AC-052",
+        "AC-053",
+        "AC-054",
+        "AC-055",
+        "AC-056",
+        "AC-057"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-010",
+      "statement": "requirements/REQ-010.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-058",
+        "AC-059"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-011",
+      "statement": "requirements/REQ-011.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-060",
+        "AC-061",
+        "AC-062",
+        "AC-063"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-012",
+      "statement": "requirements/REQ-012.md"
+    },
+    {
+      "acceptance_ids": [
+        "AC-064",
+        "AC-065"
+      ],
+      "components": [
+        "app"
+      ],
+      "id": "REQ-013",
+      "statement": "requirements/REQ-013.md"
+    }
+  ]
+}
