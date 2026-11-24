@@ -1,0 +1,30 @@
+{
+  "kind": "release-plan",
+  "model_schema": 2,
+  "operation_id": "7cf3452659b258a1504340c88c3605d5d28a5dff77eda08a83b6ec5fbd3b9435",
+  "payload": {
+    "component": "app",
+    "generation": "34c8963dc227fe2cff69e30fade64ae3449b533bd0c6c1fdf215fe0230939787",
+    "record": {
+      "base_tag": null,
+      "changes": [
+        {
+          "change_id": "CHG-001",
+          "intent_revision": "3c6df305a8fa0075571146e6906deca182c864031e8eb64e24605b7bd6064192"
+        },
+        {
+          "change_id": "CHG-002",
+          "intent_revision": "3347fc8a824dd931d7db10694df0cc0296b913ec4e44e51fa40f681287dd9222"
+        }
+      ],
+      "component": "app",
+      "kind": "release",
+      "model_schema": 2,
+      "version": "v0.1.0"
+    },
+    "version": "v0.1.0"
+  },
+  "writes": {
+    ".roclec/releases/app/v0.1.0/release.json": "83ce0f9c9513cda87f06ea947e4be8b9df60f5403412d01c95100aae1678114d"
+  }
+}

@@ -4,6 +4,10 @@
     {
       "change_id": "CHG-001",
       "intent_revision": "3c6df305a8fa0075571146e6906deca182c864031e8eb64e24605b7bd6064192"
+    },
+    {
+      "change_id": "CHG-002",
+      "intent_revision": "3347fc8a824dd931d7db10694df0cc0296b913ec4e44e51fa40f681287dd9222"
     }
   ],
   "component": "app",
